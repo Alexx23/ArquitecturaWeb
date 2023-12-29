@@ -1,0 +1,132 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package web.practicafinal.models;
+
+import jakarta.persistence.Basic;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import java.io.Serializable;
+import java.util.Collection;
+
+/**
+ *
+ * @author Alex
+ */
+@Entity
+@Table(name = "room")
+@NamedQueries({
+    @NamedQuery(name = "Room.findAll", query = "SELECT r FROM Room r"),
+    @NamedQuery(name = "Room.findById", query = "SELECT r FROM Room r WHERE r.id = :id"),
+    @NamedQuery(name = "Room.findByName", query = "SELECT r FROM Room r WHERE r.name = :name"),
+    @NamedQuery(name = "Room.findByRows", query = "SELECT r FROM Room r WHERE r.rows = :rows"),
+    @NamedQuery(name = "Room.findByCols", query = "SELECT r FROM Room r WHERE r.cols = :cols")})
+public class Room implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "id")
+    private Integer id;
+    @Basic(optional = false)
+    @Column(name = "name")
+    private String name;
+    @Basic(optional = false)
+    @Column(name = "rows")
+    private short rows;
+    @Basic(optional = false)
+    @Column(name = "cols")
+    private short cols;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "roomId")
+    private Collection<Session> sessionCollection;
+
+    public Room() {
+    }
+
+    public Room(Integer id) {
+        this.id = id;
+    }
+
+    public Room(Integer id, String name, short rows, short cols) {
+        this.id = id;
+        this.name = name;
+        this.rows = rows;
+        this.cols = cols;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public short getRows() {
+        return rows;
+    }
+
+    public void setRows(short rows) {
+        this.rows = rows;
+    }
+
+    public short getCols() {
+        return cols;
+    }
+
+    public void setCols(short cols) {
+        this.cols = cols;
+    }
+
+    public Collection<Session> getSessionCollection() {
+        return sessionCollection;
+    }
+
+    public void setSessionCollection(Collection<Session> sessionCollection) {
+        this.sessionCollection = sessionCollection;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Room)) {
+            return false;
+        }
+        Room other = (Room) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "web.practicafinal.models.Room[ id=" + id + " ]";
+    }
+    
+}
