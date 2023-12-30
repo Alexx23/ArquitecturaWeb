@@ -1,12 +1,7 @@
 package web.practicafinal.utils;
 
 import java.lang.reflect.Field;
-import web.practicafinal.models.controllers.AgeClassificationJpaController;
-import web.practicafinal.models.controllers.DirectorJpaController;
-import web.practicafinal.models.controllers.DistributorJpaController;
-import web.practicafinal.models.controllers.GenreJpaController;
 import web.practicafinal.models.controllers.ModelController;
-import web.practicafinal.models.controllers.NationalityJpaController;
 
 /**
  *

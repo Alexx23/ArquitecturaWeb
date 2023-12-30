@@ -1,9 +1,7 @@
 package web.practicafinal.models.seeders;
 
 import web.practicafinal.enums.AgeClassificationEnum;
-import web.practicafinal.enums.RoleEnum;
 import web.practicafinal.models.AgeClassification;
-import web.practicafinal.models.Role;
 import web.practicafinal.models.controllers.AgeClassificationJpaController;
 import web.practicafinal.models.controllers.ModelController;
 import web.practicafinal.utils.CustomLogger;

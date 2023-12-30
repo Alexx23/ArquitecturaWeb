@@ -3,8 +3,6 @@ package web.practicafinal.listeners;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.naming.NamingException;
 import web.practicafinal.models.controllers.ModelController;
 import web.practicafinal.models.seeders.AgeClassificationSeeder;

@@ -35,18 +35,21 @@ public class AuthFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
+        // Comprobar que existe la sesión
         HttpSession session = httpRequest.getSession(false);
         if (session == null) {
             Response.outputMessage(httpResponse, 401, "Sesión no iniciada.");
             return;
         }
         
+        // Comprobar que existe el atributo 'user_id' en la sesión
         Object userIdObj = session.getAttribute("user_id");
         if (userIdObj == null) {
             Response.outputMessage(httpResponse, 401, "Sesión no válida.");
             return;
         }
         
+        // Obtener instancia del usuario
         int userId = (int) userIdObj;
         User user = userJpaController.findUser(userId);
         if (user == null) {
@@ -54,6 +57,7 @@ public class AuthFilter implements Filter {
             return;
         }
         
+        // Pasar la instancia del usuario como atributo para poder usarlo posteriormente
         request.setAttribute("user_session", user);
         chain.doFilter(request, response);
     }

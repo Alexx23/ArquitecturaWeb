@@ -1,7 +1,5 @@
 package web.practicafinal.models.seeders;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import web.practicafinal.enums.RoleEnum;
 import web.practicafinal.models.Role;
 import web.practicafinal.models.controllers.ModelController;

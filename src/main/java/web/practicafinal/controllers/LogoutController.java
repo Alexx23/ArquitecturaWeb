@@ -17,16 +17,9 @@ import web.practicafinal.utils.Response;
  */
 @WebServlet("/logout")
 public class LogoutController extends HttpServlet {
-    
-    private static UserJpaController userJpaController = null;
 
     public LogoutController() {
         super();
-    }
-    
-    @Override
-    public void init() {
-        userJpaController = ModelController.getUser();
     }
     
     /*

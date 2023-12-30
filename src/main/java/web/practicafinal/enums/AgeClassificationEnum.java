@@ -12,7 +12,7 @@ public enum AgeClassificationEnum {
     DOCE(3, "Mayores de 12 años", (short) 12),
     DIECISEIS(4, "Mayores de 16 años", (short) 16),
     DIECIOCHO(5, "Mayores de 18 años", (short) 18),
-    PRONOGRAFIA(6, "Pornografía", (short) 18);
+    PORNOGRAFIA(6, "Pornografía", (short) 18);
     
     private final int id;
     private final String name;

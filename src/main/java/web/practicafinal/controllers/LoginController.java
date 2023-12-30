@@ -24,16 +24,9 @@ import web.practicafinal.utils.Response;
  */
 @WebServlet("/login")
 public class LoginController extends HttpServlet {
-    
-    private static UserJpaController userJpaController = null;
 
     public LoginController() {
         super();
-    }
-    
-    @Override
-    public void init() {
-        userJpaController = ModelController.getUser();
     }
     
     /*

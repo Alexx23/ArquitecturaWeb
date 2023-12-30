@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import web.practicafinal.enums.RoleEnum;
 import web.practicafinal.models.User;
-import web.practicafinal.utils.CustomLogger;
 import web.practicafinal.utils.Response;
 
 /**
