@@ -6,9 +6,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Map;
 import org.springframework.security.crypto.bcrypt.BCrypt;
-import web.practicafinal.enums.RequestScope;
+import web.practicafinal.controllers.validations.RegisterDTO;
 import web.practicafinal.enums.RoleEnum;
 import web.practicafinal.exceptions.ValidateException;
 import web.practicafinal.models.Role;
@@ -16,9 +15,7 @@ import web.practicafinal.models.User;
 import web.practicafinal.models.controllers.ModelController;
 import web.practicafinal.models.controllers.RoleJpaController;
 import web.practicafinal.models.controllers.UserJpaController;
-import web.practicafinal.models.helpers.UserHelper;
 import web.practicafinal.utils.CustomLogger;
-import web.practicafinal.utils.JsonUtils;
 import web.practicafinal.utils.Request;
 import web.practicafinal.utils.Response;
 
@@ -48,48 +45,49 @@ public class RegisterController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            Map<String, String> validatedRequest = Request.validate(RequestScope.LOGIN, request, 
-                    "name", "username", "email", "password", "password_confirmation");
             
-            String name = validatedRequest.get("name");
-            String username = validatedRequest.get("username");
-            String email = validatedRequest.get("email");
-            String password = validatedRequest.get("password");
+            RegisterDTO registerDTO = new RegisterDTO(request.getParameter("name"), request.getParameter("username"), request.getParameter("email"), 
+                    request.getParameter("password"), request.getParameter("password_confirmation"));
             
-            User userByUsername = UserHelper.getUserByUsername(username);
-            if (userByUsername != null) {
-                throw new ValidateException("Ese nombre de usuario ya está en uso por otra persona.");
-            }
-            User userByEmail = UserHelper.getUserByEmail(email);
-            if (userByEmail != null) {
-                throw new ValidateException("Ese email ya está en uso por otra persona.");
-            }
-            
-            String salt = BCrypt.gensalt(12);
-            String hashPassword = BCrypt.hashpw(password, BCrypt.gensalt(salt));
-            
-            Role role = roleJpaController.findRole(RoleEnum.CLIENT.getId());
-            
-            User user = new User();
-            user.setName(name);
-            user.setUsername(username);
-            user.setEmail(email);
-            user.setPassword(hashPassword);
-            user.setRoleId(role);
-            
-            try {
-                userJpaController.create(user);
-                Response.outputData(response, 200, user, true);
-                return;
-            } catch (Exception ex) {
-                CustomLogger.errorThrow(RegisterController.class.getName(), ex);
-            }
-            
-            Response.outputMessage(response, 500, "Ha ocurrido un error interno.");
+            Request.validateViolations(registerDTO);
             
         } catch (ValidateException ex) {
             Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
             return;
         }
+        
+        String name = request.getParameter("name");
+        String username = request.getParameter("username").toLowerCase();
+        String email = request.getParameter("email").toLowerCase();
+        String password = request.getParameter("password");
+        String passwordConfirmation = request.getParameter("password_confirmation");
+        
+        if (!password.equals(passwordConfirmation)) {
+            Response.outputMessage(response, 400, "Las contraseñas no coinciden");
+            return;
+        }
+
+        String salt = BCrypt.gensalt(12);
+        String hashPassword = BCrypt.hashpw(password, BCrypt.gensalt(salt));
+
+        Role role = roleJpaController.findRole(RoleEnum.CLIENT.getId());
+
+        User user = new User();
+        user.setName(name);
+        user.setUsername(username);
+        user.setEmail(email);
+        user.setPassword(hashPassword);
+        user.setRoleId(role);
+
+        try {
+            userJpaController.create(user);
+            Response.outputData(response, 200, user, true);
+            return;
+        } catch (Exception ex) {
+            CustomLogger.errorThrow(RegisterController.class.getName(), ex);
+            Response.outputMessage(response, 500, "Ha ocurrido un error interno.");
+            return;
+        }
+        
     }
 }

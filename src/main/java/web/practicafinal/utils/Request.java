@@ -1,11 +1,12 @@
 package web.practicafinal.utils;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import web.practicafinal.enums.RequestScope;
+import java.util.Set;
 import web.practicafinal.exceptions.ValidateException;
 
 /**
@@ -13,6 +14,8 @@ import web.practicafinal.exceptions.ValidateException;
  * @author Alex
  */
 public class Request {
+    
+    private static final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
     
     public static String getURLValue(HttpServletRequest request) {
         String pathInfo = request.getPathInfo();
@@ -22,68 +25,57 @@ public class Request {
         return pathParts[1];
     }
     
-    public static Map<String, String> validate(RequestScope scope, HttpServletRequest request, String... parameters) throws ValidateException {
-        Map<String, String> result = new HashMap<>();
-
-        String emailRegex = "^(.+)@(.+)$";
-        Pattern emailPattern = Pattern.compile(emailRegex);
-
+    /*
+        Valida que si existen estos parámetros en la request, sean Integer
+        Si existen, se devolverán como Integer. Si no existen, se devolverán como null
+    */
+    public static Map<String, Integer> validateInteger(HttpServletRequest request, String... parameters) throws ValidateException {
+        Map<String, Integer> result = new HashMap<>();
         for (String parameter : parameters) {
             String value = request.getParameter(parameter);
-
-            if (value == null || value == "") {
-                throw new ValidateException("El campo "+parameter+" no es válido.");
+            if (value == null) {
+                result.put(parameter, null);
+                continue;
             }
-
-            if (parameter == "password"
-                    && value.length() < 8) {
-
-                if (!scope.equals(RequestScope.LOGIN)) {
-                    throw new ValidateException("La contraseña debe tener más de 8 caracteres.");
-                }
-
+            try {
+                Integer integer_ = Integer.parseInt(value);
+                result.put(parameter, integer_);
+            } catch (NumberFormatException e) {
+                throw new ValidateException("El campo "+parameter+" debe ser un número entero.");
             }
-
-            if (parameter == "password_confirmation") {
-                if (request.getParameter("password") == null || request.getParameter("password") == "") {
-                    throw new ValidateException("El campo password no es válido.");
-                }
-
-                if (!value.equals(request.getParameter("password"))) {
-                    throw new ValidateException("Las contraseñas no coinciden.");
-                }
-
-            }
-
-            if (parameter == "email") {
-                Matcher matcher = emailPattern.matcher(value);
-                if (!matcher.matches()) {
-                    throw new ValidateException("No se ha introducido un email válido.");
-                }
-                value = value.toLowerCase();
-            }
-
-            if (parameter == "username") {
-                value = value.toLowerCase();
-            }
-            
-            if (parameter == "duration") {
-                if (Integer.valueOf(value) < 0) {
-                    throw new ValidateException("La duración debe ser positiva.");
-                }
-            }
-            
-            if (parameter == "year") {
-                if (Integer.valueOf(value) < 0) {
-                    throw new ValidateException("El año debe ser positivo.");
-                }
-            }
-
-            result.put(parameter, value);
-
         }
-
         return result;
+    }
+    
+    /*
+        Valida que si existen estos parámetros en la request, sean Shorts
+        Si existen, se devolverán como Shorts. Si no existen, se devolverán como null
+    */
+    public static Map<String, Short> validateShort(HttpServletRequest request, String... parameters) throws ValidateException {
+        Map<String, Short> result = new HashMap<>();
+        for (String parameter : parameters) {
+            String value = request.getParameter(parameter);
+            if (value == null) {
+                result.put(parameter, null);
+                continue;
+            }
+            try {
+                Short short_ = Short.parseShort(value);
+                result.put(parameter, short_);
+            } catch (NumberFormatException e) {
+                throw new ValidateException("El campo "+parameter+" debe ser un número entero.");
+            }
+        }
+        return result;
+    }
+    
+    public static <T> void validateViolations(T object) throws ValidateException {
+        Set<ConstraintViolation<T>> violations = validator.validate(object);
+        
+        if (!violations.isEmpty()) {
+            ConstraintViolation<T> firstViolation = violations.iterator().next();
+            throw new ValidateException("El campo "+firstViolation.getPropertyPath()+" "+firstViolation.getMessage()+".");
+        }
     }
     
 }

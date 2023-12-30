@@ -9,7 +9,7 @@ import web.practicafinal.utils.CustomLogger;
 public class ValidateException extends HttpException {
 
     /*
-    Excepción que indica cuando no se ha validado correctamente una request.
+        Excepción que indica cuando no se ha validado correctamente una request.
     */
 
     public ValidateException (String str) {
