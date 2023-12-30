@@ -1,6 +1,7 @@
 web\practicafinal\controllers\validations\LoginDTO.class
 web\practicafinal\models\controllers\LabelJpaController.class
 web\practicafinal\models\helpers\UserHelper.class
+web\practicafinal\utils\GraphAdapterBuilder$Factory$1.class
 web\practicafinal\controllers\validations\MovieUpdateDTO.class
 web\practicafinal\enums\AgeClassificationEnum.class
 web\practicafinal\utils\Request.class
@@ -10,10 +11,12 @@ web\practicafinal\controllers\validations\annotations\ValidAgeClassification.cla
 web\practicafinal\controllers\validations\RegisterDTO.class
 web\practicafinal\utils\Response.class
 web\practicafinal\utils\JsonUtils$TimestampDeserializer.class
+web\practicafinal\utils\GraphAdapterBuilder$1.class
 web\practicafinal\models\controllers\NationalityJpaController.class
 web\practicafinal\models\controllers\RoomJpaController.class
 web\practicafinal\controllers\validations\annotations\ValidGenre.class
 web\practicafinal\models\Genre.class
+web\practicafinal\utils\GraphAdapterBuilder.class
 web\practicafinal\controllers\validations\annotations\ValidNationality$NationalityValidator.class
 web\practicafinal\controllers\validations\annotations\UniqueUsername$UserValidator.class
 web\practicafinal\models\controllers\exceptions\IllegalOrphanException.class
@@ -25,6 +28,7 @@ web\practicafinal\models\Role.class
 web\practicafinal\filters\AuthFilter.class
 web\practicafinal\models\Comment.class
 web\practicafinal\models\seeders\RoleSeeder.class
+web\practicafinal\utils\GraphAdapterBuilder$Element.class
 web\practicafinal\models\Label.class
 web\practicafinal\controllers\validations\annotations\UniqueEmail.class
 web\practicafinal\utils\CustomLogger.class
@@ -40,6 +44,7 @@ web\practicafinal\models\controllers\DirectorJpaController.class
 web\practicafinal\exceptions\HttpException.class
 web\practicafinal\models\controllers\UserJpaController.class
 web\practicafinal\models\controllers\GenreJpaController.class
+web\practicafinal\controllers\responses\LoginResponse.class
 web\practicafinal\controllers\validations\annotations\ValidGenre$GenreValidator.class
 web\practicafinal\models\Room.class
 web\practicafinal\controllers\LogoutController.class
@@ -48,6 +53,7 @@ web\practicafinal\utils\JsonUtils$LocalDateTimeSerializer.class
 web\practicafinal\models\controllers\CommentJpaController.class
 web\practicafinal\models\controllers\exceptions\RollbackFailureException.class
 web\practicafinal\models\controllers\exceptions\NonexistentEntityException.class
+web\practicafinal\utils\GraphAdapterBuilder$Graph.class
 web\practicafinal\utils\JsonUtils$TimestampSerializer.class
 web\practicafinal\models\Director.class
 web\practicafinal\controllers\validations\annotations\UniqueEmail$UserValidator.class
@@ -70,6 +76,7 @@ web\practicafinal\controllers\validations\annotations\UniqueUsername.class
 web\practicafinal\controllers\validations\annotations\ValidDirector$DirectorValidator.class
 web\practicafinal\listeners\CustomServletContextListener.class
 web\practicafinal\models\Movie.class
+web\practicafinal\utils\GraphAdapterBuilder$Factory.class
 web\practicafinal\utils\InstanceConverter.class
 web\practicafinal\models\Distributor.class
 web\practicafinal\models\AgeClassification.class

@@ -81,7 +81,7 @@ public class RegisterController extends HttpServlet {
 
         try {
             userJpaController.create(user);
-            Response.outputData(response, 200, user, true);
+            Response.outputData(response, 200, user);
             return;
         } catch (Exception ex) {
             CustomLogger.errorThrow(RegisterController.class.getName(), ex);

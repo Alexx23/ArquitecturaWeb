@@ -7,13 +7,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Map;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import web.practicafinal.controllers.validations.LoginDTO;
 import web.practicafinal.exceptions.ValidateException;
 import web.practicafinal.models.User;
-import web.practicafinal.models.controllers.ModelController;
-import web.practicafinal.models.controllers.UserJpaController;
 import web.practicafinal.models.helpers.UserHelper;
 import web.practicafinal.utils.Request;
 import web.practicafinal.utils.Response;
@@ -62,7 +59,7 @@ public class LoginController extends HttpServlet {
         HttpSession session = request.getSession();
         session.setAttribute("user_id", user.getId());
 
-        Response.outputData(response, 200, user, true);
+        Response.outputData(response, 200, user);
         
 
     }

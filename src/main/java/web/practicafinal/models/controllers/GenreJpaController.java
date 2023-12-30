@@ -14,7 +14,6 @@ import jakarta.persistence.criteria.Root;
 import jakarta.transaction.UserTransaction;
 import web.practicafinal.models.Movie;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import web.practicafinal.models.Genre;
 import web.practicafinal.models.controllers.exceptions.IllegalOrphanException;
@@ -39,27 +38,27 @@ public class GenreJpaController implements Serializable {
     }
 
     public void create(Genre genre) throws RollbackFailureException, Exception {
-        if (genre.getMovieCollection() == null) {
-            genre.setMovieCollection(new ArrayList<Movie>());
+        if (genre.getMovieList() == null) {
+            genre.setMovieList(new ArrayList<Movie>());
         }
         EntityManager em = null;
         try {
             utx.begin();
             em = getEntityManager();
-            Collection<Movie> attachedMovieCollection = new ArrayList<Movie>();
-            for (Movie movieCollectionMovieToAttach : genre.getMovieCollection()) {
-                movieCollectionMovieToAttach = em.getReference(movieCollectionMovieToAttach.getClass(), movieCollectionMovieToAttach.getId());
-                attachedMovieCollection.add(movieCollectionMovieToAttach);
+            List<Movie> attachedMovieList = new ArrayList<Movie>();
+            for (Movie movieListMovieToAttach : genre.getMovieList()) {
+                movieListMovieToAttach = em.getReference(movieListMovieToAttach.getClass(), movieListMovieToAttach.getId());
+                attachedMovieList.add(movieListMovieToAttach);
             }
-            genre.setMovieCollection(attachedMovieCollection);
+            genre.setMovieList(attachedMovieList);
             em.persist(genre);
-            for (Movie movieCollectionMovie : genre.getMovieCollection()) {
-                Genre oldGenreIdOfMovieCollectionMovie = movieCollectionMovie.getGenreId();
-                movieCollectionMovie.setGenreId(genre);
-                movieCollectionMovie = em.merge(movieCollectionMovie);
-                if (oldGenreIdOfMovieCollectionMovie != null) {
-                    oldGenreIdOfMovieCollectionMovie.getMovieCollection().remove(movieCollectionMovie);
-                    oldGenreIdOfMovieCollectionMovie = em.merge(oldGenreIdOfMovieCollectionMovie);
+            for (Movie movieListMovie : genre.getMovieList()) {
+                Genre oldGenreIdOfMovieListMovie = movieListMovie.getGenreId();
+                movieListMovie.setGenreId(genre);
+                movieListMovie = em.merge(movieListMovie);
+                if (oldGenreIdOfMovieListMovie != null) {
+                    oldGenreIdOfMovieListMovie.getMovieList().remove(movieListMovie);
+                    oldGenreIdOfMovieListMovie = em.merge(oldGenreIdOfMovieListMovie);
                 }
             }
             utx.commit();
@@ -83,36 +82,36 @@ public class GenreJpaController implements Serializable {
             utx.begin();
             em = getEntityManager();
             Genre persistentGenre = em.find(Genre.class, genre.getId());
-            Collection<Movie> movieCollectionOld = persistentGenre.getMovieCollection();
-            Collection<Movie> movieCollectionNew = genre.getMovieCollection();
+            List<Movie> movieListOld = persistentGenre.getMovieList();
+            List<Movie> movieListNew = genre.getMovieList();
             List<String> illegalOrphanMessages = null;
-            for (Movie movieCollectionOldMovie : movieCollectionOld) {
-                if (!movieCollectionNew.contains(movieCollectionOldMovie)) {
+            for (Movie movieListOldMovie : movieListOld) {
+                if (!movieListNew.contains(movieListOldMovie)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Movie " + movieCollectionOldMovie + " since its genreId field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Movie " + movieListOldMovie + " since its genreId field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            Collection<Movie> attachedMovieCollectionNew = new ArrayList<Movie>();
-            for (Movie movieCollectionNewMovieToAttach : movieCollectionNew) {
-                movieCollectionNewMovieToAttach = em.getReference(movieCollectionNewMovieToAttach.getClass(), movieCollectionNewMovieToAttach.getId());
-                attachedMovieCollectionNew.add(movieCollectionNewMovieToAttach);
+            List<Movie> attachedMovieListNew = new ArrayList<Movie>();
+            for (Movie movieListNewMovieToAttach : movieListNew) {
+                movieListNewMovieToAttach = em.getReference(movieListNewMovieToAttach.getClass(), movieListNewMovieToAttach.getId());
+                attachedMovieListNew.add(movieListNewMovieToAttach);
             }
-            movieCollectionNew = attachedMovieCollectionNew;
-            genre.setMovieCollection(movieCollectionNew);
+            movieListNew = attachedMovieListNew;
+            genre.setMovieList(movieListNew);
             genre = em.merge(genre);
-            for (Movie movieCollectionNewMovie : movieCollectionNew) {
-                if (!movieCollectionOld.contains(movieCollectionNewMovie)) {
-                    Genre oldGenreIdOfMovieCollectionNewMovie = movieCollectionNewMovie.getGenreId();
-                    movieCollectionNewMovie.setGenreId(genre);
-                    movieCollectionNewMovie = em.merge(movieCollectionNewMovie);
-                    if (oldGenreIdOfMovieCollectionNewMovie != null && !oldGenreIdOfMovieCollectionNewMovie.equals(genre)) {
-                        oldGenreIdOfMovieCollectionNewMovie.getMovieCollection().remove(movieCollectionNewMovie);
-                        oldGenreIdOfMovieCollectionNewMovie = em.merge(oldGenreIdOfMovieCollectionNewMovie);
+            for (Movie movieListNewMovie : movieListNew) {
+                if (!movieListOld.contains(movieListNewMovie)) {
+                    Genre oldGenreIdOfMovieListNewMovie = movieListNewMovie.getGenreId();
+                    movieListNewMovie.setGenreId(genre);
+                    movieListNewMovie = em.merge(movieListNewMovie);
+                    if (oldGenreIdOfMovieListNewMovie != null && !oldGenreIdOfMovieListNewMovie.equals(genre)) {
+                        oldGenreIdOfMovieListNewMovie.getMovieList().remove(movieListNewMovie);
+                        oldGenreIdOfMovieListNewMovie = em.merge(oldGenreIdOfMovieListNewMovie);
                     }
                 }
             }
@@ -151,12 +150,12 @@ public class GenreJpaController implements Serializable {
                 throw new NonexistentEntityException("The genre with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            Collection<Movie> movieCollectionOrphanCheck = genre.getMovieCollection();
-            for (Movie movieCollectionOrphanCheckMovie : movieCollectionOrphanCheck) {
+            List<Movie> movieListOrphanCheck = genre.getMovieList();
+            for (Movie movieListOrphanCheckMovie : movieListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Genre (" + genre + ") cannot be destroyed since the Movie " + movieCollectionOrphanCheckMovie + " in its movieCollection field has a non-nullable genreId field.");
+                illegalOrphanMessages.add("This Genre (" + genre + ") cannot be destroyed since the Movie " + movieListOrphanCheckMovie + " in its movieList field has a non-nullable genreId field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);

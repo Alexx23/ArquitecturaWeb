@@ -14,7 +14,6 @@ import jakarta.persistence.criteria.Root;
 import jakarta.transaction.UserTransaction;
 import web.practicafinal.models.Movie;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import web.practicafinal.models.Distributor;
 import web.practicafinal.models.controllers.exceptions.IllegalOrphanException;
@@ -39,27 +38,27 @@ public class DistributorJpaController implements Serializable {
     }
 
     public void create(Distributor distributor) throws RollbackFailureException, Exception {
-        if (distributor.getMovieCollection() == null) {
-            distributor.setMovieCollection(new ArrayList<Movie>());
+        if (distributor.getMovieList() == null) {
+            distributor.setMovieList(new ArrayList<Movie>());
         }
         EntityManager em = null;
         try {
             utx.begin();
             em = getEntityManager();
-            Collection<Movie> attachedMovieCollection = new ArrayList<Movie>();
-            for (Movie movieCollectionMovieToAttach : distributor.getMovieCollection()) {
-                movieCollectionMovieToAttach = em.getReference(movieCollectionMovieToAttach.getClass(), movieCollectionMovieToAttach.getId());
-                attachedMovieCollection.add(movieCollectionMovieToAttach);
+            List<Movie> attachedMovieList = new ArrayList<Movie>();
+            for (Movie movieListMovieToAttach : distributor.getMovieList()) {
+                movieListMovieToAttach = em.getReference(movieListMovieToAttach.getClass(), movieListMovieToAttach.getId());
+                attachedMovieList.add(movieListMovieToAttach);
             }
-            distributor.setMovieCollection(attachedMovieCollection);
+            distributor.setMovieList(attachedMovieList);
             em.persist(distributor);
-            for (Movie movieCollectionMovie : distributor.getMovieCollection()) {
-                Distributor oldDistributorIdOfMovieCollectionMovie = movieCollectionMovie.getDistributorId();
-                movieCollectionMovie.setDistributorId(distributor);
-                movieCollectionMovie = em.merge(movieCollectionMovie);
-                if (oldDistributorIdOfMovieCollectionMovie != null) {
-                    oldDistributorIdOfMovieCollectionMovie.getMovieCollection().remove(movieCollectionMovie);
-                    oldDistributorIdOfMovieCollectionMovie = em.merge(oldDistributorIdOfMovieCollectionMovie);
+            for (Movie movieListMovie : distributor.getMovieList()) {
+                Distributor oldDistributorIdOfMovieListMovie = movieListMovie.getDistributorId();
+                movieListMovie.setDistributorId(distributor);
+                movieListMovie = em.merge(movieListMovie);
+                if (oldDistributorIdOfMovieListMovie != null) {
+                    oldDistributorIdOfMovieListMovie.getMovieList().remove(movieListMovie);
+                    oldDistributorIdOfMovieListMovie = em.merge(oldDistributorIdOfMovieListMovie);
                 }
             }
             utx.commit();
@@ -83,36 +82,36 @@ public class DistributorJpaController implements Serializable {
             utx.begin();
             em = getEntityManager();
             Distributor persistentDistributor = em.find(Distributor.class, distributor.getId());
-            Collection<Movie> movieCollectionOld = persistentDistributor.getMovieCollection();
-            Collection<Movie> movieCollectionNew = distributor.getMovieCollection();
+            List<Movie> movieListOld = persistentDistributor.getMovieList();
+            List<Movie> movieListNew = distributor.getMovieList();
             List<String> illegalOrphanMessages = null;
-            for (Movie movieCollectionOldMovie : movieCollectionOld) {
-                if (!movieCollectionNew.contains(movieCollectionOldMovie)) {
+            for (Movie movieListOldMovie : movieListOld) {
+                if (!movieListNew.contains(movieListOldMovie)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Movie " + movieCollectionOldMovie + " since its distributorId field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Movie " + movieListOldMovie + " since its distributorId field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            Collection<Movie> attachedMovieCollectionNew = new ArrayList<Movie>();
-            for (Movie movieCollectionNewMovieToAttach : movieCollectionNew) {
-                movieCollectionNewMovieToAttach = em.getReference(movieCollectionNewMovieToAttach.getClass(), movieCollectionNewMovieToAttach.getId());
-                attachedMovieCollectionNew.add(movieCollectionNewMovieToAttach);
+            List<Movie> attachedMovieListNew = new ArrayList<Movie>();
+            for (Movie movieListNewMovieToAttach : movieListNew) {
+                movieListNewMovieToAttach = em.getReference(movieListNewMovieToAttach.getClass(), movieListNewMovieToAttach.getId());
+                attachedMovieListNew.add(movieListNewMovieToAttach);
             }
-            movieCollectionNew = attachedMovieCollectionNew;
-            distributor.setMovieCollection(movieCollectionNew);
+            movieListNew = attachedMovieListNew;
+            distributor.setMovieList(movieListNew);
             distributor = em.merge(distributor);
-            for (Movie movieCollectionNewMovie : movieCollectionNew) {
-                if (!movieCollectionOld.contains(movieCollectionNewMovie)) {
-                    Distributor oldDistributorIdOfMovieCollectionNewMovie = movieCollectionNewMovie.getDistributorId();
-                    movieCollectionNewMovie.setDistributorId(distributor);
-                    movieCollectionNewMovie = em.merge(movieCollectionNewMovie);
-                    if (oldDistributorIdOfMovieCollectionNewMovie != null && !oldDistributorIdOfMovieCollectionNewMovie.equals(distributor)) {
-                        oldDistributorIdOfMovieCollectionNewMovie.getMovieCollection().remove(movieCollectionNewMovie);
-                        oldDistributorIdOfMovieCollectionNewMovie = em.merge(oldDistributorIdOfMovieCollectionNewMovie);
+            for (Movie movieListNewMovie : movieListNew) {
+                if (!movieListOld.contains(movieListNewMovie)) {
+                    Distributor oldDistributorIdOfMovieListNewMovie = movieListNewMovie.getDistributorId();
+                    movieListNewMovie.setDistributorId(distributor);
+                    movieListNewMovie = em.merge(movieListNewMovie);
+                    if (oldDistributorIdOfMovieListNewMovie != null && !oldDistributorIdOfMovieListNewMovie.equals(distributor)) {
+                        oldDistributorIdOfMovieListNewMovie.getMovieList().remove(movieListNewMovie);
+                        oldDistributorIdOfMovieListNewMovie = em.merge(oldDistributorIdOfMovieListNewMovie);
                     }
                 }
             }
@@ -151,12 +150,12 @@ public class DistributorJpaController implements Serializable {
                 throw new NonexistentEntityException("The distributor with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            Collection<Movie> movieCollectionOrphanCheck = distributor.getMovieCollection();
-            for (Movie movieCollectionOrphanCheckMovie : movieCollectionOrphanCheck) {
+            List<Movie> movieListOrphanCheck = distributor.getMovieList();
+            for (Movie movieListOrphanCheckMovie : movieListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Distributor (" + distributor + ") cannot be destroyed since the Movie " + movieCollectionOrphanCheckMovie + " in its movieCollection field has a non-nullable distributorId field.");
+                illegalOrphanMessages.add("This Distributor (" + distributor + ") cannot be destroyed since the Movie " + movieListOrphanCheckMovie + " in its movieList field has a non-nullable distributorId field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);

@@ -19,7 +19,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 public class JsonUtils {
-
     
     private static GsonBuilder gsonBuilder = new GsonBuilder()
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
@@ -29,8 +28,7 @@ public class JsonUtils {
             .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeDeserializer())
             .setPrettyPrinting();
     public static Gson gson = gsonBuilder.create();
-    public static Gson gsonWithExclude = gsonBuilder.excludeFieldsWithoutExposeAnnotation().create();
-
+    
     static class LocalDateTimeSerializer implements JsonSerializer <LocalDateTime> {
         private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 

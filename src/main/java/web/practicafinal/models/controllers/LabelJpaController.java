@@ -14,7 +14,6 @@ import jakarta.persistence.criteria.Root;
 import jakarta.transaction.UserTransaction;
 import web.practicafinal.models.Movie;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import web.practicafinal.models.Label;
 import web.practicafinal.models.controllers.exceptions.NonexistentEntityException;
@@ -38,23 +37,23 @@ public class LabelJpaController implements Serializable {
     }
 
     public void create(Label label) throws RollbackFailureException, Exception {
-        if (label.getMovieCollection() == null) {
-            label.setMovieCollection(new ArrayList<Movie>());
+        if (label.getMovieList() == null) {
+            label.setMovieList(new ArrayList<Movie>());
         }
         EntityManager em = null;
         try {
             utx.begin();
             em = getEntityManager();
-            Collection<Movie> attachedMovieCollection = new ArrayList<Movie>();
-            for (Movie movieCollectionMovieToAttach : label.getMovieCollection()) {
-                movieCollectionMovieToAttach = em.getReference(movieCollectionMovieToAttach.getClass(), movieCollectionMovieToAttach.getId());
-                attachedMovieCollection.add(movieCollectionMovieToAttach);
+            List<Movie> attachedMovieList = new ArrayList<Movie>();
+            for (Movie movieListMovieToAttach : label.getMovieList()) {
+                movieListMovieToAttach = em.getReference(movieListMovieToAttach.getClass(), movieListMovieToAttach.getId());
+                attachedMovieList.add(movieListMovieToAttach);
             }
-            label.setMovieCollection(attachedMovieCollection);
+            label.setMovieList(attachedMovieList);
             em.persist(label);
-            for (Movie movieCollectionMovie : label.getMovieCollection()) {
-                movieCollectionMovie.getLabelCollection().add(label);
-                movieCollectionMovie = em.merge(movieCollectionMovie);
+            for (Movie movieListMovie : label.getMovieList()) {
+                movieListMovie.getLabelList().add(label);
+                movieListMovie = em.merge(movieListMovie);
             }
             utx.commit();
         } catch (Exception ex) {
@@ -77,26 +76,26 @@ public class LabelJpaController implements Serializable {
             utx.begin();
             em = getEntityManager();
             Label persistentLabel = em.find(Label.class, label.getId());
-            Collection<Movie> movieCollectionOld = persistentLabel.getMovieCollection();
-            Collection<Movie> movieCollectionNew = label.getMovieCollection();
-            Collection<Movie> attachedMovieCollectionNew = new ArrayList<Movie>();
-            for (Movie movieCollectionNewMovieToAttach : movieCollectionNew) {
-                movieCollectionNewMovieToAttach = em.getReference(movieCollectionNewMovieToAttach.getClass(), movieCollectionNewMovieToAttach.getId());
-                attachedMovieCollectionNew.add(movieCollectionNewMovieToAttach);
+            List<Movie> movieListOld = persistentLabel.getMovieList();
+            List<Movie> movieListNew = label.getMovieList();
+            List<Movie> attachedMovieListNew = new ArrayList<Movie>();
+            for (Movie movieListNewMovieToAttach : movieListNew) {
+                movieListNewMovieToAttach = em.getReference(movieListNewMovieToAttach.getClass(), movieListNewMovieToAttach.getId());
+                attachedMovieListNew.add(movieListNewMovieToAttach);
             }
-            movieCollectionNew = attachedMovieCollectionNew;
-            label.setMovieCollection(movieCollectionNew);
+            movieListNew = attachedMovieListNew;
+            label.setMovieList(movieListNew);
             label = em.merge(label);
-            for (Movie movieCollectionOldMovie : movieCollectionOld) {
-                if (!movieCollectionNew.contains(movieCollectionOldMovie)) {
-                    movieCollectionOldMovie.getLabelCollection().remove(label);
-                    movieCollectionOldMovie = em.merge(movieCollectionOldMovie);
+            for (Movie movieListOldMovie : movieListOld) {
+                if (!movieListNew.contains(movieListOldMovie)) {
+                    movieListOldMovie.getLabelList().remove(label);
+                    movieListOldMovie = em.merge(movieListOldMovie);
                 }
             }
-            for (Movie movieCollectionNewMovie : movieCollectionNew) {
-                if (!movieCollectionOld.contains(movieCollectionNewMovie)) {
-                    movieCollectionNewMovie.getLabelCollection().add(label);
-                    movieCollectionNewMovie = em.merge(movieCollectionNewMovie);
+            for (Movie movieListNewMovie : movieListNew) {
+                if (!movieListOld.contains(movieListNewMovie)) {
+                    movieListNewMovie.getLabelList().add(label);
+                    movieListNewMovie = em.merge(movieListNewMovie);
                 }
             }
             utx.commit();
@@ -133,10 +132,10 @@ public class LabelJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The label with id " + id + " no longer exists.", enfe);
             }
-            Collection<Movie> movieCollection = label.getMovieCollection();
-            for (Movie movieCollectionMovie : movieCollection) {
-                movieCollectionMovie.getLabelCollection().remove(label);
-                movieCollectionMovie = em.merge(movieCollectionMovie);
+            List<Movie> movieList = label.getMovieList();
+            for (Movie movieListMovie : movieList) {
+                movieListMovie.getLabelList().remove(label);
+                movieListMovie = em.merge(movieListMovie);
             }
             em.remove(label);
             utx.commit();

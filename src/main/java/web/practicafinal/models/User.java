@@ -4,11 +4,12 @@
  */
 package web.practicafinal.models;
 
-import com.google.gson.annotations.Expose;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,7 +20,7 @@ import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 
 /**
  *
@@ -33,7 +34,6 @@ import java.util.Collection;
     @NamedQuery(name = "User.findByName", query = "SELECT u FROM User u WHERE u.name = :name"),
     @NamedQuery(name = "User.findByUsername", query = "SELECT u FROM User u WHERE u.username = :username"),
     @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email"),
-    @NamedQuery(name = "User.findByUsernameEmail", query = "SELECT u FROM User u WHERE u.username = :username OR u.email = :email"),
     @NamedQuery(name = "User.findByPassword", query = "SELECT u FROM User u WHERE u.password = :password")})
 public class User implements Serializable {
 
@@ -42,30 +42,28 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
-    @Expose
     private Integer id;
     @Basic(optional = false)
     @Column(name = "name")
-    @Expose
     private String name;
     @Basic(optional = false)
     @Column(name = "username")
-    @Expose
     private String username;
     @Basic(optional = false)
     @Column(name = "email")
-    @Expose
     private String email;
     @Basic(optional = false)
     @Column(name = "password")
     private String password;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
-    private Collection<Ticket> ticketCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
-    private Collection<Comment> commentCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId", fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"userId", "sessionId"})
+    private List<Ticket> ticketList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId", fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"userId", "movieId"})
+    private List<Comment> commentList;
     @JoinColumn(name = "role_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    @Expose
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("userList")
     private Role roleId;
 
     public User() {
@@ -123,20 +121,20 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public Collection<Ticket> getTicketCollection() {
-        return ticketCollection;
+    public List<Ticket> getTicketList() {
+        return ticketList;
     }
 
-    public void setTicketCollection(Collection<Ticket> ticketCollection) {
-        this.ticketCollection = ticketCollection;
+    public void setTicketList(List<Ticket> ticketList) {
+        this.ticketList = ticketList;
     }
 
-    public Collection<Comment> getCommentCollection() {
-        return commentCollection;
+    public List<Comment> getCommentList() {
+        return commentList;
     }
 
-    public void setCommentCollection(Collection<Comment> commentCollection) {
-        this.commentCollection = commentCollection;
+    public void setCommentList(List<Comment> commentList) {
+        this.commentList = commentList;
     }
 
     public Role getRoleId() {

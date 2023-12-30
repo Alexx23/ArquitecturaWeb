@@ -7,6 +7,7 @@ package web.practicafinal.models;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -39,8 +40,11 @@ public class Comment implements Serializable {
     @Lob
     @Column(name = "text")
     private String text;
+    @JoinColumn(name = "movie_id", referencedColumnName = "id")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private Movie movieId;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private User userId;
 
     public Comment() {
@@ -69,6 +73,14 @@ public class Comment implements Serializable {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public Movie getMovieId() {
+        return movieId;
+    }
+
+    public void setMovieId(Movie movieId) {
+        this.movieId = movieId;
     }
 
     public User getUserId() {

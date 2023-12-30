@@ -8,6 +8,7 @@ import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -20,8 +21,8 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -45,13 +46,13 @@ public class Session implements Serializable {
     @Column(name = "datetime")
     @Temporal(TemporalType.TIMESTAMP)
     private Date datetime;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "sessionId")
-    private Collection<Ticket> ticketCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "sessionId", fetch = FetchType.LAZY)
+    private List<Ticket> ticketList;
     @JoinColumn(name = "movie_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Movie movieId;
     @JoinColumn(name = "room_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Room roomId;
 
     public Session() {
@@ -82,12 +83,12 @@ public class Session implements Serializable {
         this.datetime = datetime;
     }
 
-    public Collection<Ticket> getTicketCollection() {
-        return ticketCollection;
+    public List<Ticket> getTicketList() {
+        return ticketList;
     }
 
-    public void setTicketCollection(Collection<Ticket> ticketCollection) {
-        this.ticketCollection = ticketCollection;
+    public void setTicketList(List<Ticket> ticketList) {
+        this.ticketList = ticketList;
     }
 
     public Movie getMovieId() {

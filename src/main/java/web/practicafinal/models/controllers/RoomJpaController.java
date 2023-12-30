@@ -14,7 +14,6 @@ import jakarta.persistence.criteria.Root;
 import jakarta.transaction.UserTransaction;
 import web.practicafinal.models.Session;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import web.practicafinal.models.Room;
 import web.practicafinal.models.controllers.exceptions.IllegalOrphanException;
@@ -39,27 +38,27 @@ public class RoomJpaController implements Serializable {
     }
 
     public void create(Room room) throws RollbackFailureException, Exception {
-        if (room.getSessionCollection() == null) {
-            room.setSessionCollection(new ArrayList<Session>());
+        if (room.getSessionList() == null) {
+            room.setSessionList(new ArrayList<Session>());
         }
         EntityManager em = null;
         try {
             utx.begin();
             em = getEntityManager();
-            Collection<Session> attachedSessionCollection = new ArrayList<Session>();
-            for (Session sessionCollectionSessionToAttach : room.getSessionCollection()) {
-                sessionCollectionSessionToAttach = em.getReference(sessionCollectionSessionToAttach.getClass(), sessionCollectionSessionToAttach.getId());
-                attachedSessionCollection.add(sessionCollectionSessionToAttach);
+            List<Session> attachedSessionList = new ArrayList<Session>();
+            for (Session sessionListSessionToAttach : room.getSessionList()) {
+                sessionListSessionToAttach = em.getReference(sessionListSessionToAttach.getClass(), sessionListSessionToAttach.getId());
+                attachedSessionList.add(sessionListSessionToAttach);
             }
-            room.setSessionCollection(attachedSessionCollection);
+            room.setSessionList(attachedSessionList);
             em.persist(room);
-            for (Session sessionCollectionSession : room.getSessionCollection()) {
-                Room oldRoomIdOfSessionCollectionSession = sessionCollectionSession.getRoomId();
-                sessionCollectionSession.setRoomId(room);
-                sessionCollectionSession = em.merge(sessionCollectionSession);
-                if (oldRoomIdOfSessionCollectionSession != null) {
-                    oldRoomIdOfSessionCollectionSession.getSessionCollection().remove(sessionCollectionSession);
-                    oldRoomIdOfSessionCollectionSession = em.merge(oldRoomIdOfSessionCollectionSession);
+            for (Session sessionListSession : room.getSessionList()) {
+                Room oldRoomIdOfSessionListSession = sessionListSession.getRoomId();
+                sessionListSession.setRoomId(room);
+                sessionListSession = em.merge(sessionListSession);
+                if (oldRoomIdOfSessionListSession != null) {
+                    oldRoomIdOfSessionListSession.getSessionList().remove(sessionListSession);
+                    oldRoomIdOfSessionListSession = em.merge(oldRoomIdOfSessionListSession);
                 }
             }
             utx.commit();
@@ -83,36 +82,36 @@ public class RoomJpaController implements Serializable {
             utx.begin();
             em = getEntityManager();
             Room persistentRoom = em.find(Room.class, room.getId());
-            Collection<Session> sessionCollectionOld = persistentRoom.getSessionCollection();
-            Collection<Session> sessionCollectionNew = room.getSessionCollection();
+            List<Session> sessionListOld = persistentRoom.getSessionList();
+            List<Session> sessionListNew = room.getSessionList();
             List<String> illegalOrphanMessages = null;
-            for (Session sessionCollectionOldSession : sessionCollectionOld) {
-                if (!sessionCollectionNew.contains(sessionCollectionOldSession)) {
+            for (Session sessionListOldSession : sessionListOld) {
+                if (!sessionListNew.contains(sessionListOldSession)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Session " + sessionCollectionOldSession + " since its roomId field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Session " + sessionListOldSession + " since its roomId field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            Collection<Session> attachedSessionCollectionNew = new ArrayList<Session>();
-            for (Session sessionCollectionNewSessionToAttach : sessionCollectionNew) {
-                sessionCollectionNewSessionToAttach = em.getReference(sessionCollectionNewSessionToAttach.getClass(), sessionCollectionNewSessionToAttach.getId());
-                attachedSessionCollectionNew.add(sessionCollectionNewSessionToAttach);
+            List<Session> attachedSessionListNew = new ArrayList<Session>();
+            for (Session sessionListNewSessionToAttach : sessionListNew) {
+                sessionListNewSessionToAttach = em.getReference(sessionListNewSessionToAttach.getClass(), sessionListNewSessionToAttach.getId());
+                attachedSessionListNew.add(sessionListNewSessionToAttach);
             }
-            sessionCollectionNew = attachedSessionCollectionNew;
-            room.setSessionCollection(sessionCollectionNew);
+            sessionListNew = attachedSessionListNew;
+            room.setSessionList(sessionListNew);
             room = em.merge(room);
-            for (Session sessionCollectionNewSession : sessionCollectionNew) {
-                if (!sessionCollectionOld.contains(sessionCollectionNewSession)) {
-                    Room oldRoomIdOfSessionCollectionNewSession = sessionCollectionNewSession.getRoomId();
-                    sessionCollectionNewSession.setRoomId(room);
-                    sessionCollectionNewSession = em.merge(sessionCollectionNewSession);
-                    if (oldRoomIdOfSessionCollectionNewSession != null && !oldRoomIdOfSessionCollectionNewSession.equals(room)) {
-                        oldRoomIdOfSessionCollectionNewSession.getSessionCollection().remove(sessionCollectionNewSession);
-                        oldRoomIdOfSessionCollectionNewSession = em.merge(oldRoomIdOfSessionCollectionNewSession);
+            for (Session sessionListNewSession : sessionListNew) {
+                if (!sessionListOld.contains(sessionListNewSession)) {
+                    Room oldRoomIdOfSessionListNewSession = sessionListNewSession.getRoomId();
+                    sessionListNewSession.setRoomId(room);
+                    sessionListNewSession = em.merge(sessionListNewSession);
+                    if (oldRoomIdOfSessionListNewSession != null && !oldRoomIdOfSessionListNewSession.equals(room)) {
+                        oldRoomIdOfSessionListNewSession.getSessionList().remove(sessionListNewSession);
+                        oldRoomIdOfSessionListNewSession = em.merge(oldRoomIdOfSessionListNewSession);
                     }
                 }
             }
@@ -151,12 +150,12 @@ public class RoomJpaController implements Serializable {
                 throw new NonexistentEntityException("The room with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            Collection<Session> sessionCollectionOrphanCheck = room.getSessionCollection();
-            for (Session sessionCollectionOrphanCheckSession : sessionCollectionOrphanCheck) {
+            List<Session> sessionListOrphanCheck = room.getSessionList();
+            for (Session sessionListOrphanCheckSession : sessionListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Room (" + room + ") cannot be destroyed since the Session " + sessionCollectionOrphanCheckSession + " in its sessionCollection field has a non-nullable roomId field.");
+                illegalOrphanMessages.add("This Room (" + room + ") cannot be destroyed since the Session " + sessionListOrphanCheckSession + " in its sessionList field has a non-nullable roomId field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);

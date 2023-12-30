@@ -14,7 +14,6 @@ import jakarta.persistence.criteria.Root;
 import jakarta.transaction.UserTransaction;
 import web.practicafinal.models.User;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import web.practicafinal.models.Role;
 import web.practicafinal.models.controllers.exceptions.IllegalOrphanException;
@@ -39,27 +38,27 @@ public class RoleJpaController implements Serializable {
     }
 
     public void create(Role role) throws RollbackFailureException, Exception {
-        if (role.getUserCollection() == null) {
-            role.setUserCollection(new ArrayList<User>());
+        if (role.getUserList() == null) {
+            role.setUserList(new ArrayList<User>());
         }
         EntityManager em = null;
         try {
             utx.begin();
             em = getEntityManager();
-            Collection<User> attachedUserCollection = new ArrayList<User>();
-            for (User userCollectionUserToAttach : role.getUserCollection()) {
-                userCollectionUserToAttach = em.getReference(userCollectionUserToAttach.getClass(), userCollectionUserToAttach.getId());
-                attachedUserCollection.add(userCollectionUserToAttach);
+            List<User> attachedUserList = new ArrayList<User>();
+            for (User userListUserToAttach : role.getUserList()) {
+                userListUserToAttach = em.getReference(userListUserToAttach.getClass(), userListUserToAttach.getId());
+                attachedUserList.add(userListUserToAttach);
             }
-            role.setUserCollection(attachedUserCollection);
+            role.setUserList(attachedUserList);
             em.persist(role);
-            for (User userCollectionUser : role.getUserCollection()) {
-                Role oldRoleIdOfUserCollectionUser = userCollectionUser.getRoleId();
-                userCollectionUser.setRoleId(role);
-                userCollectionUser = em.merge(userCollectionUser);
-                if (oldRoleIdOfUserCollectionUser != null) {
-                    oldRoleIdOfUserCollectionUser.getUserCollection().remove(userCollectionUser);
-                    oldRoleIdOfUserCollectionUser = em.merge(oldRoleIdOfUserCollectionUser);
+            for (User userListUser : role.getUserList()) {
+                Role oldRoleIdOfUserListUser = userListUser.getRoleId();
+                userListUser.setRoleId(role);
+                userListUser = em.merge(userListUser);
+                if (oldRoleIdOfUserListUser != null) {
+                    oldRoleIdOfUserListUser.getUserList().remove(userListUser);
+                    oldRoleIdOfUserListUser = em.merge(oldRoleIdOfUserListUser);
                 }
             }
             utx.commit();
@@ -83,36 +82,36 @@ public class RoleJpaController implements Serializable {
             utx.begin();
             em = getEntityManager();
             Role persistentRole = em.find(Role.class, role.getId());
-            Collection<User> userCollectionOld = persistentRole.getUserCollection();
-            Collection<User> userCollectionNew = role.getUserCollection();
+            List<User> userListOld = persistentRole.getUserList();
+            List<User> userListNew = role.getUserList();
             List<String> illegalOrphanMessages = null;
-            for (User userCollectionOldUser : userCollectionOld) {
-                if (!userCollectionNew.contains(userCollectionOldUser)) {
+            for (User userListOldUser : userListOld) {
+                if (!userListNew.contains(userListOldUser)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain User " + userCollectionOldUser + " since its roleId field is not nullable.");
+                    illegalOrphanMessages.add("You must retain User " + userListOldUser + " since its roleId field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            Collection<User> attachedUserCollectionNew = new ArrayList<User>();
-            for (User userCollectionNewUserToAttach : userCollectionNew) {
-                userCollectionNewUserToAttach = em.getReference(userCollectionNewUserToAttach.getClass(), userCollectionNewUserToAttach.getId());
-                attachedUserCollectionNew.add(userCollectionNewUserToAttach);
+            List<User> attachedUserListNew = new ArrayList<User>();
+            for (User userListNewUserToAttach : userListNew) {
+                userListNewUserToAttach = em.getReference(userListNewUserToAttach.getClass(), userListNewUserToAttach.getId());
+                attachedUserListNew.add(userListNewUserToAttach);
             }
-            userCollectionNew = attachedUserCollectionNew;
-            role.setUserCollection(userCollectionNew);
+            userListNew = attachedUserListNew;
+            role.setUserList(userListNew);
             role = em.merge(role);
-            for (User userCollectionNewUser : userCollectionNew) {
-                if (!userCollectionOld.contains(userCollectionNewUser)) {
-                    Role oldRoleIdOfUserCollectionNewUser = userCollectionNewUser.getRoleId();
-                    userCollectionNewUser.setRoleId(role);
-                    userCollectionNewUser = em.merge(userCollectionNewUser);
-                    if (oldRoleIdOfUserCollectionNewUser != null && !oldRoleIdOfUserCollectionNewUser.equals(role)) {
-                        oldRoleIdOfUserCollectionNewUser.getUserCollection().remove(userCollectionNewUser);
-                        oldRoleIdOfUserCollectionNewUser = em.merge(oldRoleIdOfUserCollectionNewUser);
+            for (User userListNewUser : userListNew) {
+                if (!userListOld.contains(userListNewUser)) {
+                    Role oldRoleIdOfUserListNewUser = userListNewUser.getRoleId();
+                    userListNewUser.setRoleId(role);
+                    userListNewUser = em.merge(userListNewUser);
+                    if (oldRoleIdOfUserListNewUser != null && !oldRoleIdOfUserListNewUser.equals(role)) {
+                        oldRoleIdOfUserListNewUser.getUserList().remove(userListNewUser);
+                        oldRoleIdOfUserListNewUser = em.merge(oldRoleIdOfUserListNewUser);
                     }
                 }
             }
@@ -151,12 +150,12 @@ public class RoleJpaController implements Serializable {
                 throw new NonexistentEntityException("The role with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            Collection<User> userCollectionOrphanCheck = role.getUserCollection();
-            for (User userCollectionOrphanCheckUser : userCollectionOrphanCheck) {
+            List<User> userListOrphanCheck = role.getUserList();
+            for (User userListOrphanCheckUser : userListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Role (" + role + ") cannot be destroyed since the User " + userCollectionOrphanCheckUser + " in its userCollection field has a non-nullable roleId field.");
+                illegalOrphanMessages.add("This Role (" + role + ") cannot be destroyed since the User " + userListOrphanCheckUser + " in its userList field has a non-nullable roleId field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);

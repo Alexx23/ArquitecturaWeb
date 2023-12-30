@@ -8,6 +8,7 @@ import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -16,7 +17,7 @@ import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 
 /**
  *
@@ -43,8 +44,8 @@ public class AgeClassification implements Serializable {
     @Basic(optional = false)
     @Column(name = "age")
     private short age;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ageClassificationId")
-    private Collection<Movie> movieCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ageClassificationId", fetch = FetchType.LAZY)
+    private List<Movie> movieList;
 
     public AgeClassification() {
     }
@@ -83,12 +84,12 @@ public class AgeClassification implements Serializable {
         this.age = age;
     }
 
-    public Collection<Movie> getMovieCollection() {
-        return movieCollection;
+    public List<Movie> getMovieList() {
+        return movieList;
     }
 
-    public void setMovieCollection(Collection<Movie> movieCollection) {
-        this.movieCollection = movieCollection;
+    public void setMovieList(List<Movie> movieList) {
+        this.movieList = movieList;
     }
 
     @Override

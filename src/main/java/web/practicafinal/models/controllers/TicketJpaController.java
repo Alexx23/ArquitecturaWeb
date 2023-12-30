@@ -53,11 +53,11 @@ public class TicketJpaController implements Serializable {
             }
             em.persist(ticket);
             if (sessionId != null) {
-                sessionId.getTicketCollection().add(ticket);
+                sessionId.getTicketList().add(ticket);
                 sessionId = em.merge(sessionId);
             }
             if (userId != null) {
-                userId.getTicketCollection().add(ticket);
+                userId.getTicketList().add(ticket);
                 userId = em.merge(userId);
             }
             utx.commit();
@@ -95,19 +95,19 @@ public class TicketJpaController implements Serializable {
             }
             ticket = em.merge(ticket);
             if (sessionIdOld != null && !sessionIdOld.equals(sessionIdNew)) {
-                sessionIdOld.getTicketCollection().remove(ticket);
+                sessionIdOld.getTicketList().remove(ticket);
                 sessionIdOld = em.merge(sessionIdOld);
             }
             if (sessionIdNew != null && !sessionIdNew.equals(sessionIdOld)) {
-                sessionIdNew.getTicketCollection().add(ticket);
+                sessionIdNew.getTicketList().add(ticket);
                 sessionIdNew = em.merge(sessionIdNew);
             }
             if (userIdOld != null && !userIdOld.equals(userIdNew)) {
-                userIdOld.getTicketCollection().remove(ticket);
+                userIdOld.getTicketList().remove(ticket);
                 userIdOld = em.merge(userIdOld);
             }
             if (userIdNew != null && !userIdNew.equals(userIdOld)) {
-                userIdNew.getTicketCollection().add(ticket);
+                userIdNew.getTicketList().add(ticket);
                 userIdNew = em.merge(userIdNew);
             }
             utx.commit();
@@ -146,12 +146,12 @@ public class TicketJpaController implements Serializable {
             }
             Session sessionId = ticket.getSessionId();
             if (sessionId != null) {
-                sessionId.getTicketCollection().remove(ticket);
+                sessionId.getTicketList().remove(ticket);
                 sessionId = em.merge(sessionId);
             }
             User userId = ticket.getUserId();
             if (userId != null) {
-                userId.getTicketCollection().remove(ticket);
+                userId.getTicketList().remove(ticket);
                 userId = em.merge(userId);
             }
             em.remove(ticket);

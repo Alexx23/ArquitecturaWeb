@@ -14,6 +14,14 @@ public class UserHelper {
     
     private static EntityManager em = ModelController.getEMF().createEntityManager();
     
+    public static User getUserById(int id) {
+        TypedQuery<User> query = em.createNamedQuery("User.findById", User.class); 
+        query.setParameter("id", id);
+        List<User> results = query.getResultList();
+        if (results.size() <= 0) return null;
+        return results.get(0);
+    }
+    
     public static User getUserByUsername(String username) {
         TypedQuery<User> queryUsername = em.createNamedQuery("User.findByUsername", User.class); 
         queryUsername.setParameter("username", username);
@@ -31,11 +39,12 @@ public class UserHelper {
     }
     
     public static User getUserByUsernameEmail(String username) {
-        TypedQuery<User> query = em.createNamedQuery("User.findByUsernameEmail", User.class); 
+        TypedQuery<User> query = em.createQuery("SELECT u FROM User u WHERE u.username = :username OR u.email = :email", User.class);
         query.setParameter("username", username);
         query.setParameter("email", username);
         List<User> results = query.getResultList();
         if (results.size() <= 0) return null;
         return results.get(0);
     }
+
 }

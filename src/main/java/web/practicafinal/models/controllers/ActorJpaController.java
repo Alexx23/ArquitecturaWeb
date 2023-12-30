@@ -14,7 +14,6 @@ import jakarta.persistence.criteria.Root;
 import jakarta.transaction.UserTransaction;
 import web.practicafinal.models.Movie;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import web.practicafinal.models.Actor;
 import web.practicafinal.models.controllers.exceptions.NonexistentEntityException;
@@ -38,23 +37,23 @@ public class ActorJpaController implements Serializable {
     }
 
     public void create(Actor actor) throws RollbackFailureException, Exception {
-        if (actor.getMovieCollection() == null) {
-            actor.setMovieCollection(new ArrayList<Movie>());
+        if (actor.getMovieList() == null) {
+            actor.setMovieList(new ArrayList<Movie>());
         }
         EntityManager em = null;
         try {
             utx.begin();
             em = getEntityManager();
-            Collection<Movie> attachedMovieCollection = new ArrayList<Movie>();
-            for (Movie movieCollectionMovieToAttach : actor.getMovieCollection()) {
-                movieCollectionMovieToAttach = em.getReference(movieCollectionMovieToAttach.getClass(), movieCollectionMovieToAttach.getId());
-                attachedMovieCollection.add(movieCollectionMovieToAttach);
+            List<Movie> attachedMovieList = new ArrayList<Movie>();
+            for (Movie movieListMovieToAttach : actor.getMovieList()) {
+                movieListMovieToAttach = em.getReference(movieListMovieToAttach.getClass(), movieListMovieToAttach.getId());
+                attachedMovieList.add(movieListMovieToAttach);
             }
-            actor.setMovieCollection(attachedMovieCollection);
+            actor.setMovieList(attachedMovieList);
             em.persist(actor);
-            for (Movie movieCollectionMovie : actor.getMovieCollection()) {
-                movieCollectionMovie.getActorCollection().add(actor);
-                movieCollectionMovie = em.merge(movieCollectionMovie);
+            for (Movie movieListMovie : actor.getMovieList()) {
+                movieListMovie.getActorList().add(actor);
+                movieListMovie = em.merge(movieListMovie);
             }
             utx.commit();
         } catch (Exception ex) {
@@ -77,26 +76,26 @@ public class ActorJpaController implements Serializable {
             utx.begin();
             em = getEntityManager();
             Actor persistentActor = em.find(Actor.class, actor.getId());
-            Collection<Movie> movieCollectionOld = persistentActor.getMovieCollection();
-            Collection<Movie> movieCollectionNew = actor.getMovieCollection();
-            Collection<Movie> attachedMovieCollectionNew = new ArrayList<Movie>();
-            for (Movie movieCollectionNewMovieToAttach : movieCollectionNew) {
-                movieCollectionNewMovieToAttach = em.getReference(movieCollectionNewMovieToAttach.getClass(), movieCollectionNewMovieToAttach.getId());
-                attachedMovieCollectionNew.add(movieCollectionNewMovieToAttach);
+            List<Movie> movieListOld = persistentActor.getMovieList();
+            List<Movie> movieListNew = actor.getMovieList();
+            List<Movie> attachedMovieListNew = new ArrayList<Movie>();
+            for (Movie movieListNewMovieToAttach : movieListNew) {
+                movieListNewMovieToAttach = em.getReference(movieListNewMovieToAttach.getClass(), movieListNewMovieToAttach.getId());
+                attachedMovieListNew.add(movieListNewMovieToAttach);
             }
-            movieCollectionNew = attachedMovieCollectionNew;
-            actor.setMovieCollection(movieCollectionNew);
+            movieListNew = attachedMovieListNew;
+            actor.setMovieList(movieListNew);
             actor = em.merge(actor);
-            for (Movie movieCollectionOldMovie : movieCollectionOld) {
-                if (!movieCollectionNew.contains(movieCollectionOldMovie)) {
-                    movieCollectionOldMovie.getActorCollection().remove(actor);
-                    movieCollectionOldMovie = em.merge(movieCollectionOldMovie);
+            for (Movie movieListOldMovie : movieListOld) {
+                if (!movieListNew.contains(movieListOldMovie)) {
+                    movieListOldMovie.getActorList().remove(actor);
+                    movieListOldMovie = em.merge(movieListOldMovie);
                 }
             }
-            for (Movie movieCollectionNewMovie : movieCollectionNew) {
-                if (!movieCollectionOld.contains(movieCollectionNewMovie)) {
-                    movieCollectionNewMovie.getActorCollection().add(actor);
-                    movieCollectionNewMovie = em.merge(movieCollectionNewMovie);
+            for (Movie movieListNewMovie : movieListNew) {
+                if (!movieListOld.contains(movieListNewMovie)) {
+                    movieListNewMovie.getActorList().add(actor);
+                    movieListNewMovie = em.merge(movieListNewMovie);
                 }
             }
             utx.commit();
@@ -133,10 +132,10 @@ public class ActorJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The actor with id " + id + " no longer exists.", enfe);
             }
-            Collection<Movie> movieCollection = actor.getMovieCollection();
-            for (Movie movieCollectionMovie : movieCollection) {
-                movieCollectionMovie.getActorCollection().remove(actor);
-                movieCollectionMovie = em.merge(movieCollectionMovie);
+            List<Movie> movieList = actor.getMovieList();
+            for (Movie movieListMovie : movieList) {
+                movieListMovie.getActorList().remove(actor);
+                movieListMovie = em.merge(movieListMovie);
             }
             em.remove(actor);
             utx.commit();

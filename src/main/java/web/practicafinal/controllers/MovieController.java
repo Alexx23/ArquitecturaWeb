@@ -69,7 +69,7 @@ public class MovieController extends HttpServlet {
         
         if (movieIdStr == null) {
             List<Movie> movies = movieJpaController.findMovieEntities();
-            Response.outputData(response, 200, movies, true);
+            Response.outputData(response, 200, movies);
             return;
         }
         
@@ -79,7 +79,7 @@ public class MovieController extends HttpServlet {
             Response.outputMessage(response, 404, "No se ha encontrado la película solicitada");
             return;
         }
-        Response.outputData(response, 200, movie, true);
+        Response.outputData(response, 200, movie);
         
     }
     
@@ -132,7 +132,7 @@ public class MovieController extends HttpServlet {
 
         try {
             movieJpaController.create(movie);
-            Response.outputData(response, 200, movie, true);
+            Response.outputData(response, 200, movie);
         } catch (Exception ex) {
             CustomLogger.errorThrow(MovieController.class.getName(), ex);
             Response.outputMessage(response, 500, "Ha ocurrido un error interno.");
@@ -185,7 +185,7 @@ public class MovieController extends HttpServlet {
         
         try {
             movieJpaController.edit(movie);
-            Response.outputData(response, 200, movie, true);
+            Response.outputData(response, 200, movie);
         } catch (Exception ex) {
             CustomLogger.errorThrow(MovieController.class.getName(), ex);
             Response.outputMessage(response, 500, "Ha ocurrido un error interno.");

@@ -14,7 +14,6 @@ import jakarta.persistence.criteria.Root;
 import jakarta.transaction.UserTransaction;
 import web.practicafinal.models.Movie;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import web.practicafinal.models.Director;
 import web.practicafinal.models.controllers.exceptions.IllegalOrphanException;
@@ -39,27 +38,27 @@ public class DirectorJpaController implements Serializable {
     }
 
     public void create(Director director) throws RollbackFailureException, Exception {
-        if (director.getMovieCollection() == null) {
-            director.setMovieCollection(new ArrayList<Movie>());
+        if (director.getMovieList() == null) {
+            director.setMovieList(new ArrayList<Movie>());
         }
         EntityManager em = null;
         try {
             utx.begin();
             em = getEntityManager();
-            Collection<Movie> attachedMovieCollection = new ArrayList<Movie>();
-            for (Movie movieCollectionMovieToAttach : director.getMovieCollection()) {
-                movieCollectionMovieToAttach = em.getReference(movieCollectionMovieToAttach.getClass(), movieCollectionMovieToAttach.getId());
-                attachedMovieCollection.add(movieCollectionMovieToAttach);
+            List<Movie> attachedMovieList = new ArrayList<Movie>();
+            for (Movie movieListMovieToAttach : director.getMovieList()) {
+                movieListMovieToAttach = em.getReference(movieListMovieToAttach.getClass(), movieListMovieToAttach.getId());
+                attachedMovieList.add(movieListMovieToAttach);
             }
-            director.setMovieCollection(attachedMovieCollection);
+            director.setMovieList(attachedMovieList);
             em.persist(director);
-            for (Movie movieCollectionMovie : director.getMovieCollection()) {
-                Director oldDirectorIdOfMovieCollectionMovie = movieCollectionMovie.getDirectorId();
-                movieCollectionMovie.setDirectorId(director);
-                movieCollectionMovie = em.merge(movieCollectionMovie);
-                if (oldDirectorIdOfMovieCollectionMovie != null) {
-                    oldDirectorIdOfMovieCollectionMovie.getMovieCollection().remove(movieCollectionMovie);
-                    oldDirectorIdOfMovieCollectionMovie = em.merge(oldDirectorIdOfMovieCollectionMovie);
+            for (Movie movieListMovie : director.getMovieList()) {
+                Director oldDirectorIdOfMovieListMovie = movieListMovie.getDirectorId();
+                movieListMovie.setDirectorId(director);
+                movieListMovie = em.merge(movieListMovie);
+                if (oldDirectorIdOfMovieListMovie != null) {
+                    oldDirectorIdOfMovieListMovie.getMovieList().remove(movieListMovie);
+                    oldDirectorIdOfMovieListMovie = em.merge(oldDirectorIdOfMovieListMovie);
                 }
             }
             utx.commit();
@@ -83,36 +82,36 @@ public class DirectorJpaController implements Serializable {
             utx.begin();
             em = getEntityManager();
             Director persistentDirector = em.find(Director.class, director.getId());
-            Collection<Movie> movieCollectionOld = persistentDirector.getMovieCollection();
-            Collection<Movie> movieCollectionNew = director.getMovieCollection();
+            List<Movie> movieListOld = persistentDirector.getMovieList();
+            List<Movie> movieListNew = director.getMovieList();
             List<String> illegalOrphanMessages = null;
-            for (Movie movieCollectionOldMovie : movieCollectionOld) {
-                if (!movieCollectionNew.contains(movieCollectionOldMovie)) {
+            for (Movie movieListOldMovie : movieListOld) {
+                if (!movieListNew.contains(movieListOldMovie)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Movie " + movieCollectionOldMovie + " since its directorId field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Movie " + movieListOldMovie + " since its directorId field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            Collection<Movie> attachedMovieCollectionNew = new ArrayList<Movie>();
-            for (Movie movieCollectionNewMovieToAttach : movieCollectionNew) {
-                movieCollectionNewMovieToAttach = em.getReference(movieCollectionNewMovieToAttach.getClass(), movieCollectionNewMovieToAttach.getId());
-                attachedMovieCollectionNew.add(movieCollectionNewMovieToAttach);
+            List<Movie> attachedMovieListNew = new ArrayList<Movie>();
+            for (Movie movieListNewMovieToAttach : movieListNew) {
+                movieListNewMovieToAttach = em.getReference(movieListNewMovieToAttach.getClass(), movieListNewMovieToAttach.getId());
+                attachedMovieListNew.add(movieListNewMovieToAttach);
             }
-            movieCollectionNew = attachedMovieCollectionNew;
-            director.setMovieCollection(movieCollectionNew);
+            movieListNew = attachedMovieListNew;
+            director.setMovieList(movieListNew);
             director = em.merge(director);
-            for (Movie movieCollectionNewMovie : movieCollectionNew) {
-                if (!movieCollectionOld.contains(movieCollectionNewMovie)) {
-                    Director oldDirectorIdOfMovieCollectionNewMovie = movieCollectionNewMovie.getDirectorId();
-                    movieCollectionNewMovie.setDirectorId(director);
-                    movieCollectionNewMovie = em.merge(movieCollectionNewMovie);
-                    if (oldDirectorIdOfMovieCollectionNewMovie != null && !oldDirectorIdOfMovieCollectionNewMovie.equals(director)) {
-                        oldDirectorIdOfMovieCollectionNewMovie.getMovieCollection().remove(movieCollectionNewMovie);
-                        oldDirectorIdOfMovieCollectionNewMovie = em.merge(oldDirectorIdOfMovieCollectionNewMovie);
+            for (Movie movieListNewMovie : movieListNew) {
+                if (!movieListOld.contains(movieListNewMovie)) {
+                    Director oldDirectorIdOfMovieListNewMovie = movieListNewMovie.getDirectorId();
+                    movieListNewMovie.setDirectorId(director);
+                    movieListNewMovie = em.merge(movieListNewMovie);
+                    if (oldDirectorIdOfMovieListNewMovie != null && !oldDirectorIdOfMovieListNewMovie.equals(director)) {
+                        oldDirectorIdOfMovieListNewMovie.getMovieList().remove(movieListNewMovie);
+                        oldDirectorIdOfMovieListNewMovie = em.merge(oldDirectorIdOfMovieListNewMovie);
                     }
                 }
             }
@@ -151,12 +150,12 @@ public class DirectorJpaController implements Serializable {
                 throw new NonexistentEntityException("The director with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            Collection<Movie> movieCollectionOrphanCheck = director.getMovieCollection();
-            for (Movie movieCollectionOrphanCheckMovie : movieCollectionOrphanCheck) {
+            List<Movie> movieListOrphanCheck = director.getMovieList();
+            for (Movie movieListOrphanCheckMovie : movieListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Director (" + director + ") cannot be destroyed since the Movie " + movieCollectionOrphanCheckMovie + " in its movieCollection field has a non-nullable directorId field.");
+                illegalOrphanMessages.add("This Director (" + director + ") cannot be destroyed since the Movie " + movieListOrphanCheckMovie + " in its movieList field has a non-nullable directorId field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);

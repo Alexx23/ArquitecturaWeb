@@ -15,7 +15,6 @@ import jakarta.transaction.UserTransaction;
 import web.practicafinal.models.Role;
 import web.practicafinal.models.Ticket;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import web.practicafinal.models.Comment;
 import web.practicafinal.models.User;
@@ -41,11 +40,11 @@ public class UserJpaController implements Serializable {
     }
 
     public void create(User user) throws RollbackFailureException, Exception {
-        if (user.getTicketCollection() == null) {
-            user.setTicketCollection(new ArrayList<Ticket>());
+        if (user.getTicketList() == null) {
+            user.setTicketList(new ArrayList<Ticket>());
         }
-        if (user.getCommentCollection() == null) {
-            user.setCommentCollection(new ArrayList<Comment>());
+        if (user.getCommentList() == null) {
+            user.setCommentList(new ArrayList<Comment>());
         }
         EntityManager em = null;
         try {
@@ -56,39 +55,39 @@ public class UserJpaController implements Serializable {
                 roleId = em.getReference(roleId.getClass(), roleId.getId());
                 user.setRoleId(roleId);
             }
-            Collection<Ticket> attachedTicketCollection = new ArrayList<Ticket>();
-            for (Ticket ticketCollectionTicketToAttach : user.getTicketCollection()) {
-                ticketCollectionTicketToAttach = em.getReference(ticketCollectionTicketToAttach.getClass(), ticketCollectionTicketToAttach.getId());
-                attachedTicketCollection.add(ticketCollectionTicketToAttach);
+            List<Ticket> attachedTicketList = new ArrayList<Ticket>();
+            for (Ticket ticketListTicketToAttach : user.getTicketList()) {
+                ticketListTicketToAttach = em.getReference(ticketListTicketToAttach.getClass(), ticketListTicketToAttach.getId());
+                attachedTicketList.add(ticketListTicketToAttach);
             }
-            user.setTicketCollection(attachedTicketCollection);
-            Collection<Comment> attachedCommentCollection = new ArrayList<Comment>();
-            for (Comment commentCollectionCommentToAttach : user.getCommentCollection()) {
-                commentCollectionCommentToAttach = em.getReference(commentCollectionCommentToAttach.getClass(), commentCollectionCommentToAttach.getId());
-                attachedCommentCollection.add(commentCollectionCommentToAttach);
+            user.setTicketList(attachedTicketList);
+            List<Comment> attachedCommentList = new ArrayList<Comment>();
+            for (Comment commentListCommentToAttach : user.getCommentList()) {
+                commentListCommentToAttach = em.getReference(commentListCommentToAttach.getClass(), commentListCommentToAttach.getId());
+                attachedCommentList.add(commentListCommentToAttach);
             }
-            user.setCommentCollection(attachedCommentCollection);
+            user.setCommentList(attachedCommentList);
             em.persist(user);
             if (roleId != null) {
-                roleId.getUserCollection().add(user);
+                roleId.getUserList().add(user);
                 roleId = em.merge(roleId);
             }
-            for (Ticket ticketCollectionTicket : user.getTicketCollection()) {
-                User oldUserIdOfTicketCollectionTicket = ticketCollectionTicket.getUserId();
-                ticketCollectionTicket.setUserId(user);
-                ticketCollectionTicket = em.merge(ticketCollectionTicket);
-                if (oldUserIdOfTicketCollectionTicket != null) {
-                    oldUserIdOfTicketCollectionTicket.getTicketCollection().remove(ticketCollectionTicket);
-                    oldUserIdOfTicketCollectionTicket = em.merge(oldUserIdOfTicketCollectionTicket);
+            for (Ticket ticketListTicket : user.getTicketList()) {
+                User oldUserIdOfTicketListTicket = ticketListTicket.getUserId();
+                ticketListTicket.setUserId(user);
+                ticketListTicket = em.merge(ticketListTicket);
+                if (oldUserIdOfTicketListTicket != null) {
+                    oldUserIdOfTicketListTicket.getTicketList().remove(ticketListTicket);
+                    oldUserIdOfTicketListTicket = em.merge(oldUserIdOfTicketListTicket);
                 }
             }
-            for (Comment commentCollectionComment : user.getCommentCollection()) {
-                User oldUserIdOfCommentCollectionComment = commentCollectionComment.getUserId();
-                commentCollectionComment.setUserId(user);
-                commentCollectionComment = em.merge(commentCollectionComment);
-                if (oldUserIdOfCommentCollectionComment != null) {
-                    oldUserIdOfCommentCollectionComment.getCommentCollection().remove(commentCollectionComment);
-                    oldUserIdOfCommentCollectionComment = em.merge(oldUserIdOfCommentCollectionComment);
+            for (Comment commentListComment : user.getCommentList()) {
+                User oldUserIdOfCommentListComment = commentListComment.getUserId();
+                commentListComment.setUserId(user);
+                commentListComment = em.merge(commentListComment);
+                if (oldUserIdOfCommentListComment != null) {
+                    oldUserIdOfCommentListComment.getCommentList().remove(commentListComment);
+                    oldUserIdOfCommentListComment = em.merge(oldUserIdOfCommentListComment);
                 }
             }
             utx.commit();
@@ -114,25 +113,25 @@ public class UserJpaController implements Serializable {
             User persistentUser = em.find(User.class, user.getId());
             Role roleIdOld = persistentUser.getRoleId();
             Role roleIdNew = user.getRoleId();
-            Collection<Ticket> ticketCollectionOld = persistentUser.getTicketCollection();
-            Collection<Ticket> ticketCollectionNew = user.getTicketCollection();
-            Collection<Comment> commentCollectionOld = persistentUser.getCommentCollection();
-            Collection<Comment> commentCollectionNew = user.getCommentCollection();
+            List<Ticket> ticketListOld = persistentUser.getTicketList();
+            List<Ticket> ticketListNew = user.getTicketList();
+            List<Comment> commentListOld = persistentUser.getCommentList();
+            List<Comment> commentListNew = user.getCommentList();
             List<String> illegalOrphanMessages = null;
-            for (Ticket ticketCollectionOldTicket : ticketCollectionOld) {
-                if (!ticketCollectionNew.contains(ticketCollectionOldTicket)) {
+            for (Ticket ticketListOldTicket : ticketListOld) {
+                if (!ticketListNew.contains(ticketListOldTicket)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Ticket " + ticketCollectionOldTicket + " since its userId field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Ticket " + ticketListOldTicket + " since its userId field is not nullable.");
                 }
             }
-            for (Comment commentCollectionOldComment : commentCollectionOld) {
-                if (!commentCollectionNew.contains(commentCollectionOldComment)) {
+            for (Comment commentListOldComment : commentListOld) {
+                if (!commentListNew.contains(commentListOldComment)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Comment " + commentCollectionOldComment + " since its userId field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Comment " + commentListOldComment + " since its userId field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -142,48 +141,48 @@ public class UserJpaController implements Serializable {
                 roleIdNew = em.getReference(roleIdNew.getClass(), roleIdNew.getId());
                 user.setRoleId(roleIdNew);
             }
-            Collection<Ticket> attachedTicketCollectionNew = new ArrayList<Ticket>();
-            for (Ticket ticketCollectionNewTicketToAttach : ticketCollectionNew) {
-                ticketCollectionNewTicketToAttach = em.getReference(ticketCollectionNewTicketToAttach.getClass(), ticketCollectionNewTicketToAttach.getId());
-                attachedTicketCollectionNew.add(ticketCollectionNewTicketToAttach);
+            List<Ticket> attachedTicketListNew = new ArrayList<Ticket>();
+            for (Ticket ticketListNewTicketToAttach : ticketListNew) {
+                ticketListNewTicketToAttach = em.getReference(ticketListNewTicketToAttach.getClass(), ticketListNewTicketToAttach.getId());
+                attachedTicketListNew.add(ticketListNewTicketToAttach);
             }
-            ticketCollectionNew = attachedTicketCollectionNew;
-            user.setTicketCollection(ticketCollectionNew);
-            Collection<Comment> attachedCommentCollectionNew = new ArrayList<Comment>();
-            for (Comment commentCollectionNewCommentToAttach : commentCollectionNew) {
-                commentCollectionNewCommentToAttach = em.getReference(commentCollectionNewCommentToAttach.getClass(), commentCollectionNewCommentToAttach.getId());
-                attachedCommentCollectionNew.add(commentCollectionNewCommentToAttach);
+            ticketListNew = attachedTicketListNew;
+            user.setTicketList(ticketListNew);
+            List<Comment> attachedCommentListNew = new ArrayList<Comment>();
+            for (Comment commentListNewCommentToAttach : commentListNew) {
+                commentListNewCommentToAttach = em.getReference(commentListNewCommentToAttach.getClass(), commentListNewCommentToAttach.getId());
+                attachedCommentListNew.add(commentListNewCommentToAttach);
             }
-            commentCollectionNew = attachedCommentCollectionNew;
-            user.setCommentCollection(commentCollectionNew);
+            commentListNew = attachedCommentListNew;
+            user.setCommentList(commentListNew);
             user = em.merge(user);
             if (roleIdOld != null && !roleIdOld.equals(roleIdNew)) {
-                roleIdOld.getUserCollection().remove(user);
+                roleIdOld.getUserList().remove(user);
                 roleIdOld = em.merge(roleIdOld);
             }
             if (roleIdNew != null && !roleIdNew.equals(roleIdOld)) {
-                roleIdNew.getUserCollection().add(user);
+                roleIdNew.getUserList().add(user);
                 roleIdNew = em.merge(roleIdNew);
             }
-            for (Ticket ticketCollectionNewTicket : ticketCollectionNew) {
-                if (!ticketCollectionOld.contains(ticketCollectionNewTicket)) {
-                    User oldUserIdOfTicketCollectionNewTicket = ticketCollectionNewTicket.getUserId();
-                    ticketCollectionNewTicket.setUserId(user);
-                    ticketCollectionNewTicket = em.merge(ticketCollectionNewTicket);
-                    if (oldUserIdOfTicketCollectionNewTicket != null && !oldUserIdOfTicketCollectionNewTicket.equals(user)) {
-                        oldUserIdOfTicketCollectionNewTicket.getTicketCollection().remove(ticketCollectionNewTicket);
-                        oldUserIdOfTicketCollectionNewTicket = em.merge(oldUserIdOfTicketCollectionNewTicket);
+            for (Ticket ticketListNewTicket : ticketListNew) {
+                if (!ticketListOld.contains(ticketListNewTicket)) {
+                    User oldUserIdOfTicketListNewTicket = ticketListNewTicket.getUserId();
+                    ticketListNewTicket.setUserId(user);
+                    ticketListNewTicket = em.merge(ticketListNewTicket);
+                    if (oldUserIdOfTicketListNewTicket != null && !oldUserIdOfTicketListNewTicket.equals(user)) {
+                        oldUserIdOfTicketListNewTicket.getTicketList().remove(ticketListNewTicket);
+                        oldUserIdOfTicketListNewTicket = em.merge(oldUserIdOfTicketListNewTicket);
                     }
                 }
             }
-            for (Comment commentCollectionNewComment : commentCollectionNew) {
-                if (!commentCollectionOld.contains(commentCollectionNewComment)) {
-                    User oldUserIdOfCommentCollectionNewComment = commentCollectionNewComment.getUserId();
-                    commentCollectionNewComment.setUserId(user);
-                    commentCollectionNewComment = em.merge(commentCollectionNewComment);
-                    if (oldUserIdOfCommentCollectionNewComment != null && !oldUserIdOfCommentCollectionNewComment.equals(user)) {
-                        oldUserIdOfCommentCollectionNewComment.getCommentCollection().remove(commentCollectionNewComment);
-                        oldUserIdOfCommentCollectionNewComment = em.merge(oldUserIdOfCommentCollectionNewComment);
+            for (Comment commentListNewComment : commentListNew) {
+                if (!commentListOld.contains(commentListNewComment)) {
+                    User oldUserIdOfCommentListNewComment = commentListNewComment.getUserId();
+                    commentListNewComment.setUserId(user);
+                    commentListNewComment = em.merge(commentListNewComment);
+                    if (oldUserIdOfCommentListNewComment != null && !oldUserIdOfCommentListNewComment.equals(user)) {
+                        oldUserIdOfCommentListNewComment.getCommentList().remove(commentListNewComment);
+                        oldUserIdOfCommentListNewComment = em.merge(oldUserIdOfCommentListNewComment);
                     }
                 }
             }
@@ -222,26 +221,26 @@ public class UserJpaController implements Serializable {
                 throw new NonexistentEntityException("The user with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            Collection<Ticket> ticketCollectionOrphanCheck = user.getTicketCollection();
-            for (Ticket ticketCollectionOrphanCheckTicket : ticketCollectionOrphanCheck) {
+            List<Ticket> ticketListOrphanCheck = user.getTicketList();
+            for (Ticket ticketListOrphanCheckTicket : ticketListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This User (" + user + ") cannot be destroyed since the Ticket " + ticketCollectionOrphanCheckTicket + " in its ticketCollection field has a non-nullable userId field.");
+                illegalOrphanMessages.add("This User (" + user + ") cannot be destroyed since the Ticket " + ticketListOrphanCheckTicket + " in its ticketList field has a non-nullable userId field.");
             }
-            Collection<Comment> commentCollectionOrphanCheck = user.getCommentCollection();
-            for (Comment commentCollectionOrphanCheckComment : commentCollectionOrphanCheck) {
+            List<Comment> commentListOrphanCheck = user.getCommentList();
+            for (Comment commentListOrphanCheckComment : commentListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This User (" + user + ") cannot be destroyed since the Comment " + commentCollectionOrphanCheckComment + " in its commentCollection field has a non-nullable userId field.");
+                illegalOrphanMessages.add("This User (" + user + ") cannot be destroyed since the Comment " + commentListOrphanCheckComment + " in its commentList field has a non-nullable userId field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
             Role roleId = user.getRoleId();
             if (roleId != null) {
-                roleId.getUserCollection().remove(user);
+                roleId.getUserList().remove(user);
                 roleId = em.merge(roleId);
             }
             em.remove(user);

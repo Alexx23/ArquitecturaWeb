@@ -14,7 +14,6 @@ import jakarta.persistence.criteria.Root;
 import jakarta.transaction.UserTransaction;
 import web.practicafinal.models.Movie;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import web.practicafinal.models.AgeClassification;
 import web.practicafinal.models.controllers.exceptions.IllegalOrphanException;
@@ -39,27 +38,27 @@ public class AgeClassificationJpaController implements Serializable {
     }
 
     public void create(AgeClassification ageClassification) throws RollbackFailureException, Exception {
-        if (ageClassification.getMovieCollection() == null) {
-            ageClassification.setMovieCollection(new ArrayList<Movie>());
+        if (ageClassification.getMovieList() == null) {
+            ageClassification.setMovieList(new ArrayList<Movie>());
         }
         EntityManager em = null;
         try {
             utx.begin();
             em = getEntityManager();
-            Collection<Movie> attachedMovieCollection = new ArrayList<Movie>();
-            for (Movie movieCollectionMovieToAttach : ageClassification.getMovieCollection()) {
-                movieCollectionMovieToAttach = em.getReference(movieCollectionMovieToAttach.getClass(), movieCollectionMovieToAttach.getId());
-                attachedMovieCollection.add(movieCollectionMovieToAttach);
+            List<Movie> attachedMovieList = new ArrayList<Movie>();
+            for (Movie movieListMovieToAttach : ageClassification.getMovieList()) {
+                movieListMovieToAttach = em.getReference(movieListMovieToAttach.getClass(), movieListMovieToAttach.getId());
+                attachedMovieList.add(movieListMovieToAttach);
             }
-            ageClassification.setMovieCollection(attachedMovieCollection);
+            ageClassification.setMovieList(attachedMovieList);
             em.persist(ageClassification);
-            for (Movie movieCollectionMovie : ageClassification.getMovieCollection()) {
-                AgeClassification oldAgeClassificationIdOfMovieCollectionMovie = movieCollectionMovie.getAgeClassificationId();
-                movieCollectionMovie.setAgeClassificationId(ageClassification);
-                movieCollectionMovie = em.merge(movieCollectionMovie);
-                if (oldAgeClassificationIdOfMovieCollectionMovie != null) {
-                    oldAgeClassificationIdOfMovieCollectionMovie.getMovieCollection().remove(movieCollectionMovie);
-                    oldAgeClassificationIdOfMovieCollectionMovie = em.merge(oldAgeClassificationIdOfMovieCollectionMovie);
+            for (Movie movieListMovie : ageClassification.getMovieList()) {
+                AgeClassification oldAgeClassificationIdOfMovieListMovie = movieListMovie.getAgeClassificationId();
+                movieListMovie.setAgeClassificationId(ageClassification);
+                movieListMovie = em.merge(movieListMovie);
+                if (oldAgeClassificationIdOfMovieListMovie != null) {
+                    oldAgeClassificationIdOfMovieListMovie.getMovieList().remove(movieListMovie);
+                    oldAgeClassificationIdOfMovieListMovie = em.merge(oldAgeClassificationIdOfMovieListMovie);
                 }
             }
             utx.commit();
@@ -83,36 +82,36 @@ public class AgeClassificationJpaController implements Serializable {
             utx.begin();
             em = getEntityManager();
             AgeClassification persistentAgeClassification = em.find(AgeClassification.class, ageClassification.getId());
-            Collection<Movie> movieCollectionOld = persistentAgeClassification.getMovieCollection();
-            Collection<Movie> movieCollectionNew = ageClassification.getMovieCollection();
+            List<Movie> movieListOld = persistentAgeClassification.getMovieList();
+            List<Movie> movieListNew = ageClassification.getMovieList();
             List<String> illegalOrphanMessages = null;
-            for (Movie movieCollectionOldMovie : movieCollectionOld) {
-                if (!movieCollectionNew.contains(movieCollectionOldMovie)) {
+            for (Movie movieListOldMovie : movieListOld) {
+                if (!movieListNew.contains(movieListOldMovie)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Movie " + movieCollectionOldMovie + " since its ageClassificationId field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Movie " + movieListOldMovie + " since its ageClassificationId field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            Collection<Movie> attachedMovieCollectionNew = new ArrayList<Movie>();
-            for (Movie movieCollectionNewMovieToAttach : movieCollectionNew) {
-                movieCollectionNewMovieToAttach = em.getReference(movieCollectionNewMovieToAttach.getClass(), movieCollectionNewMovieToAttach.getId());
-                attachedMovieCollectionNew.add(movieCollectionNewMovieToAttach);
+            List<Movie> attachedMovieListNew = new ArrayList<Movie>();
+            for (Movie movieListNewMovieToAttach : movieListNew) {
+                movieListNewMovieToAttach = em.getReference(movieListNewMovieToAttach.getClass(), movieListNewMovieToAttach.getId());
+                attachedMovieListNew.add(movieListNewMovieToAttach);
             }
-            movieCollectionNew = attachedMovieCollectionNew;
-            ageClassification.setMovieCollection(movieCollectionNew);
+            movieListNew = attachedMovieListNew;
+            ageClassification.setMovieList(movieListNew);
             ageClassification = em.merge(ageClassification);
-            for (Movie movieCollectionNewMovie : movieCollectionNew) {
-                if (!movieCollectionOld.contains(movieCollectionNewMovie)) {
-                    AgeClassification oldAgeClassificationIdOfMovieCollectionNewMovie = movieCollectionNewMovie.getAgeClassificationId();
-                    movieCollectionNewMovie.setAgeClassificationId(ageClassification);
-                    movieCollectionNewMovie = em.merge(movieCollectionNewMovie);
-                    if (oldAgeClassificationIdOfMovieCollectionNewMovie != null && !oldAgeClassificationIdOfMovieCollectionNewMovie.equals(ageClassification)) {
-                        oldAgeClassificationIdOfMovieCollectionNewMovie.getMovieCollection().remove(movieCollectionNewMovie);
-                        oldAgeClassificationIdOfMovieCollectionNewMovie = em.merge(oldAgeClassificationIdOfMovieCollectionNewMovie);
+            for (Movie movieListNewMovie : movieListNew) {
+                if (!movieListOld.contains(movieListNewMovie)) {
+                    AgeClassification oldAgeClassificationIdOfMovieListNewMovie = movieListNewMovie.getAgeClassificationId();
+                    movieListNewMovie.setAgeClassificationId(ageClassification);
+                    movieListNewMovie = em.merge(movieListNewMovie);
+                    if (oldAgeClassificationIdOfMovieListNewMovie != null && !oldAgeClassificationIdOfMovieListNewMovie.equals(ageClassification)) {
+                        oldAgeClassificationIdOfMovieListNewMovie.getMovieList().remove(movieListNewMovie);
+                        oldAgeClassificationIdOfMovieListNewMovie = em.merge(oldAgeClassificationIdOfMovieListNewMovie);
                     }
                 }
             }
@@ -151,12 +150,12 @@ public class AgeClassificationJpaController implements Serializable {
                 throw new NonexistentEntityException("The ageClassification with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            Collection<Movie> movieCollectionOrphanCheck = ageClassification.getMovieCollection();
-            for (Movie movieCollectionOrphanCheckMovie : movieCollectionOrphanCheck) {
+            List<Movie> movieListOrphanCheck = ageClassification.getMovieList();
+            for (Movie movieListOrphanCheckMovie : movieListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This AgeClassification (" + ageClassification + ") cannot be destroyed since the Movie " + movieCollectionOrphanCheckMovie + " in its movieCollection field has a non-nullable ageClassificationId field.");
+                illegalOrphanMessages.add("This AgeClassification (" + ageClassification + ") cannot be destroyed since the Movie " + movieListOrphanCheckMovie + " in its movieList field has a non-nullable ageClassificationId field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);

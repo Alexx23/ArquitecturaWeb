@@ -14,7 +14,6 @@ import jakarta.persistence.criteria.Root;
 import jakarta.transaction.UserTransaction;
 import web.practicafinal.models.Movie;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import web.practicafinal.models.Nationality;
 import web.practicafinal.models.controllers.exceptions.IllegalOrphanException;
@@ -39,27 +38,27 @@ public class NationalityJpaController implements Serializable {
     }
 
     public void create(Nationality nationality) throws RollbackFailureException, Exception {
-        if (nationality.getMovieCollection() == null) {
-            nationality.setMovieCollection(new ArrayList<Movie>());
+        if (nationality.getMovieList() == null) {
+            nationality.setMovieList(new ArrayList<Movie>());
         }
         EntityManager em = null;
         try {
             utx.begin();
             em = getEntityManager();
-            Collection<Movie> attachedMovieCollection = new ArrayList<Movie>();
-            for (Movie movieCollectionMovieToAttach : nationality.getMovieCollection()) {
-                movieCollectionMovieToAttach = em.getReference(movieCollectionMovieToAttach.getClass(), movieCollectionMovieToAttach.getId());
-                attachedMovieCollection.add(movieCollectionMovieToAttach);
+            List<Movie> attachedMovieList = new ArrayList<Movie>();
+            for (Movie movieListMovieToAttach : nationality.getMovieList()) {
+                movieListMovieToAttach = em.getReference(movieListMovieToAttach.getClass(), movieListMovieToAttach.getId());
+                attachedMovieList.add(movieListMovieToAttach);
             }
-            nationality.setMovieCollection(attachedMovieCollection);
+            nationality.setMovieList(attachedMovieList);
             em.persist(nationality);
-            for (Movie movieCollectionMovie : nationality.getMovieCollection()) {
-                Nationality oldNationalityIdOfMovieCollectionMovie = movieCollectionMovie.getNationalityId();
-                movieCollectionMovie.setNationalityId(nationality);
-                movieCollectionMovie = em.merge(movieCollectionMovie);
-                if (oldNationalityIdOfMovieCollectionMovie != null) {
-                    oldNationalityIdOfMovieCollectionMovie.getMovieCollection().remove(movieCollectionMovie);
-                    oldNationalityIdOfMovieCollectionMovie = em.merge(oldNationalityIdOfMovieCollectionMovie);
+            for (Movie movieListMovie : nationality.getMovieList()) {
+                Nationality oldNationalityIdOfMovieListMovie = movieListMovie.getNationalityId();
+                movieListMovie.setNationalityId(nationality);
+                movieListMovie = em.merge(movieListMovie);
+                if (oldNationalityIdOfMovieListMovie != null) {
+                    oldNationalityIdOfMovieListMovie.getMovieList().remove(movieListMovie);
+                    oldNationalityIdOfMovieListMovie = em.merge(oldNationalityIdOfMovieListMovie);
                 }
             }
             utx.commit();
@@ -83,36 +82,36 @@ public class NationalityJpaController implements Serializable {
             utx.begin();
             em = getEntityManager();
             Nationality persistentNationality = em.find(Nationality.class, nationality.getId());
-            Collection<Movie> movieCollectionOld = persistentNationality.getMovieCollection();
-            Collection<Movie> movieCollectionNew = nationality.getMovieCollection();
+            List<Movie> movieListOld = persistentNationality.getMovieList();
+            List<Movie> movieListNew = nationality.getMovieList();
             List<String> illegalOrphanMessages = null;
-            for (Movie movieCollectionOldMovie : movieCollectionOld) {
-                if (!movieCollectionNew.contains(movieCollectionOldMovie)) {
+            for (Movie movieListOldMovie : movieListOld) {
+                if (!movieListNew.contains(movieListOldMovie)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Movie " + movieCollectionOldMovie + " since its nationalityId field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Movie " + movieListOldMovie + " since its nationalityId field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            Collection<Movie> attachedMovieCollectionNew = new ArrayList<Movie>();
-            for (Movie movieCollectionNewMovieToAttach : movieCollectionNew) {
-                movieCollectionNewMovieToAttach = em.getReference(movieCollectionNewMovieToAttach.getClass(), movieCollectionNewMovieToAttach.getId());
-                attachedMovieCollectionNew.add(movieCollectionNewMovieToAttach);
+            List<Movie> attachedMovieListNew = new ArrayList<Movie>();
+            for (Movie movieListNewMovieToAttach : movieListNew) {
+                movieListNewMovieToAttach = em.getReference(movieListNewMovieToAttach.getClass(), movieListNewMovieToAttach.getId());
+                attachedMovieListNew.add(movieListNewMovieToAttach);
             }
-            movieCollectionNew = attachedMovieCollectionNew;
-            nationality.setMovieCollection(movieCollectionNew);
+            movieListNew = attachedMovieListNew;
+            nationality.setMovieList(movieListNew);
             nationality = em.merge(nationality);
-            for (Movie movieCollectionNewMovie : movieCollectionNew) {
-                if (!movieCollectionOld.contains(movieCollectionNewMovie)) {
-                    Nationality oldNationalityIdOfMovieCollectionNewMovie = movieCollectionNewMovie.getNationalityId();
-                    movieCollectionNewMovie.setNationalityId(nationality);
-                    movieCollectionNewMovie = em.merge(movieCollectionNewMovie);
-                    if (oldNationalityIdOfMovieCollectionNewMovie != null && !oldNationalityIdOfMovieCollectionNewMovie.equals(nationality)) {
-                        oldNationalityIdOfMovieCollectionNewMovie.getMovieCollection().remove(movieCollectionNewMovie);
-                        oldNationalityIdOfMovieCollectionNewMovie = em.merge(oldNationalityIdOfMovieCollectionNewMovie);
+            for (Movie movieListNewMovie : movieListNew) {
+                if (!movieListOld.contains(movieListNewMovie)) {
+                    Nationality oldNationalityIdOfMovieListNewMovie = movieListNewMovie.getNationalityId();
+                    movieListNewMovie.setNationalityId(nationality);
+                    movieListNewMovie = em.merge(movieListNewMovie);
+                    if (oldNationalityIdOfMovieListNewMovie != null && !oldNationalityIdOfMovieListNewMovie.equals(nationality)) {
+                        oldNationalityIdOfMovieListNewMovie.getMovieList().remove(movieListNewMovie);
+                        oldNationalityIdOfMovieListNewMovie = em.merge(oldNationalityIdOfMovieListNewMovie);
                     }
                 }
             }
@@ -151,12 +150,12 @@ public class NationalityJpaController implements Serializable {
                 throw new NonexistentEntityException("The nationality with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            Collection<Movie> movieCollectionOrphanCheck = nationality.getMovieCollection();
-            for (Movie movieCollectionOrphanCheckMovie : movieCollectionOrphanCheck) {
+            List<Movie> movieListOrphanCheck = nationality.getMovieList();
+            for (Movie movieListOrphanCheckMovie : movieListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Nationality (" + nationality + ") cannot be destroyed since the Movie " + movieCollectionOrphanCheckMovie + " in its movieCollection field has a non-nullable nationalityId field.");
+                illegalOrphanMessages.add("This Nationality (" + nationality + ") cannot be destroyed since the Movie " + movieListOrphanCheckMovie + " in its movieList field has a non-nullable nationalityId field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);

@@ -8,6 +8,7 @@ import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -16,7 +17,7 @@ import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 
 /**
  *
@@ -47,8 +48,8 @@ public class Room implements Serializable {
     @Basic(optional = false)
     @Column(name = "cols")
     private short cols;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "roomId")
-    private Collection<Session> sessionCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "roomId", fetch = FetchType.LAZY)
+    private List<Session> sessionList;
 
     public Room() {
     }
@@ -96,12 +97,12 @@ public class Room implements Serializable {
         this.cols = cols;
     }
 
-    public Collection<Session> getSessionCollection() {
-        return sessionCollection;
+    public List<Session> getSessionList() {
+        return sessionList;
     }
 
-    public void setSessionCollection(Collection<Session> sessionCollection) {
-        this.sessionCollection = sessionCollection;
+    public void setSessionList(List<Session> sessionList) {
+        this.sessionList = sessionList;
     }
 
     @Override

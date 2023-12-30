@@ -7,6 +7,7 @@ package web.practicafinal.models;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -17,7 +18,7 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 
 /**
  *
@@ -43,8 +44,8 @@ public class Actor implements Serializable {
     @JoinTable(name = "movie_actor", joinColumns = {
         @JoinColumn(name = "actor_id", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "movie_id", referencedColumnName = "id")})
-    @ManyToMany
-    private Collection<Movie> movieCollection;
+    @ManyToMany(fetch = FetchType.LAZY)
+    private List<Movie> movieList;
 
     public Actor() {
     }
@@ -74,12 +75,12 @@ public class Actor implements Serializable {
         this.name = name;
     }
 
-    public Collection<Movie> getMovieCollection() {
-        return movieCollection;
+    public List<Movie> getMovieList() {
+        return movieList;
     }
 
-    public void setMovieCollection(Collection<Movie> movieCollection) {
-        this.movieCollection = movieCollection;
+    public void setMovieList(List<Movie> movieList) {
+        this.movieList = movieList;
     }
 
     @Override

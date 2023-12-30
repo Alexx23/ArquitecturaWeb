@@ -4,11 +4,12 @@
  */
 package web.practicafinal.models;
 
-import com.google.gson.annotations.Expose;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -20,7 +21,7 @@ import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 
 /**
  *
@@ -38,63 +39,57 @@ import java.util.Collection;
     @NamedQuery(name = "Movie.findByYear", query = "SELECT m FROM Movie m WHERE m.year = :year")})
 public class Movie implements Serializable {
 
-    @Expose
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
-    @Expose
     private Integer id;
     @Basic(optional = false)
     @Column(name = "name")
-    @Expose
     private String name;
     @Basic(optional = false)
     @Column(name = "web")
-    @Expose
     private String web;
     @Basic(optional = false)
     @Column(name = "original_title")
-    @Expose
     private String originalTitle;
     @Basic(optional = false)
     @Column(name = "duration")
-    @Expose
     private short duration;
     @Basic(optional = false)
     @Column(name = "year")
-    @Expose
     private short year;
-    @ManyToMany(mappedBy = "movieCollection")
-    @Expose
-    private Collection<Label> labelCollection;
-    @ManyToMany(mappedBy = "movieCollection")
-    @Expose
-    private Collection<Actor> actorCollection;
+    @ManyToMany(mappedBy = "movieList", fetch = FetchType.LAZY)
+    private List<Label> labelList;
+    @ManyToMany(mappedBy = "movieList", fetch = FetchType.LAZY)
+    private List<Actor> actorList;
     @JoinColumn(name = "age_classification_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    @Expose
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"movieList"})
     private AgeClassification ageClassificationId;
     @JoinColumn(name = "director_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    @Expose
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"movieList"})
     private Director directorId;
     @JoinColumn(name = "distributor_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    @Expose
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"movieList"})
     private Distributor distributorId;
     @JoinColumn(name = "genre_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    @Expose
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"movieList"})
     private Genre genreId;
     @JoinColumn(name = "nationality_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    @Expose
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"movieList"})
     private Nationality nationalityId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "movieId")
-    @Expose
-    private Collection<Session> sessionCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "movieId", fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"movieId"})
+    private List<Session> sessionList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "movieId", fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"movieId"})
+    private List<Comment> commentList;
 
     public Movie() {
     }
@@ -160,20 +155,20 @@ public class Movie implements Serializable {
         this.year = year;
     }
 
-    public Collection<Label> getLabelCollection() {
-        return labelCollection;
+    public List<Label> getLabelList() {
+        return labelList;
     }
 
-    public void setLabelCollection(Collection<Label> labelCollection) {
-        this.labelCollection = labelCollection;
+    public void setLabelList(List<Label> labelList) {
+        this.labelList = labelList;
     }
 
-    public Collection<Actor> getActorCollection() {
-        return actorCollection;
+    public List<Actor> getActorList() {
+        return actorList;
     }
 
-    public void setActorCollection(Collection<Actor> actorCollection) {
-        this.actorCollection = actorCollection;
+    public void setActorList(List<Actor> actorList) {
+        this.actorList = actorList;
     }
 
     public AgeClassification getAgeClassificationId() {
@@ -216,12 +211,20 @@ public class Movie implements Serializable {
         this.nationalityId = nationalityId;
     }
 
-    public Collection<Session> getSessionCollection() {
-        return sessionCollection;
+    public List<Session> getSessionList() {
+        return sessionList;
     }
 
-    public void setSessionCollection(Collection<Session> sessionCollection) {
-        this.sessionCollection = sessionCollection;
+    public void setSessionList(List<Session> sessionList) {
+        this.sessionList = sessionList;
+    }
+
+    public List<Comment> getCommentList() {
+        return commentList;
+    }
+
+    public void setCommentList(List<Comment> commentList) {
+        this.commentList = commentList;
     }
 
     @Override
