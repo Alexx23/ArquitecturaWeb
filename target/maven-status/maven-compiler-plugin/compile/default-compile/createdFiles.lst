@@ -52,6 +52,7 @@ web\practicafinal\models\Session.class
 web\practicafinal\utils\JsonUtils$LocalDateTimeSerializer.class
 web\practicafinal\models\controllers\CommentJpaController.class
 web\practicafinal\models\controllers\exceptions\RollbackFailureException.class
+web\practicafinal\utils\Response$DeepFieldFilter.class
 web\practicafinal\models\controllers\exceptions\NonexistentEntityException.class
 web\practicafinal\utils\JsonUtils$TimestampSerializer.class
 web\practicafinal\models\Director.class

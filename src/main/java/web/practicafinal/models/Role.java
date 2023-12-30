@@ -4,6 +4,9 @@
  */
 package web.practicafinal.models;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -24,6 +27,7 @@ import java.util.List;
  * @author Alex
  */
 @Entity
+@JsonFilter("depth_3")
 @Table(name = "role")
 @NamedQueries({
     @NamedQuery(name = "Role.findAll", query = "SELECT r FROM Role r"),

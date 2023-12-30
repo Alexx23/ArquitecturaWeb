@@ -4,6 +4,7 @@
  */
 package web.practicafinal.models;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
@@ -28,6 +29,7 @@ import java.util.List;
  * @author Alex
  */
 @Entity
+@JsonFilter("depth_3")
 @Table(name = "movie")
 @NamedQueries({
     @NamedQuery(name = "Movie.findAll", query = "SELECT m FROM Movie m"),
@@ -66,29 +68,29 @@ public class Movie implements Serializable {
     private List<Actor> actorList;
     @JoinColumn(name = "age_classification_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JsonIgnoreProperties({"movieList"})
+    //@JsonIgnoreProperties({"movieList"})
     private AgeClassification ageClassificationId;
     @JoinColumn(name = "director_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JsonIgnoreProperties({"movieList"})
+    //@JsonIgnoreProperties({"movieList"})
     private Director directorId;
     @JoinColumn(name = "distributor_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JsonIgnoreProperties({"movieList"})
+    //@JsonIgnoreProperties({"movieList"})
     private Distributor distributorId;
     @JoinColumn(name = "genre_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JsonIgnoreProperties({"movieList"})
+    //@JsonIgnoreProperties({"movieList"})
     private Genre genreId;
     @JoinColumn(name = "nationality_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JsonIgnoreProperties({"movieList"})
+    //@JsonIgnoreProperties({"movieList"})
     private Nationality nationalityId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "movieId", fetch = FetchType.LAZY)
-    @JsonIgnoreProperties({"movieId"})
+    //@JsonIgnoreProperties({"movieId", "ticketList", "roomId"})
     private List<Session> sessionList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "movieId", fetch = FetchType.LAZY)
-    @JsonIgnoreProperties({"movieId"})
+    //@JsonIgnoreProperties({"movieId", "userId"})
     private List<Comment> commentList;
 
     public Movie() {

@@ -4,6 +4,7 @@
  */
 package web.practicafinal.models;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,6 +26,7 @@ import java.util.List;
  * @author Alex
  */
 @Entity
+@JsonFilter("depth_3")
 @Table(name = "label")
 @NamedQueries({
     @NamedQuery(name = "Label.findAll", query = "SELECT l FROM Label l"),

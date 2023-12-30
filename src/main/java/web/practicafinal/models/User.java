@@ -4,7 +4,10 @@
  */
 package web.practicafinal.models;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -27,6 +30,7 @@ import java.util.List;
  * @author Alex
  */
 @Entity
+@JsonFilter("depth_3")
 @Table(name = "user")
 @NamedQueries({
     @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"),
@@ -56,14 +60,14 @@ public class User implements Serializable {
     @Column(name = "password")
     private String password;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId", fetch = FetchType.LAZY)
-    @JsonIgnoreProperties({"userId", "sessionId"})
+    //@JsonIgnoreProperties({"userId", "sessionId"})
     private List<Ticket> ticketList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId", fetch = FetchType.LAZY)
-    @JsonIgnoreProperties({"userId", "movieId"})
+    //@JsonIgnoreProperties({"userId", "movieId"})
     private List<Comment> commentList;
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JsonIgnoreProperties("userList")
+    //@JsonIgnoreProperties("userList")
     private Role roleId;
 
     public User() {

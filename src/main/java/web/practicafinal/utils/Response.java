@@ -1,6 +1,13 @@
 package web.practicafinal.utils;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonStreamContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.ser.PropertyWriter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.google.gson.JsonObject;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -12,6 +19,39 @@ import java.io.PrintWriter;
  */
 public class Response {
 
+    static class DeepFieldFilter extends SimpleBeanPropertyFilter {
+        private final int maxDepth;
+
+        public DeepFieldFilter(int maxDepth) {
+            super();
+            this.maxDepth = maxDepth;
+        }
+
+        private int calcDepth(PropertyWriter writer, JsonGenerator jgen) {
+            JsonStreamContext sc = jgen.getOutputContext();
+            int depth = -1;
+            while (sc != null) {
+                sc = sc.getParent();
+                depth++;
+            }
+            return depth;
+        }
+
+        @Override
+        public void serializeAsField(Object pojo, JsonGenerator gen, SerializerProvider provider, PropertyWriter writer)
+                                        throws Exception {
+            int depth = calcDepth(writer, gen);
+            if (depth <= maxDepth) {
+                writer.serializeAsField(pojo, gen, provider);
+            }
+            // Comentar si no se desea que aparezca {}
+            /*else {
+                writer.serializeAsOmittedField(pojo, gen, provider);
+            }*/
+        }
+
+    }
+    
     public static void outputData(HttpServletResponse response, int status, Object payload) {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
@@ -19,8 +59,16 @@ public class Response {
 
         try {
             if (payload != null) {
-                ObjectMapper basicMapper = new ObjectMapper();
-                String result = basicMapper.writeValueAsString(payload);
+                ObjectMapper objectMapper = new ObjectMapper();
+                SimpleFilterProvider depthFilters = new SimpleFilterProvider()
+                                        .addFilter("depth_1", new DeepFieldFilter(1))
+                                        .addFilter("depth_2", new DeepFieldFilter(2))
+                                        .addFilter("depth_3", new DeepFieldFilter(3))
+                                        .addFilter("depth_4", new DeepFieldFilter(4))
+                                        .addFilter("depth_5", new DeepFieldFilter(5));
+                objectMapper.setFilterProvider(depthFilters);
+                objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+                String result = objectMapper.writeValueAsString(payload);
                 
                 PrintWriter out = response.getWriter();
                 out.print(result);
