@@ -1,6 +1,5 @@
 package web.practicafinal.models.controllers;
 
-import jakarta.activation.DataSource;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import jakarta.transaction.UserTransaction;
@@ -18,12 +17,17 @@ public class ModelController {
     
     private static ActorJpaController actor = null;
     private static AgeClassificationJpaController ageClassification = null;
+    private static CommentJpaController comment = null;
     private static DirectorJpaController director = null;
     private static DistributorJpaController distributor = null;
     private static GenreJpaController genre = null;
+    private static LabelJpaController label = null;
     private static MovieJpaController movie = null;
     private static NationalityJpaController nationality = null;
     private static RoleJpaController role = null;
+    private static RoomJpaController room = null;
+    private static SessionJpaController session = null;
+    private static TicketJpaController ticket = null;
     private static UserJpaController user = null;
     
     public static void init() throws NamingException {
@@ -32,12 +36,17 @@ public class ModelController {
         
         actor = new ActorJpaController(utx, emf);
         ageClassification = new AgeClassificationJpaController(utx, emf);
+        comment = new CommentJpaController(utx, emf);
         director = new DirectorJpaController(utx, emf);
         distributor = new DistributorJpaController(utx, emf);
         genre = new GenreJpaController(utx, emf);
+        label = new LabelJpaController(utx, emf);
         movie = new MovieJpaController(utx, emf);
         nationality = new NationalityJpaController(utx, emf);
         role = new RoleJpaController(utx, emf);
+        room = new RoomJpaController(utx, emf);
+        session = new SessionJpaController(utx, emf);
+        ticket = new TicketJpaController(utx, emf);
         user = new UserJpaController(utx, emf);
     }
     
@@ -56,6 +65,10 @@ public class ModelController {
     public static AgeClassificationJpaController getAgeClassification() {
         return ageClassification;
     }
+    
+    public static CommentJpaController getComment() {
+        return comment;
+    }
 
     public static DirectorJpaController getDirector() {
         return director;
@@ -69,6 +82,10 @@ public class ModelController {
         return genre;
     }
 
+    public static LabelJpaController getLabel() {
+        return label;
+    }
+    
     public static MovieJpaController getMovie() {
         return movie;
     }
@@ -79,6 +96,18 @@ public class ModelController {
     
     public static RoleJpaController getRole() {
         return role;
+    }
+    
+    public static RoomJpaController getRoom() {
+        return room;
+    }
+    
+    public static SessionJpaController getSession() {
+        return session;
+    }
+
+    public static TicketJpaController getTicket() {
+        return ticket;
     }
     
     public static UserJpaController getUser() {
