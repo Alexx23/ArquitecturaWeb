@@ -29,7 +29,7 @@ import java.util.List;
     @NamedQuery(name = "Room.findAll", query = "SELECT r FROM Room r"),
     @NamedQuery(name = "Room.findById", query = "SELECT r FROM Room r WHERE r.id = :id"),
     @NamedQuery(name = "Room.findByName", query = "SELECT r FROM Room r WHERE r.name = :name"),
-    @NamedQuery(name = "Room.findByRows", query = "SELECT r FROM Room r WHERE r.rows = :rows"),
+    @NamedQuery(name = "Room.findByFiles", query = "SELECT r FROM Room r WHERE r.files = :files"),
     @NamedQuery(name = "Room.findByCols", query = "SELECT r FROM Room r WHERE r.cols = :cols")})
 public class Room implements Serializable {
 
@@ -43,8 +43,8 @@ public class Room implements Serializable {
     @Column(name = "name")
     private String name;
     @Basic(optional = false)
-    @Column(name = "rows")
-    private short rows;
+    @Column(name = "files")
+    private short files;
     @Basic(optional = false)
     @Column(name = "cols")
     private short cols;
@@ -58,10 +58,10 @@ public class Room implements Serializable {
         this.id = id;
     }
 
-    public Room(Integer id, String name, short rows, short cols) {
+    public Room(Integer id, String name, short files, short cols) {
         this.id = id;
         this.name = name;
-        this.rows = rows;
+        this.files = files;
         this.cols = cols;
     }
 
@@ -81,12 +81,12 @@ public class Room implements Serializable {
         this.name = name;
     }
 
-    public short getRows() {
-        return rows;
+    public short getFiles() {
+        return files;
     }
 
-    public void setRows(short rows) {
-        this.rows = rows;
+    public void setFiles(short files) {
+        this.files = files;
     }
 
     public short getCols() {

@@ -208,6 +208,12 @@ public class MovieController extends HttpServlet {
         
         int movieId = Integer.parseInt(movieIdStr);
         
+        Movie movie = movieJpaController.findMovie(movieId);
+        if (movie == null) {
+            Response.outputMessage(response, 404, "No se ha encontrado la película solicitada");
+            return;
+        }
+        
         try {
             movieJpaController.destroy(movieId);
             Response.outputMessage(response, 200, "Película eliminada correctamente");
