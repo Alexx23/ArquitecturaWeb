@@ -29,8 +29,6 @@ public @interface ValidDirector {
 
     class DirectorValidator implements ConstraintValidator<ValidDirector, Integer> {
         
-        private static final DirectorJpaController directorJpaController = ModelController.getDirector();
-
         @Override
         public void initialize(ValidDirector constraintAnnotation) {
         }
@@ -38,7 +36,7 @@ public @interface ValidDirector {
         @Override
         public boolean isValid(Integer directorId, ConstraintValidatorContext context) {
             if (directorId == null) return true;
-            Director director = directorJpaController.findDirector(directorId);
+            Director director = ModelController.getDirector().findDirector(directorId);
             return director != null;
         }
     }

@@ -28,9 +28,6 @@ public @interface ValidAgeClassification {
     Class<? extends Payload>[] payload() default {};
 
     class AgeClassificationValidator implements ConstraintValidator<ValidAgeClassification, Integer> {
-        
-        private static final AgeClassificationJpaController ageClassificationJpaController = ModelController.getAgeClassification();
-
         @Override
         public void initialize(ValidAgeClassification constraintAnnotation) {
         }
@@ -38,7 +35,7 @@ public @interface ValidAgeClassification {
         @Override
         public boolean isValid(Integer ageClassificationId, ConstraintValidatorContext context) {
             if (ageClassificationId == null) return true;
-            AgeClassification ageClassification = ageClassificationJpaController.findAgeClassification(ageClassificationId);
+            AgeClassification ageClassification = ModelController.getAgeClassification().findAgeClassification(ageClassificationId);
             return ageClassification != null;
         }
     }

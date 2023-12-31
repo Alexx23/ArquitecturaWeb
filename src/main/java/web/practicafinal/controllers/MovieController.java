@@ -36,26 +36,9 @@ import web.practicafinal.utils.Response;
  */
 @WebServlet("/movie/*")
 public class MovieController extends HttpServlet {
-    
-    private static MovieJpaController movieJpaController = null;
-    private static AgeClassificationJpaController ageClassificationJpaController = null;
-    private static DirectorJpaController directorJpaController = null;
-    private static DistributorJpaController distributorJpaController = null;
-    private static GenreJpaController genreJpaController = null;
-    private static NationalityJpaController nationalityJpaController = null;
 
     public MovieController() {
         super();
-    }
-    
-    @Override
-    public void init() {
-        movieJpaController = ModelController.getMovie();
-        ageClassificationJpaController = ModelController.getAgeClassification();
-        directorJpaController = ModelController.getDirector();
-        distributorJpaController = ModelController.getDistributor();
-        genreJpaController = ModelController.getGenre();
-        nationalityJpaController = ModelController.getNationality();
     }
 
     /*
@@ -68,13 +51,13 @@ public class MovieController extends HttpServlet {
         String movieIdStr = Request.getURLValue(request);
         
         if (movieIdStr == null) {
-            List<Movie> movies = movieJpaController.findMovieEntities();
+            List<Movie> movies = ModelController.getMovie().findMovieEntities();
             Response.outputData(response, 200, movies);
             return;
         }
         
         int movieId = Integer.parseInt(movieIdStr);
-        Movie movie = movieJpaController.findMovie(movieId);
+        Movie movie = ModelController.getMovie().findMovie(movieId);
         if (movie == null) {
             Response.outputMessage(response, 404, "No se ha encontrado la película solicitada");
             return;
@@ -112,11 +95,11 @@ public class MovieController extends HttpServlet {
         int directorId = Integer.parseInt(request.getParameter("director_id"));
         int ageClassificationId = Integer.parseInt(request.getParameter("age_classification_id"));
         
-        AgeClassification ageClassification = ageClassificationJpaController.findAgeClassification(ageClassificationId);
-        Director director = directorJpaController.findDirector(directorId);
-        Distributor distributor = distributorJpaController.findDistributor(distributorId);
-        Genre genre = genreJpaController.findGenre(genreId);
-        Nationality nationality = nationalityJpaController.findNationality(nationalityId);
+        AgeClassification ageClassification = ModelController.getAgeClassification().findAgeClassification(ageClassificationId);
+        Director director = ModelController.getDirector().findDirector(directorId);
+        Distributor distributor = ModelController.getDistributor().findDistributor(distributorId);
+        Genre genre = ModelController.getGenre().findGenre(genreId);
+        Nationality nationality = ModelController.getNationality().findNationality(nationalityId);
         
         Movie movie = new Movie();
         movie.setName(request.getParameter("name"));
@@ -131,7 +114,7 @@ public class MovieController extends HttpServlet {
         movie.setNationalityId(nationality);
 
         try {
-            movieJpaController.create(movie);
+            ModelController.getMovie().create(movie);
             Response.outputData(response, 200, movie);
         } catch (Exception ex) {
             CustomLogger.errorThrow(MovieController.class.getName(), ex);
@@ -175,7 +158,7 @@ public class MovieController extends HttpServlet {
         
         int movieId = Integer.parseInt(movieIdStr);
         
-        Movie movie = movieJpaController.findMovie(movieId);
+        Movie movie = ModelController.getMovie().findMovie(movieId);
         if (movie == null) {
             Response.outputMessage(response, 404, "No se ha encontrado la película solicitada");
             return;
@@ -184,7 +167,7 @@ public class MovieController extends HttpServlet {
         InstanceConverter.updateInstance(Movie.class, movie, MovieUpdateDTO.class, movieUpdateDTO);
         
         try {
-            movieJpaController.edit(movie);
+            ModelController.getMovie().edit(movie);
             Response.outputData(response, 200, movie);
         } catch (Exception ex) {
             CustomLogger.errorThrow(MovieController.class.getName(), ex);
@@ -208,14 +191,14 @@ public class MovieController extends HttpServlet {
         
         int movieId = Integer.parseInt(movieIdStr);
         
-        Movie movie = movieJpaController.findMovie(movieId);
+        Movie movie = ModelController.getMovie().findMovie(movieId);
         if (movie == null) {
             Response.outputMessage(response, 404, "No se ha encontrado la película solicitada");
             return;
         }
         
         try {
-            movieJpaController.destroy(movieId);
+            ModelController.getMovie().destroy(movieId);
             Response.outputMessage(response, 200, "Película eliminada correctamente");
         } catch (RollbackFailureException ex) {
             CustomLogger.errorThrow(MovieController.class.getName(), ex);

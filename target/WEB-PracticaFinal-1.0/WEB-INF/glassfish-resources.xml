@@ -11,5 +11,4 @@
         <property name="driverClass" value="com.mysql.cj.jdbc.Driver"/>
     </jdbc-connection-pool>
     <jdbc-resource enabled="true" jndi-name="java:app/web_practicafinal_datasource" object-type="user" pool-name="mysql_web_practicafinal_rootPool"/>
-    <jdbc-resource enabled="true" jndi-name="java:app/web_practicafinal_datasource" object-type="user" pool-name="mysql_web_practicafinal_rootPool"/>
 </resources>

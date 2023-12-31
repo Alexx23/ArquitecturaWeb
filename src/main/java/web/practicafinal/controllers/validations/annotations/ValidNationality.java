@@ -29,8 +29,6 @@ public @interface ValidNationality {
 
     class NationalityValidator implements ConstraintValidator<ValidNationality, Integer> {
         
-        private static final NationalityJpaController nationalityJpaController = ModelController.getNationality();
-
         @Override
         public void initialize(ValidNationality constraintAnnotation) {
         }
@@ -38,7 +36,7 @@ public @interface ValidNationality {
         @Override
         public boolean isValid(Integer nationalityId, ConstraintValidatorContext context) {
             if (nationalityId == null) return true;
-            Nationality nationality = nationalityJpaController.findNationality(nationalityId);
+            Nationality nationality = ModelController.getNationality().findNationality(nationalityId);
             return nationality != null;
         }
     }

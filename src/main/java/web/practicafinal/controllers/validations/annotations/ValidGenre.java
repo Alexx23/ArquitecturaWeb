@@ -29,8 +29,6 @@ public @interface ValidGenre {
 
     class GenreValidator implements ConstraintValidator<ValidGenre, Integer> {
         
-        private static final GenreJpaController genreJpaController = ModelController.getGenre();
-
         @Override
         public void initialize(ValidGenre constraintAnnotation) {
         }
@@ -38,7 +36,7 @@ public @interface ValidGenre {
         @Override
         public boolean isValid(Integer genreId, ConstraintValidatorContext context) {
             if (genreId == null) return true;
-            Genre genre = genreJpaController.findGenre(genreId);
+            Genre genre = ModelController.getGenre().findGenre(genreId);
             return genre != null;
         }
     }

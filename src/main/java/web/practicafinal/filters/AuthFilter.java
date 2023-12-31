@@ -22,13 +22,6 @@ import web.practicafinal.utils.Response;
  */
 @WebFilter(filterName="auth", urlPatterns = {"/logout", "/movie/*", "/room/*"})
 public class AuthFilter implements Filter {
-    
-    private static UserJpaController userJpaController = null;
-    
-    @Override
-    public void init(FilterConfig filterConfig) {
-        userJpaController = ModelController.getUser();
-    }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -51,7 +44,7 @@ public class AuthFilter implements Filter {
         
         // Obtener instancia del usuario
         int userId = (int) userIdObj;
-        User user = userJpaController.findUser(userId);
+        User user = ModelController.getUser().findUser(userId);
         if (user == null) {
             Response.outputMessage(httpResponse, 401, "Sesión con usuario no válido.");
             return;

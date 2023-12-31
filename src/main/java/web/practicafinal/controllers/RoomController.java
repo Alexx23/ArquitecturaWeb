@@ -26,16 +26,9 @@ import web.practicafinal.utils.Response;
  */
 @WebServlet("/room/*")
 public class RoomController extends HttpServlet {
-    
-    private static RoomJpaController roomJpaController = null;
 
     public RoomController() {
         super();
-    }
-    
-    @Override
-    public void init() {
-        roomJpaController = ModelController.getRoom();
     }
 
     /*
@@ -48,13 +41,13 @@ public class RoomController extends HttpServlet {
         String roomIdStr = Request.getURLValue(request);
         
         if (roomIdStr == null) {
-            List<Room> rooms = roomJpaController.findRoomEntities();
+            List<Room> rooms = ModelController.getRoom().findRoomEntities();
             Response.outputData(response, 200, rooms);
             return;
         }
         
         int roomId = Integer.parseInt(roomIdStr);
-        Room room = roomJpaController.findRoom(roomId);
+        Room room = ModelController.getRoom().findRoom(roomId);
         if (room == null) {
             Response.outputMessage(response, 404, "No se ha encontrado la sala solicitada");
             return;
@@ -89,7 +82,7 @@ public class RoomController extends HttpServlet {
         room.setCols((short)Integer.parseInt(request.getParameter("cols")));
 
         try {
-            roomJpaController.create(room);
+            ModelController.getRoom().create(room);
             Response.outputData(response, 200, room);
         } catch (Exception ex) {
             CustomLogger.errorThrow(RoomController.class.getName(), ex);
@@ -130,7 +123,7 @@ public class RoomController extends HttpServlet {
         
         int roomId = Integer.parseInt(roomIdStr);
         
-        Room room = roomJpaController.findRoom(roomId);
+        Room room = ModelController.getRoom().findRoom(roomId);
         if (room == null) {
             Response.outputMessage(response, 404, "No se ha encontrado la sala solicitada");
             return;
@@ -139,7 +132,7 @@ public class RoomController extends HttpServlet {
         InstanceConverter.updateInstance(Room.class, room, RoomUpdateDTO.class, roomUpdateDTO);
         
         try {
-            roomJpaController.edit(room);
+            ModelController.getRoom().edit(room);
             Response.outputData(response, 200, room);
         } catch (Exception ex) {
             CustomLogger.errorThrow(RoomController.class.getName(), ex);
@@ -163,14 +156,14 @@ public class RoomController extends HttpServlet {
         
         int roomId = Integer.parseInt(roomIdStr);
         
-        Room room = roomJpaController.findRoom(roomId);
+        Room room = ModelController.getRoom().findRoom(roomId);
         if (room == null) {
             Response.outputMessage(response, 404, "No se ha encontrado la sala solicitada");
             return;
         }
         
         try {
-            roomJpaController.destroy(roomId);
+            ModelController.getRoom().destroy(roomId);
             Response.outputMessage(response, 200, "Sala eliminada correctamente");
         } catch (RollbackFailureException ex) {
             CustomLogger.errorThrow(RoomController.class.getName(), ex);

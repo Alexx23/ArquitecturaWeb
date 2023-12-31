@@ -29,8 +29,6 @@ public @interface ValidDistributor {
 
     class DistributorValidator implements ConstraintValidator<ValidDistributor, Integer> {
         
-        private static final DistributorJpaController distributorJpaController = ModelController.getDistributor();
-
         @Override
         public void initialize(ValidDistributor constraintAnnotation) {
         }
@@ -38,7 +36,7 @@ public @interface ValidDistributor {
         @Override
         public boolean isValid(Integer distributorId, ConstraintValidatorContext context) {
             if (distributorId == null) return true;
-            Distributor distributor = distributorJpaController.findDistributor(distributorId);
+            Distributor distributor = ModelController.getDistributor().findDistributor(distributorId);
             return distributor != null;
         }
     }

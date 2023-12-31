@@ -25,18 +25,9 @@ import web.practicafinal.utils.Response;
  */
 @WebServlet("/register")
 public class RegisterController extends HttpServlet {
-    
-    private static UserJpaController userJpaController = null;
-    private static RoleJpaController roleJpaController = null;
 
     public RegisterController() {
         super();
-    }
-    
-    @Override
-    public void init() {
-        userJpaController = ModelController.getUser();
-        roleJpaController = ModelController.getRole();
     }
     
     /*
@@ -70,7 +61,7 @@ public class RegisterController extends HttpServlet {
         String salt = BCrypt.gensalt(12);
         String hashPassword = BCrypt.hashpw(password, BCrypt.gensalt(salt));
 
-        Role role = roleJpaController.findRole(RoleEnum.CLIENT.getId());
+        Role role = ModelController.getRole().findRole(RoleEnum.CLIENT.getId());
 
         User user = new User();
         user.setName(name);
@@ -80,7 +71,7 @@ public class RegisterController extends HttpServlet {
         user.setRoleId(role);
 
         try {
-            userJpaController.create(user);
+            ModelController.getUser().create(user);
             Response.outputData(response, 200, user);
             return;
         } catch (Exception ex) {
