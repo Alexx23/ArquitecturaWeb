@@ -13,8 +13,11 @@ web\practicafinal\models\helpers\RoomHelper.class
 web\practicafinal\controllers\validations\RegisterDTO.class
 web\practicafinal\utils\Response.class
 web\practicafinal\utils\JsonUtils$TimestampDeserializer.class
+web\practicafinal\controllers\validations\SessionUpdateDTO.class
+web\practicafinal\controllers\validations\annotations\ValidMovie$MovieValidator.class
 web\practicafinal\models\controllers\NationalityJpaController.class
 web\practicafinal\controllers\validations\annotations\UniqueRoomName$RoomValidator.class
+web\practicafinal\controllers\validations\SessionCreateDTO.class
 web\practicafinal\models\controllers\RoomJpaController.class
 web\practicafinal\controllers\validations\annotations\ValidGenre.class
 web\practicafinal\models\Genre.class
@@ -42,6 +45,8 @@ web\practicafinal\models\controllers\TicketJpaController.class
 web\practicafinal\controllers\validations\annotations\ValidNationality.class
 web\practicafinal\models\controllers\DirectorJpaController.class
 web\practicafinal\exceptions\HttpException.class
+web\practicafinal\controllers\SessionController.class
+web\practicafinal\controllers\validations\annotations\ValidRoom.class
 web\practicafinal\models\controllers\UserJpaController.class
 web\practicafinal\models\controllers\GenreJpaController.class
 web\practicafinal\controllers\validations\annotations\ValidGenre$GenreValidator.class
@@ -73,10 +78,12 @@ web\practicafinal\controllers\validations\MovieCreateDTO.class
 web\practicafinal\controllers\validations\RoomCreateDTO.class
 web\practicafinal\models\controllers\DistributorJpaController.class
 web\practicafinal\controllers\validations\annotations\ValidDistributor.class
+web\practicafinal\controllers\validations\annotations\ValidRoom$RoomValidator.class
 web\practicafinal\controllers\validations\annotations\UniqueUsername.class
 web\practicafinal\controllers\validations\annotations\ValidDirector$DirectorValidator.class
 web\practicafinal\listeners\CustomServletContextListener.class
 web\practicafinal\models\Movie.class
 web\practicafinal\utils\InstanceConverter.class
+web\practicafinal\controllers\validations\annotations\ValidMovie.class
 web\practicafinal\models\Distributor.class
 web\practicafinal\models\AgeClassification.class

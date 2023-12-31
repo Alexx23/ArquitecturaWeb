@@ -13,7 +13,6 @@ import web.practicafinal.controllers.validations.RoomUpdateDTO;
 import web.practicafinal.exceptions.ValidateException;
 import web.practicafinal.models.Room;
 import web.practicafinal.models.controllers.ModelController;
-import web.practicafinal.models.controllers.RoomJpaController;
 import web.practicafinal.models.controllers.exceptions.RollbackFailureException;
 import web.practicafinal.utils.CustomLogger;
 import web.practicafinal.utils.InstanceConverter;
@@ -63,8 +62,9 @@ public class RoomController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
         // Validar parámetros de la solicitud
+        Map<String, Short> shorts = null;
         try {
-            Map<String, Short> shorts = Request.validateShort(request, "files", "cols");
+            shorts = Request.validateShort(request, "files", "cols");
             
             RoomCreateDTO roomCreateDTO = new RoomCreateDTO(request.getParameter("name"), shorts.get("files"), shorts.get("cols"));
 
@@ -78,8 +78,8 @@ public class RoomController extends HttpServlet {
         // Parámetros validados. Hacer comprobaciones y operaciones correspondientes
         Room room = new Room();
         room.setName(request.getParameter("name"));
-        room.setFiles((short)Integer.parseInt(request.getParameter("files")));
-        room.setCols((short)Integer.parseInt(request.getParameter("cols")));
+        room.setFiles(shorts.get("files"));
+        room.setCols(shorts.get("cols"));
 
         try {
             ModelController.getRoom().create(room);

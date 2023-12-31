@@ -77,6 +77,10 @@ public class InstanceConverter {
                 return ModelController.getGenre().findGenre((Integer)fieldValue);
             case "nationalityId":
                 return ModelController.getNationality().findNationality((Integer)fieldValue);
+            case "movieId":
+                return ModelController.getMovie().findMovie((Integer)fieldValue);
+            case "roomId":
+                return ModelController.getRoom().findRoom((Integer)fieldValue);
             // Añadir aquí más conversiones según sea necesario
         }
         return null;

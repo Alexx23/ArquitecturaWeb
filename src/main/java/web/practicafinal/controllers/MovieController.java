@@ -73,9 +73,11 @@ public class MovieController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
         // Validar parámetros de la solicitud
+        Map<String, Short> shorts = null;
+        Map<String, Integer> integers = null;
         try {
-            Map<String, Short> shorts = Request.validateShort(request, "duration", "year");
-            Map<String, Integer> integers = Request.validateInteger(request, "genre_id", "nationality_id", "distributor_id", "director_id", "age_classification_id");
+            shorts = Request.validateShort(request, "duration", "year");
+            integers = Request.validateInteger(request, "genre_id", "nationality_id", "distributor_id", "director_id", "age_classification_id");
             
             MovieCreateDTO movieCreateDTO = new MovieCreateDTO(request.getParameter("name"), request.getParameter("web"), request.getParameter("original_title"),
                 shorts.get("year"), shorts.get("duration"), integers.get("genre_id"), integers.get("nationality_id"), integers.get("distributor_id"), 
@@ -89,11 +91,11 @@ public class MovieController extends HttpServlet {
         }
         
         // Parámetros validados. Hacer comprobaciones y operaciones correspondientes
-        int genreId = Integer.parseInt(request.getParameter("genre_id"));
-        int nationalityId = Integer.parseInt(request.getParameter("nationality_id"));
-        int distributorId = Integer.parseInt(request.getParameter("distributor_id"));
-        int directorId = Integer.parseInt(request.getParameter("director_id"));
-        int ageClassificationId = Integer.parseInt(request.getParameter("age_classification_id"));
+        int genreId = integers.get("genre_id");
+        int nationalityId = integers.get("nationality_id");
+        int distributorId = integers.get("distributor_id");
+        int directorId = integers.get("director_id");
+        int ageClassificationId = integers.get("age_classification_id");
         
         AgeClassification ageClassification = ModelController.getAgeClassification().findAgeClassification(ageClassificationId);
         Director director = ModelController.getDirector().findDirector(directorId);
@@ -105,8 +107,8 @@ public class MovieController extends HttpServlet {
         movie.setName(request.getParameter("name"));
         movie.setWeb(request.getParameter("web"));
         movie.setOriginalTitle(request.getParameter("original_title"));
-        movie.setDuration((short)Integer.parseInt(request.getParameter("duration")));
-        movie.setYear((short)Integer.parseInt(request.getParameter("year")));
+        movie.setDuration(shorts.get("duration"));
+        movie.setYear(shorts.get("year"));
         movie.setAgeClassificationId(ageClassification);
         movie.setDirectorId(director);
         movie.setDistributorId(distributor);
