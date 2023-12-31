@@ -61,7 +61,9 @@ web\practicafinal\utils\Response$DeepFieldFilter.class
 web\practicafinal\models\controllers\exceptions\NonexistentEntityException.class
 web\practicafinal\utils\JsonUtils$TimestampSerializer.class
 web\practicafinal\models\Director.class
+web\practicafinal\models\Card.class
 web\practicafinal\controllers\validations\annotations\UniqueEmail$UserValidator.class
+web\practicafinal\models\controllers\CardJpaController.class
 web\practicafinal\controllers\TestController.class
 web\practicafinal\filters\AdminFilter.class
 web\practicafinal\controllers\RegisterController.class
@@ -84,6 +86,7 @@ web\practicafinal\controllers\validations\annotations\UniqueUsername.class
 web\practicafinal\controllers\validations\annotations\ValidDirector$DirectorValidator.class
 web\practicafinal\listeners\CustomServletContextListener.class
 web\practicafinal\models\Movie.class
+web\practicafinal\utils\Response$FilterMixin.class
 web\practicafinal\utils\InstanceConverter.class
 web\practicafinal\controllers\validations\annotations\ValidMovie.class
 web\practicafinal\models\Distributor.class

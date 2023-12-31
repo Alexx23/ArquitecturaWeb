@@ -4,7 +4,6 @@
  */
 package web.practicafinal.models;
 
-import com.fasterxml.jackson.annotation.JsonFilter;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,12 +26,11 @@ import java.util.Date;
  * @author Alex
  */
 @Entity
-@JsonFilter("depth_3")
 @Table(name = "card")
 @NamedQueries({
     @NamedQuery(name = "Card.findAll", query = "SELECT c FROM Card c"),
     @NamedQuery(name = "Card.findById", query = "SELECT c FROM Card c WHERE c.id = :id"),
-    @NamedQuery(name = "Card.findByNumber", query = "SELECT c FROM Card c WHERE c.number = :number"),
+    @NamedQuery(name = "Card.findByCardNumber", query = "SELECT c FROM Card c WHERE c.cardNumber = :cardNumber"),
     @NamedQuery(name = "Card.findByExpiration", query = "SELECT c FROM Card c WHERE c.expiration = :expiration"),
     @NamedQuery(name = "Card.findByCvv", query = "SELECT c FROM Card c WHERE c.cvv = :cvv")})
 public class Card implements Serializable {
@@ -44,8 +42,8 @@ public class Card implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
-    @Column(name = "number")
-    private int number;
+    @Column(name = "card_number")
+    private int cardNumber;
     @Basic(optional = false)
     @Column(name = "expiration")
     @Temporal(TemporalType.DATE)
@@ -64,9 +62,9 @@ public class Card implements Serializable {
         this.id = id;
     }
 
-    public Card(Integer id, int number, Date expiration, int cvv) {
+    public Card(Integer id, int cardNumber, Date expiration, int cvv) {
         this.id = id;
-        this.number = number;
+        this.cardNumber = cardNumber;
         this.expiration = expiration;
         this.cvv = cvv;
     }
@@ -79,12 +77,12 @@ public class Card implements Serializable {
         this.id = id;
     }
 
-    public int getNumber() {
-        return number;
+    public int getCardNumber() {
+        return cardNumber;
     }
 
-    public void setNumber(int number) {
-        this.number = number;
+    public void setCardNumber(int cardNumber) {
+        this.cardNumber = cardNumber;
     }
 
     public Date getExpiration() {

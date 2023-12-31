@@ -25,7 +25,6 @@ import java.io.Serializable;
  * @author Alex
  */
 @Entity
-@JsonFilter("depth_3")
 @Table(name = "comment")
 @NamedQueries({
     @NamedQuery(name = "Comment.findAll", query = "SELECT c FROM Comment c"),

@@ -30,7 +30,6 @@ import java.util.List;
  * @author Alex
  */
 @Entity
-@JsonFilter("depth_3")
 @Table(name = "session")
 @NamedQueries({
     @NamedQuery(name = "Session.findAll", query = "SELECT s FROM Session s"),

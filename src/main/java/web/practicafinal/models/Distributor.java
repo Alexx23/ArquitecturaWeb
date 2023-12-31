@@ -25,7 +25,6 @@ import java.util.List;
  * @author Alex
  */
 @Entity
-@JsonFilter("depth_3")
 @Table(name = "distributor")
 @NamedQueries({
     @NamedQuery(name = "Distributor.findAll", query = "SELECT d FROM Distributor d"),

@@ -1,5 +1,10 @@
 package web.practicafinal.utils;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonStreamContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,8 +43,7 @@ public class Response {
         }
 
         @Override
-        public void serializeAsField(Object pojo, JsonGenerator gen, SerializerProvider provider, PropertyWriter writer)
-                                        throws Exception {
+        public void serializeAsField(Object pojo, JsonGenerator gen, SerializerProvider provider, PropertyWriter writer) throws Exception {
             int depth = calcDepth(writer, gen);
             if (depth <= maxDepth) {
                 writer.serializeAsField(pojo, gen, provider);
@@ -52,6 +56,11 @@ public class Response {
 
     }
     
+    @JsonFilter("depth_3")
+    @JsonIgnoreProperties({ "password", "cvv", "cardNumber" })
+    interface FilterMixin {
+    }
+        
     public static void outputData(HttpServletResponse response, int status, Object payload) {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
@@ -60,13 +69,9 @@ public class Response {
         try {
             if (payload != null) {
                 ObjectMapper objectMapper = new ObjectMapper();
-                SimpleFilterProvider depthFilters = new SimpleFilterProvider()
-                                        .addFilter("depth_1", new DeepFieldFilter(1))
-                                        .addFilter("depth_2", new DeepFieldFilter(2))
-                                        .addFilter("depth_3", new DeepFieldFilter(3))
-                                        .addFilter("depth_4", new DeepFieldFilter(4))
-                                        .addFilter("depth_5", new DeepFieldFilter(5));
-                objectMapper.setFilterProvider(depthFilters);
+                objectMapper.addMixIn(Object.class, FilterMixin.class);
+                SimpleFilterProvider depthFilter = new SimpleFilterProvider().addFilter("depth_3", new DeepFieldFilter(3));
+                objectMapper.setFilterProvider(depthFilter);
                 objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
                 String result = objectMapper.writeValueAsString(payload);
                 
