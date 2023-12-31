@@ -5,9 +5,6 @@
 package web.practicafinal.models;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -60,15 +57,14 @@ public class User implements Serializable {
     @Column(name = "password")
     private String password;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId", fetch = FetchType.LAZY)
-    //@JsonIgnoreProperties({"userId", "sessionId"})
     private List<Ticket> ticketList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId", fetch = FetchType.LAZY)
-    //@JsonIgnoreProperties({"userId", "movieId"})
     private List<Comment> commentList;
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    //@JsonIgnoreProperties("userList")
     private Role roleId;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId", fetch = FetchType.LAZY)
+    private List<Card> cardList;
 
     public User() {
     }
@@ -147,6 +143,14 @@ public class User implements Serializable {
 
     public void setRoleId(Role roleId) {
         this.roleId = roleId;
+    }
+
+    public List<Card> getCardList() {
+        return cardList;
+    }
+
+    public void setCardList(List<Card> cardList) {
+        this.cardList = cardList;
     }
 
     @Override

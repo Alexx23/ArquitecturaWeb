@@ -17,6 +17,7 @@ import web.practicafinal.models.Ticket;
 import java.util.ArrayList;
 import java.util.List;
 import web.practicafinal.models.Comment;
+import web.practicafinal.models.Card;
 import web.practicafinal.models.User;
 import web.practicafinal.models.controllers.exceptions.IllegalOrphanException;
 import web.practicafinal.models.controllers.exceptions.NonexistentEntityException;
@@ -46,6 +47,9 @@ public class UserJpaController implements Serializable {
         if (user.getCommentList() == null) {
             user.setCommentList(new ArrayList<Comment>());
         }
+        if (user.getCardList() == null) {
+            user.setCardList(new ArrayList<Card>());
+        }
         EntityManager em = null;
         try {
             utx.begin();
@@ -67,6 +71,12 @@ public class UserJpaController implements Serializable {
                 attachedCommentList.add(commentListCommentToAttach);
             }
             user.setCommentList(attachedCommentList);
+            List<Card> attachedCardList = new ArrayList<Card>();
+            for (Card cardListCardToAttach : user.getCardList()) {
+                cardListCardToAttach = em.getReference(cardListCardToAttach.getClass(), cardListCardToAttach.getId());
+                attachedCardList.add(cardListCardToAttach);
+            }
+            user.setCardList(attachedCardList);
             em.persist(user);
             if (roleId != null) {
                 roleId.getUserList().add(user);
@@ -88,6 +98,15 @@ public class UserJpaController implements Serializable {
                 if (oldUserIdOfCommentListComment != null) {
                     oldUserIdOfCommentListComment.getCommentList().remove(commentListComment);
                     oldUserIdOfCommentListComment = em.merge(oldUserIdOfCommentListComment);
+                }
+            }
+            for (Card cardListCard : user.getCardList()) {
+                User oldUserIdOfCardListCard = cardListCard.getUserId();
+                cardListCard.setUserId(user);
+                cardListCard = em.merge(cardListCard);
+                if (oldUserIdOfCardListCard != null) {
+                    oldUserIdOfCardListCard.getCardList().remove(cardListCard);
+                    oldUserIdOfCardListCard = em.merge(oldUserIdOfCardListCard);
                 }
             }
             utx.commit();
@@ -117,6 +136,8 @@ public class UserJpaController implements Serializable {
             List<Ticket> ticketListNew = user.getTicketList();
             List<Comment> commentListOld = persistentUser.getCommentList();
             List<Comment> commentListNew = user.getCommentList();
+            List<Card> cardListOld = persistentUser.getCardList();
+            List<Card> cardListNew = user.getCardList();
             List<String> illegalOrphanMessages = null;
             for (Ticket ticketListOldTicket : ticketListOld) {
                 if (!ticketListNew.contains(ticketListOldTicket)) {
@@ -132,6 +153,14 @@ public class UserJpaController implements Serializable {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
                     illegalOrphanMessages.add("You must retain Comment " + commentListOldComment + " since its userId field is not nullable.");
+                }
+            }
+            for (Card cardListOldCard : cardListOld) {
+                if (!cardListNew.contains(cardListOldCard)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain Card " + cardListOldCard + " since its userId field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -155,6 +184,13 @@ public class UserJpaController implements Serializable {
             }
             commentListNew = attachedCommentListNew;
             user.setCommentList(commentListNew);
+            List<Card> attachedCardListNew = new ArrayList<Card>();
+            for (Card cardListNewCardToAttach : cardListNew) {
+                cardListNewCardToAttach = em.getReference(cardListNewCardToAttach.getClass(), cardListNewCardToAttach.getId());
+                attachedCardListNew.add(cardListNewCardToAttach);
+            }
+            cardListNew = attachedCardListNew;
+            user.setCardList(cardListNew);
             user = em.merge(user);
             if (roleIdOld != null && !roleIdOld.equals(roleIdNew)) {
                 roleIdOld.getUserList().remove(user);
@@ -183,6 +219,17 @@ public class UserJpaController implements Serializable {
                     if (oldUserIdOfCommentListNewComment != null && !oldUserIdOfCommentListNewComment.equals(user)) {
                         oldUserIdOfCommentListNewComment.getCommentList().remove(commentListNewComment);
                         oldUserIdOfCommentListNewComment = em.merge(oldUserIdOfCommentListNewComment);
+                    }
+                }
+            }
+            for (Card cardListNewCard : cardListNew) {
+                if (!cardListOld.contains(cardListNewCard)) {
+                    User oldUserIdOfCardListNewCard = cardListNewCard.getUserId();
+                    cardListNewCard.setUserId(user);
+                    cardListNewCard = em.merge(cardListNewCard);
+                    if (oldUserIdOfCardListNewCard != null && !oldUserIdOfCardListNewCard.equals(user)) {
+                        oldUserIdOfCardListNewCard.getCardList().remove(cardListNewCard);
+                        oldUserIdOfCardListNewCard = em.merge(oldUserIdOfCardListNewCard);
                     }
                 }
             }
@@ -234,6 +281,13 @@ public class UserJpaController implements Serializable {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
                 illegalOrphanMessages.add("This User (" + user + ") cannot be destroyed since the Comment " + commentListOrphanCheckComment + " in its commentList field has a non-nullable userId field.");
+            }
+            List<Card> cardListOrphanCheck = user.getCardList();
+            for (Card cardListOrphanCheckCard : cardListOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This User (" + user + ") cannot be destroyed since the Card " + cardListOrphanCheckCard + " in its cardList field has a non-nullable userId field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);

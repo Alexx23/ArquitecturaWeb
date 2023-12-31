@@ -17,7 +17,10 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  *
@@ -25,14 +28,14 @@ import java.io.Serializable;
  */
 @Entity
 @JsonFilter("depth_3")
-@Table(name = "ticket")
+@Table(name = "card")
 @NamedQueries({
-    @NamedQuery(name = "Ticket.findAll", query = "SELECT t FROM Ticket t"),
-    @NamedQuery(name = "Ticket.findById", query = "SELECT t FROM Ticket t WHERE t.id = :id"),
-    @NamedQuery(name = "Ticket.findByRow", query = "SELECT t FROM Ticket t WHERE t.row = :row"),
-    @NamedQuery(name = "Ticket.findByCol", query = "SELECT t FROM Ticket t WHERE t.col = :col"),
-    @NamedQuery(name = "Ticket.findByCode", query = "SELECT t FROM Ticket t WHERE t.code = :code")})
-public class Ticket implements Serializable {
+    @NamedQuery(name = "Card.findAll", query = "SELECT c FROM Card c"),
+    @NamedQuery(name = "Card.findById", query = "SELECT c FROM Card c WHERE c.id = :id"),
+    @NamedQuery(name = "Card.findByNumber", query = "SELECT c FROM Card c WHERE c.number = :number"),
+    @NamedQuery(name = "Card.findByExpiration", query = "SELECT c FROM Card c WHERE c.expiration = :expiration"),
+    @NamedQuery(name = "Card.findByCvv", query = "SELECT c FROM Card c WHERE c.cvv = :cvv")})
+public class Card implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -41,33 +44,31 @@ public class Ticket implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
-    @Column(name = "row")
-    private short row;
+    @Column(name = "number")
+    private int number;
     @Basic(optional = false)
-    @Column(name = "col")
-    private short col;
+    @Column(name = "expiration")
+    @Temporal(TemporalType.DATE)
+    private Date expiration;
     @Basic(optional = false)
-    @Column(name = "code")
-    private String code;
-    @JoinColumn(name = "session_id", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private Session sessionId;
+    @Column(name = "cvv")
+    private int cvv;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private User userId;
 
-    public Ticket() {
+    public Card() {
     }
 
-    public Ticket(Integer id) {
+    public Card(Integer id) {
         this.id = id;
     }
 
-    public Ticket(Integer id, short row, short col, String code) {
+    public Card(Integer id, int number, Date expiration, int cvv) {
         this.id = id;
-        this.row = row;
-        this.col = col;
-        this.code = code;
+        this.number = number;
+        this.expiration = expiration;
+        this.cvv = cvv;
     }
 
     public Integer getId() {
@@ -78,36 +79,28 @@ public class Ticket implements Serializable {
         this.id = id;
     }
 
-    public short getRow() {
-        return row;
+    public int getNumber() {
+        return number;
     }
 
-    public void setRow(short row) {
-        this.row = row;
+    public void setNumber(int number) {
+        this.number = number;
     }
 
-    public short getCol() {
-        return col;
+    public Date getExpiration() {
+        return expiration;
     }
 
-    public void setCol(short col) {
-        this.col = col;
+    public void setExpiration(Date expiration) {
+        this.expiration = expiration;
     }
 
-    public String getCode() {
-        return code;
+    public int getCvv() {
+        return cvv;
     }
 
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public Session getSessionId() {
-        return sessionId;
-    }
-
-    public void setSessionId(Session sessionId) {
-        this.sessionId = sessionId;
+    public void setCvv(int cvv) {
+        this.cvv = cvv;
     }
 
     public User getUserId() {
@@ -128,10 +121,10 @@ public class Ticket implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Ticket)) {
+        if (!(object instanceof Card)) {
             return false;
         }
-        Ticket other = (Ticket) object;
+        Card other = (Card) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -140,7 +133,7 @@ public class Ticket implements Serializable {
 
     @Override
     public String toString() {
-        return "web.practicafinal.models.Ticket[ id=" + id + " ]";
+        return "web.practicafinal.models.Card[ id=" + id + " ]";
     }
     
 }
