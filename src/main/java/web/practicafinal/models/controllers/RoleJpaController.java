@@ -53,12 +53,12 @@ public class RoleJpaController implements Serializable {
             role.setUserList(attachedUserList);
             em.persist(role);
             for (User userListUser : role.getUserList()) {
-                Role oldRoleIdOfUserListUser = userListUser.getRoleId();
-                userListUser.setRoleId(role);
+                Role oldRoleOfUserListUser = userListUser.getRole();
+                userListUser.setRole(role);
                 userListUser = em.merge(userListUser);
-                if (oldRoleIdOfUserListUser != null) {
-                    oldRoleIdOfUserListUser.getUserList().remove(userListUser);
-                    oldRoleIdOfUserListUser = em.merge(oldRoleIdOfUserListUser);
+                if (oldRoleOfUserListUser != null) {
+                    oldRoleOfUserListUser.getUserList().remove(userListUser);
+                    oldRoleOfUserListUser = em.merge(oldRoleOfUserListUser);
                 }
             }
             utx.commit();
@@ -90,7 +90,7 @@ public class RoleJpaController implements Serializable {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain User " + userListOldUser + " since its roleId field is not nullable.");
+                    illegalOrphanMessages.add("You must retain User " + userListOldUser + " since its role field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -106,12 +106,12 @@ public class RoleJpaController implements Serializable {
             role = em.merge(role);
             for (User userListNewUser : userListNew) {
                 if (!userListOld.contains(userListNewUser)) {
-                    Role oldRoleIdOfUserListNewUser = userListNewUser.getRoleId();
-                    userListNewUser.setRoleId(role);
+                    Role oldRoleOfUserListNewUser = userListNewUser.getRole();
+                    userListNewUser.setRole(role);
                     userListNewUser = em.merge(userListNewUser);
-                    if (oldRoleIdOfUserListNewUser != null && !oldRoleIdOfUserListNewUser.equals(role)) {
-                        oldRoleIdOfUserListNewUser.getUserList().remove(userListNewUser);
-                        oldRoleIdOfUserListNewUser = em.merge(oldRoleIdOfUserListNewUser);
+                    if (oldRoleOfUserListNewUser != null && !oldRoleOfUserListNewUser.equals(role)) {
+                        oldRoleOfUserListNewUser.getUserList().remove(userListNewUser);
+                        oldRoleOfUserListNewUser = em.merge(oldRoleOfUserListNewUser);
                     }
                 }
             }
@@ -155,7 +155,7 @@ public class RoleJpaController implements Serializable {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Role (" + role + ") cannot be destroyed since the User " + userListOrphanCheckUser + " in its userList field has a non-nullable roleId field.");
+                illegalOrphanMessages.add("This Role (" + role + ") cannot be destroyed since the User " + userListOrphanCheckUser + " in its userList field has a non-nullable role field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);

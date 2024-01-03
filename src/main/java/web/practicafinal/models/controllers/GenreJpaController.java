@@ -53,12 +53,12 @@ public class GenreJpaController implements Serializable {
             genre.setMovieList(attachedMovieList);
             em.persist(genre);
             for (Movie movieListMovie : genre.getMovieList()) {
-                Genre oldGenreIdOfMovieListMovie = movieListMovie.getGenreId();
-                movieListMovie.setGenreId(genre);
+                Genre oldGenreOfMovieListMovie = movieListMovie.getGenre();
+                movieListMovie.setGenre(genre);
                 movieListMovie = em.merge(movieListMovie);
-                if (oldGenreIdOfMovieListMovie != null) {
-                    oldGenreIdOfMovieListMovie.getMovieList().remove(movieListMovie);
-                    oldGenreIdOfMovieListMovie = em.merge(oldGenreIdOfMovieListMovie);
+                if (oldGenreOfMovieListMovie != null) {
+                    oldGenreOfMovieListMovie.getMovieList().remove(movieListMovie);
+                    oldGenreOfMovieListMovie = em.merge(oldGenreOfMovieListMovie);
                 }
             }
             utx.commit();
@@ -90,7 +90,7 @@ public class GenreJpaController implements Serializable {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Movie " + movieListOldMovie + " since its genreId field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Movie " + movieListOldMovie + " since its genre field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -106,12 +106,12 @@ public class GenreJpaController implements Serializable {
             genre = em.merge(genre);
             for (Movie movieListNewMovie : movieListNew) {
                 if (!movieListOld.contains(movieListNewMovie)) {
-                    Genre oldGenreIdOfMovieListNewMovie = movieListNewMovie.getGenreId();
-                    movieListNewMovie.setGenreId(genre);
+                    Genre oldGenreOfMovieListNewMovie = movieListNewMovie.getGenre();
+                    movieListNewMovie.setGenre(genre);
                     movieListNewMovie = em.merge(movieListNewMovie);
-                    if (oldGenreIdOfMovieListNewMovie != null && !oldGenreIdOfMovieListNewMovie.equals(genre)) {
-                        oldGenreIdOfMovieListNewMovie.getMovieList().remove(movieListNewMovie);
-                        oldGenreIdOfMovieListNewMovie = em.merge(oldGenreIdOfMovieListNewMovie);
+                    if (oldGenreOfMovieListNewMovie != null && !oldGenreOfMovieListNewMovie.equals(genre)) {
+                        oldGenreOfMovieListNewMovie.getMovieList().remove(movieListNewMovie);
+                        oldGenreOfMovieListNewMovie = em.merge(oldGenreOfMovieListNewMovie);
                     }
                 }
             }
@@ -155,7 +155,7 @@ public class GenreJpaController implements Serializable {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Genre (" + genre + ") cannot be destroyed since the Movie " + movieListOrphanCheckMovie + " in its movieList field has a non-nullable genreId field.");
+                illegalOrphanMessages.add("This Genre (" + genre + ") cannot be destroyed since the Movie " + movieListOrphanCheckMovie + " in its movieList field has a non-nullable genre field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);

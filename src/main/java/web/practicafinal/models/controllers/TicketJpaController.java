@@ -41,24 +41,24 @@ public class TicketJpaController implements Serializable {
         try {
             utx.begin();
             em = getEntityManager();
-            Session sessionId = ticket.getSessionId();
-            if (sessionId != null) {
-                sessionId = em.getReference(sessionId.getClass(), sessionId.getId());
-                ticket.setSessionId(sessionId);
+            Session session = ticket.getSession();
+            if (session != null) {
+                session = em.getReference(session.getClass(), session.getId());
+                ticket.setSession(session);
             }
-            User userId = ticket.getUserId();
-            if (userId != null) {
-                userId = em.getReference(userId.getClass(), userId.getId());
-                ticket.setUserId(userId);
+            User user = ticket.getUser();
+            if (user != null) {
+                user = em.getReference(user.getClass(), user.getId());
+                ticket.setUser(user);
             }
             em.persist(ticket);
-            if (sessionId != null) {
-                sessionId.getTicketList().add(ticket);
-                sessionId = em.merge(sessionId);
+            if (session != null) {
+                session.getTicketList().add(ticket);
+                session = em.merge(session);
             }
-            if (userId != null) {
-                userId.getTicketList().add(ticket);
-                userId = em.merge(userId);
+            if (user != null) {
+                user.getTicketList().add(ticket);
+                user = em.merge(user);
             }
             utx.commit();
         } catch (Exception ex) {
@@ -81,34 +81,34 @@ public class TicketJpaController implements Serializable {
             utx.begin();
             em = getEntityManager();
             Ticket persistentTicket = em.find(Ticket.class, ticket.getId());
-            Session sessionIdOld = persistentTicket.getSessionId();
-            Session sessionIdNew = ticket.getSessionId();
-            User userIdOld = persistentTicket.getUserId();
-            User userIdNew = ticket.getUserId();
-            if (sessionIdNew != null) {
-                sessionIdNew = em.getReference(sessionIdNew.getClass(), sessionIdNew.getId());
-                ticket.setSessionId(sessionIdNew);
+            Session sessionOld = persistentTicket.getSession();
+            Session sessionNew = ticket.getSession();
+            User userOld = persistentTicket.getUser();
+            User userNew = ticket.getUser();
+            if (sessionNew != null) {
+                sessionNew = em.getReference(sessionNew.getClass(), sessionNew.getId());
+                ticket.setSession(sessionNew);
             }
-            if (userIdNew != null) {
-                userIdNew = em.getReference(userIdNew.getClass(), userIdNew.getId());
-                ticket.setUserId(userIdNew);
+            if (userNew != null) {
+                userNew = em.getReference(userNew.getClass(), userNew.getId());
+                ticket.setUser(userNew);
             }
             ticket = em.merge(ticket);
-            if (sessionIdOld != null && !sessionIdOld.equals(sessionIdNew)) {
-                sessionIdOld.getTicketList().remove(ticket);
-                sessionIdOld = em.merge(sessionIdOld);
+            if (sessionOld != null && !sessionOld.equals(sessionNew)) {
+                sessionOld.getTicketList().remove(ticket);
+                sessionOld = em.merge(sessionOld);
             }
-            if (sessionIdNew != null && !sessionIdNew.equals(sessionIdOld)) {
-                sessionIdNew.getTicketList().add(ticket);
-                sessionIdNew = em.merge(sessionIdNew);
+            if (sessionNew != null && !sessionNew.equals(sessionOld)) {
+                sessionNew.getTicketList().add(ticket);
+                sessionNew = em.merge(sessionNew);
             }
-            if (userIdOld != null && !userIdOld.equals(userIdNew)) {
-                userIdOld.getTicketList().remove(ticket);
-                userIdOld = em.merge(userIdOld);
+            if (userOld != null && !userOld.equals(userNew)) {
+                userOld.getTicketList().remove(ticket);
+                userOld = em.merge(userOld);
             }
-            if (userIdNew != null && !userIdNew.equals(userIdOld)) {
-                userIdNew.getTicketList().add(ticket);
-                userIdNew = em.merge(userIdNew);
+            if (userNew != null && !userNew.equals(userOld)) {
+                userNew.getTicketList().add(ticket);
+                userNew = em.merge(userNew);
             }
             utx.commit();
         } catch (Exception ex) {
@@ -144,15 +144,15 @@ public class TicketJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The ticket with id " + id + " no longer exists.", enfe);
             }
-            Session sessionId = ticket.getSessionId();
-            if (sessionId != null) {
-                sessionId.getTicketList().remove(ticket);
-                sessionId = em.merge(sessionId);
+            Session session = ticket.getSession();
+            if (session != null) {
+                session.getTicketList().remove(ticket);
+                session = em.merge(session);
             }
-            User userId = ticket.getUserId();
-            if (userId != null) {
-                userId.getTicketList().remove(ticket);
-                userId = em.merge(userId);
+            User user = ticket.getUser();
+            if (user != null) {
+                user.getTicketList().remove(ticket);
+                user = em.merge(user);
             }
             em.remove(ticket);
             utx.commit();

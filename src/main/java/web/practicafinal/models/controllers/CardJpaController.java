@@ -40,15 +40,15 @@ public class CardJpaController implements Serializable {
         try {
             utx.begin();
             em = getEntityManager();
-            User userId = card.getUserId();
-            if (userId != null) {
-                userId = em.getReference(userId.getClass(), userId.getId());
-                card.setUserId(userId);
+            User user = card.getUser();
+            if (user != null) {
+                user = em.getReference(user.getClass(), user.getId());
+                card.setUser(user);
             }
             em.persist(card);
-            if (userId != null) {
-                userId.getCardList().add(card);
-                userId = em.merge(userId);
+            if (user != null) {
+                user.getCardList().add(card);
+                user = em.merge(user);
             }
             utx.commit();
         } catch (Exception ex) {
@@ -71,20 +71,20 @@ public class CardJpaController implements Serializable {
             utx.begin();
             em = getEntityManager();
             Card persistentCard = em.find(Card.class, card.getId());
-            User userIdOld = persistentCard.getUserId();
-            User userIdNew = card.getUserId();
-            if (userIdNew != null) {
-                userIdNew = em.getReference(userIdNew.getClass(), userIdNew.getId());
-                card.setUserId(userIdNew);
+            User userOld = persistentCard.getUser();
+            User userNew = card.getUser();
+            if (userNew != null) {
+                userNew = em.getReference(userNew.getClass(), userNew.getId());
+                card.setUser(userNew);
             }
             card = em.merge(card);
-            if (userIdOld != null && !userIdOld.equals(userIdNew)) {
-                userIdOld.getCardList().remove(card);
-                userIdOld = em.merge(userIdOld);
+            if (userOld != null && !userOld.equals(userNew)) {
+                userOld.getCardList().remove(card);
+                userOld = em.merge(userOld);
             }
-            if (userIdNew != null && !userIdNew.equals(userIdOld)) {
-                userIdNew.getCardList().add(card);
-                userIdNew = em.merge(userIdNew);
+            if (userNew != null && !userNew.equals(userOld)) {
+                userNew.getCardList().add(card);
+                userNew = em.merge(userNew);
             }
             utx.commit();
         } catch (Exception ex) {
@@ -120,10 +120,10 @@ public class CardJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The card with id " + id + " no longer exists.", enfe);
             }
-            User userId = card.getUserId();
-            if (userId != null) {
-                userId.getCardList().remove(card);
-                userId = em.merge(userId);
+            User user = card.getUser();
+            if (user != null) {
+                user.getCardList().remove(card);
+                user = em.merge(user);
             }
             em.remove(card);
             utx.commit();

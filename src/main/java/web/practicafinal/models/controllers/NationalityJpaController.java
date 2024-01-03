@@ -53,12 +53,12 @@ public class NationalityJpaController implements Serializable {
             nationality.setMovieList(attachedMovieList);
             em.persist(nationality);
             for (Movie movieListMovie : nationality.getMovieList()) {
-                Nationality oldNationalityIdOfMovieListMovie = movieListMovie.getNationalityId();
-                movieListMovie.setNationalityId(nationality);
+                Nationality oldNationalityOfMovieListMovie = movieListMovie.getNationality();
+                movieListMovie.setNationality(nationality);
                 movieListMovie = em.merge(movieListMovie);
-                if (oldNationalityIdOfMovieListMovie != null) {
-                    oldNationalityIdOfMovieListMovie.getMovieList().remove(movieListMovie);
-                    oldNationalityIdOfMovieListMovie = em.merge(oldNationalityIdOfMovieListMovie);
+                if (oldNationalityOfMovieListMovie != null) {
+                    oldNationalityOfMovieListMovie.getMovieList().remove(movieListMovie);
+                    oldNationalityOfMovieListMovie = em.merge(oldNationalityOfMovieListMovie);
                 }
             }
             utx.commit();
@@ -90,7 +90,7 @@ public class NationalityJpaController implements Serializable {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Movie " + movieListOldMovie + " since its nationalityId field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Movie " + movieListOldMovie + " since its nationality field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -106,12 +106,12 @@ public class NationalityJpaController implements Serializable {
             nationality = em.merge(nationality);
             for (Movie movieListNewMovie : movieListNew) {
                 if (!movieListOld.contains(movieListNewMovie)) {
-                    Nationality oldNationalityIdOfMovieListNewMovie = movieListNewMovie.getNationalityId();
-                    movieListNewMovie.setNationalityId(nationality);
+                    Nationality oldNationalityOfMovieListNewMovie = movieListNewMovie.getNationality();
+                    movieListNewMovie.setNationality(nationality);
                     movieListNewMovie = em.merge(movieListNewMovie);
-                    if (oldNationalityIdOfMovieListNewMovie != null && !oldNationalityIdOfMovieListNewMovie.equals(nationality)) {
-                        oldNationalityIdOfMovieListNewMovie.getMovieList().remove(movieListNewMovie);
-                        oldNationalityIdOfMovieListNewMovie = em.merge(oldNationalityIdOfMovieListNewMovie);
+                    if (oldNationalityOfMovieListNewMovie != null && !oldNationalityOfMovieListNewMovie.equals(nationality)) {
+                        oldNationalityOfMovieListNewMovie.getMovieList().remove(movieListNewMovie);
+                        oldNationalityOfMovieListNewMovie = em.merge(oldNationalityOfMovieListNewMovie);
                     }
                 }
             }
@@ -155,7 +155,7 @@ public class NationalityJpaController implements Serializable {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Nationality (" + nationality + ") cannot be destroyed since the Movie " + movieListOrphanCheckMovie + " in its movieList field has a non-nullable nationalityId field.");
+                illegalOrphanMessages.add("This Nationality (" + nationality + ") cannot be destroyed since the Movie " + movieListOrphanCheckMovie + " in its movieList field has a non-nullable nationality field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);

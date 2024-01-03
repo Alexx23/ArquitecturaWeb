@@ -41,24 +41,24 @@ public class CommentJpaController implements Serializable {
         try {
             utx.begin();
             em = getEntityManager();
-            Movie movieId = comment.getMovieId();
-            if (movieId != null) {
-                movieId = em.getReference(movieId.getClass(), movieId.getId());
-                comment.setMovieId(movieId);
+            Movie movie = comment.getMovie();
+            if (movie != null) {
+                movie = em.getReference(movie.getClass(), movie.getId());
+                comment.setMovie(movie);
             }
-            User userId = comment.getUserId();
-            if (userId != null) {
-                userId = em.getReference(userId.getClass(), userId.getId());
-                comment.setUserId(userId);
+            User user = comment.getUser();
+            if (user != null) {
+                user = em.getReference(user.getClass(), user.getId());
+                comment.setUser(user);
             }
             em.persist(comment);
-            if (movieId != null) {
-                movieId.getCommentList().add(comment);
-                movieId = em.merge(movieId);
+            if (movie != null) {
+                movie.getCommentList().add(comment);
+                movie = em.merge(movie);
             }
-            if (userId != null) {
-                userId.getCommentList().add(comment);
-                userId = em.merge(userId);
+            if (user != null) {
+                user.getCommentList().add(comment);
+                user = em.merge(user);
             }
             utx.commit();
         } catch (Exception ex) {
@@ -81,34 +81,34 @@ public class CommentJpaController implements Serializable {
             utx.begin();
             em = getEntityManager();
             Comment persistentComment = em.find(Comment.class, comment.getId());
-            Movie movieIdOld = persistentComment.getMovieId();
-            Movie movieIdNew = comment.getMovieId();
-            User userIdOld = persistentComment.getUserId();
-            User userIdNew = comment.getUserId();
-            if (movieIdNew != null) {
-                movieIdNew = em.getReference(movieIdNew.getClass(), movieIdNew.getId());
-                comment.setMovieId(movieIdNew);
+            Movie movieOld = persistentComment.getMovie();
+            Movie movieNew = comment.getMovie();
+            User userOld = persistentComment.getUser();
+            User userNew = comment.getUser();
+            if (movieNew != null) {
+                movieNew = em.getReference(movieNew.getClass(), movieNew.getId());
+                comment.setMovie(movieNew);
             }
-            if (userIdNew != null) {
-                userIdNew = em.getReference(userIdNew.getClass(), userIdNew.getId());
-                comment.setUserId(userIdNew);
+            if (userNew != null) {
+                userNew = em.getReference(userNew.getClass(), userNew.getId());
+                comment.setUser(userNew);
             }
             comment = em.merge(comment);
-            if (movieIdOld != null && !movieIdOld.equals(movieIdNew)) {
-                movieIdOld.getCommentList().remove(comment);
-                movieIdOld = em.merge(movieIdOld);
+            if (movieOld != null && !movieOld.equals(movieNew)) {
+                movieOld.getCommentList().remove(comment);
+                movieOld = em.merge(movieOld);
             }
-            if (movieIdNew != null && !movieIdNew.equals(movieIdOld)) {
-                movieIdNew.getCommentList().add(comment);
-                movieIdNew = em.merge(movieIdNew);
+            if (movieNew != null && !movieNew.equals(movieOld)) {
+                movieNew.getCommentList().add(comment);
+                movieNew = em.merge(movieNew);
             }
-            if (userIdOld != null && !userIdOld.equals(userIdNew)) {
-                userIdOld.getCommentList().remove(comment);
-                userIdOld = em.merge(userIdOld);
+            if (userOld != null && !userOld.equals(userNew)) {
+                userOld.getCommentList().remove(comment);
+                userOld = em.merge(userOld);
             }
-            if (userIdNew != null && !userIdNew.equals(userIdOld)) {
-                userIdNew.getCommentList().add(comment);
-                userIdNew = em.merge(userIdNew);
+            if (userNew != null && !userNew.equals(userOld)) {
+                userNew.getCommentList().add(comment);
+                userNew = em.merge(userNew);
             }
             utx.commit();
         } catch (Exception ex) {
@@ -144,15 +144,15 @@ public class CommentJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The comment with id " + id + " no longer exists.", enfe);
             }
-            Movie movieId = comment.getMovieId();
-            if (movieId != null) {
-                movieId.getCommentList().remove(comment);
-                movieId = em.merge(movieId);
+            Movie movie = comment.getMovie();
+            if (movie != null) {
+                movie.getCommentList().remove(comment);
+                movie = em.merge(movie);
             }
-            User userId = comment.getUserId();
-            if (userId != null) {
-                userId.getCommentList().remove(comment);
-                userId = em.merge(userId);
+            User user = comment.getUser();
+            if (user != null) {
+                user.getCommentList().remove(comment);
+                user = em.merge(user);
             }
             em.remove(comment);
             utx.commit();

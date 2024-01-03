@@ -53,12 +53,12 @@ public class DirectorJpaController implements Serializable {
             director.setMovieList(attachedMovieList);
             em.persist(director);
             for (Movie movieListMovie : director.getMovieList()) {
-                Director oldDirectorIdOfMovieListMovie = movieListMovie.getDirectorId();
-                movieListMovie.setDirectorId(director);
+                Director oldDirectorOfMovieListMovie = movieListMovie.getDirector();
+                movieListMovie.setDirector(director);
                 movieListMovie = em.merge(movieListMovie);
-                if (oldDirectorIdOfMovieListMovie != null) {
-                    oldDirectorIdOfMovieListMovie.getMovieList().remove(movieListMovie);
-                    oldDirectorIdOfMovieListMovie = em.merge(oldDirectorIdOfMovieListMovie);
+                if (oldDirectorOfMovieListMovie != null) {
+                    oldDirectorOfMovieListMovie.getMovieList().remove(movieListMovie);
+                    oldDirectorOfMovieListMovie = em.merge(oldDirectorOfMovieListMovie);
                 }
             }
             utx.commit();
@@ -90,7 +90,7 @@ public class DirectorJpaController implements Serializable {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Movie " + movieListOldMovie + " since its directorId field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Movie " + movieListOldMovie + " since its director field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -106,12 +106,12 @@ public class DirectorJpaController implements Serializable {
             director = em.merge(director);
             for (Movie movieListNewMovie : movieListNew) {
                 if (!movieListOld.contains(movieListNewMovie)) {
-                    Director oldDirectorIdOfMovieListNewMovie = movieListNewMovie.getDirectorId();
-                    movieListNewMovie.setDirectorId(director);
+                    Director oldDirectorOfMovieListNewMovie = movieListNewMovie.getDirector();
+                    movieListNewMovie.setDirector(director);
                     movieListNewMovie = em.merge(movieListNewMovie);
-                    if (oldDirectorIdOfMovieListNewMovie != null && !oldDirectorIdOfMovieListNewMovie.equals(director)) {
-                        oldDirectorIdOfMovieListNewMovie.getMovieList().remove(movieListNewMovie);
-                        oldDirectorIdOfMovieListNewMovie = em.merge(oldDirectorIdOfMovieListNewMovie);
+                    if (oldDirectorOfMovieListNewMovie != null && !oldDirectorOfMovieListNewMovie.equals(director)) {
+                        oldDirectorOfMovieListNewMovie.getMovieList().remove(movieListNewMovie);
+                        oldDirectorOfMovieListNewMovie = em.merge(oldDirectorOfMovieListNewMovie);
                     }
                 }
             }
@@ -155,7 +155,7 @@ public class DirectorJpaController implements Serializable {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Director (" + director + ") cannot be destroyed since the Movie " + movieListOrphanCheckMovie + " in its movieList field has a non-nullable directorId field.");
+                illegalOrphanMessages.add("This Director (" + director + ") cannot be destroyed since the Movie " + movieListOrphanCheckMovie + " in its movieList field has a non-nullable director field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);

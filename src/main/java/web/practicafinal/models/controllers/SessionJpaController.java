@@ -47,15 +47,15 @@ public class SessionJpaController implements Serializable {
         try {
             utx.begin();
             em = getEntityManager();
-            Movie movieId = session.getMovieId();
-            if (movieId != null) {
-                movieId = em.getReference(movieId.getClass(), movieId.getId());
-                session.setMovieId(movieId);
+            Movie movie = session.getMovie();
+            if (movie != null) {
+                movie = em.getReference(movie.getClass(), movie.getId());
+                session.setMovie(movie);
             }
-            Room roomId = session.getRoomId();
-            if (roomId != null) {
-                roomId = em.getReference(roomId.getClass(), roomId.getId());
-                session.setRoomId(roomId);
+            Room room = session.getRoom();
+            if (room != null) {
+                room = em.getReference(room.getClass(), room.getId());
+                session.setRoom(room);
             }
             List<Ticket> attachedTicketList = new ArrayList<Ticket>();
             for (Ticket ticketListTicketToAttach : session.getTicketList()) {
@@ -64,21 +64,21 @@ public class SessionJpaController implements Serializable {
             }
             session.setTicketList(attachedTicketList);
             em.persist(session);
-            if (movieId != null) {
-                movieId.getSessionList().add(session);
-                movieId = em.merge(movieId);
+            if (movie != null) {
+                movie.getSessionList().add(session);
+                movie = em.merge(movie);
             }
-            if (roomId != null) {
-                roomId.getSessionList().add(session);
-                roomId = em.merge(roomId);
+            if (room != null) {
+                room.getSessionList().add(session);
+                room = em.merge(room);
             }
             for (Ticket ticketListTicket : session.getTicketList()) {
-                Session oldSessionIdOfTicketListTicket = ticketListTicket.getSessionId();
-                ticketListTicket.setSessionId(session);
+                Session oldSessionOfTicketListTicket = ticketListTicket.getSession();
+                ticketListTicket.setSession(session);
                 ticketListTicket = em.merge(ticketListTicket);
-                if (oldSessionIdOfTicketListTicket != null) {
-                    oldSessionIdOfTicketListTicket.getTicketList().remove(ticketListTicket);
-                    oldSessionIdOfTicketListTicket = em.merge(oldSessionIdOfTicketListTicket);
+                if (oldSessionOfTicketListTicket != null) {
+                    oldSessionOfTicketListTicket.getTicketList().remove(ticketListTicket);
+                    oldSessionOfTicketListTicket = em.merge(oldSessionOfTicketListTicket);
                 }
             }
             utx.commit();
@@ -102,10 +102,10 @@ public class SessionJpaController implements Serializable {
             utx.begin();
             em = getEntityManager();
             Session persistentSession = em.find(Session.class, session.getId());
-            Movie movieIdOld = persistentSession.getMovieId();
-            Movie movieIdNew = session.getMovieId();
-            Room roomIdOld = persistentSession.getRoomId();
-            Room roomIdNew = session.getRoomId();
+            Movie movieOld = persistentSession.getMovie();
+            Movie movieNew = session.getMovie();
+            Room roomOld = persistentSession.getRoom();
+            Room roomNew = session.getRoom();
             List<Ticket> ticketListOld = persistentSession.getTicketList();
             List<Ticket> ticketListNew = session.getTicketList();
             List<String> illegalOrphanMessages = null;
@@ -114,19 +114,19 @@ public class SessionJpaController implements Serializable {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Ticket " + ticketListOldTicket + " since its sessionId field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Ticket " + ticketListOldTicket + " since its session field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            if (movieIdNew != null) {
-                movieIdNew = em.getReference(movieIdNew.getClass(), movieIdNew.getId());
-                session.setMovieId(movieIdNew);
+            if (movieNew != null) {
+                movieNew = em.getReference(movieNew.getClass(), movieNew.getId());
+                session.setMovie(movieNew);
             }
-            if (roomIdNew != null) {
-                roomIdNew = em.getReference(roomIdNew.getClass(), roomIdNew.getId());
-                session.setRoomId(roomIdNew);
+            if (roomNew != null) {
+                roomNew = em.getReference(roomNew.getClass(), roomNew.getId());
+                session.setRoom(roomNew);
             }
             List<Ticket> attachedTicketListNew = new ArrayList<Ticket>();
             for (Ticket ticketListNewTicketToAttach : ticketListNew) {
@@ -136,30 +136,30 @@ public class SessionJpaController implements Serializable {
             ticketListNew = attachedTicketListNew;
             session.setTicketList(ticketListNew);
             session = em.merge(session);
-            if (movieIdOld != null && !movieIdOld.equals(movieIdNew)) {
-                movieIdOld.getSessionList().remove(session);
-                movieIdOld = em.merge(movieIdOld);
+            if (movieOld != null && !movieOld.equals(movieNew)) {
+                movieOld.getSessionList().remove(session);
+                movieOld = em.merge(movieOld);
             }
-            if (movieIdNew != null && !movieIdNew.equals(movieIdOld)) {
-                movieIdNew.getSessionList().add(session);
-                movieIdNew = em.merge(movieIdNew);
+            if (movieNew != null && !movieNew.equals(movieOld)) {
+                movieNew.getSessionList().add(session);
+                movieNew = em.merge(movieNew);
             }
-            if (roomIdOld != null && !roomIdOld.equals(roomIdNew)) {
-                roomIdOld.getSessionList().remove(session);
-                roomIdOld = em.merge(roomIdOld);
+            if (roomOld != null && !roomOld.equals(roomNew)) {
+                roomOld.getSessionList().remove(session);
+                roomOld = em.merge(roomOld);
             }
-            if (roomIdNew != null && !roomIdNew.equals(roomIdOld)) {
-                roomIdNew.getSessionList().add(session);
-                roomIdNew = em.merge(roomIdNew);
+            if (roomNew != null && !roomNew.equals(roomOld)) {
+                roomNew.getSessionList().add(session);
+                roomNew = em.merge(roomNew);
             }
             for (Ticket ticketListNewTicket : ticketListNew) {
                 if (!ticketListOld.contains(ticketListNewTicket)) {
-                    Session oldSessionIdOfTicketListNewTicket = ticketListNewTicket.getSessionId();
-                    ticketListNewTicket.setSessionId(session);
+                    Session oldSessionOfTicketListNewTicket = ticketListNewTicket.getSession();
+                    ticketListNewTicket.setSession(session);
                     ticketListNewTicket = em.merge(ticketListNewTicket);
-                    if (oldSessionIdOfTicketListNewTicket != null && !oldSessionIdOfTicketListNewTicket.equals(session)) {
-                        oldSessionIdOfTicketListNewTicket.getTicketList().remove(ticketListNewTicket);
-                        oldSessionIdOfTicketListNewTicket = em.merge(oldSessionIdOfTicketListNewTicket);
+                    if (oldSessionOfTicketListNewTicket != null && !oldSessionOfTicketListNewTicket.equals(session)) {
+                        oldSessionOfTicketListNewTicket.getTicketList().remove(ticketListNewTicket);
+                        oldSessionOfTicketListNewTicket = em.merge(oldSessionOfTicketListNewTicket);
                     }
                 }
             }
@@ -203,20 +203,20 @@ public class SessionJpaController implements Serializable {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Session (" + session + ") cannot be destroyed since the Ticket " + ticketListOrphanCheckTicket + " in its ticketList field has a non-nullable sessionId field.");
+                illegalOrphanMessages.add("This Session (" + session + ") cannot be destroyed since the Ticket " + ticketListOrphanCheckTicket + " in its ticketList field has a non-nullable session field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            Movie movieId = session.getMovieId();
-            if (movieId != null) {
-                movieId.getSessionList().remove(session);
-                movieId = em.merge(movieId);
+            Movie movie = session.getMovie();
+            if (movie != null) {
+                movie.getSessionList().remove(session);
+                movie = em.merge(movie);
             }
-            Room roomId = session.getRoomId();
-            if (roomId != null) {
-                roomId.getSessionList().remove(session);
-                roomId = em.merge(roomId);
+            Room room = session.getRoom();
+            if (room != null) {
+                room.getSessionList().remove(session);
+                room = em.merge(room);
             }
             em.remove(session);
             utx.commit();

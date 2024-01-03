@@ -62,30 +62,30 @@ public class MovieJpaController implements Serializable {
         try {
             utx.begin();
             em = getEntityManager();
-            AgeClassification ageClassificationId = movie.getAgeClassificationId();
-            if (ageClassificationId != null) {
-                ageClassificationId = em.getReference(ageClassificationId.getClass(), ageClassificationId.getId());
-                movie.setAgeClassificationId(ageClassificationId);
+            AgeClassification ageClassification = movie.getAgeClassification();
+            if (ageClassification != null) {
+                ageClassification = em.getReference(ageClassification.getClass(), ageClassification.getId());
+                movie.setAgeClassification(ageClassification);
             }
-            Director directorId = movie.getDirectorId();
-            if (directorId != null) {
-                directorId = em.getReference(directorId.getClass(), directorId.getId());
-                movie.setDirectorId(directorId);
+            Director director = movie.getDirector();
+            if (director != null) {
+                director = em.getReference(director.getClass(), director.getId());
+                movie.setDirector(director);
             }
-            Distributor distributorId = movie.getDistributorId();
-            if (distributorId != null) {
-                distributorId = em.getReference(distributorId.getClass(), distributorId.getId());
-                movie.setDistributorId(distributorId);
+            Distributor distributor = movie.getDistributor();
+            if (distributor != null) {
+                distributor = em.getReference(distributor.getClass(), distributor.getId());
+                movie.setDistributor(distributor);
             }
-            Genre genreId = movie.getGenreId();
-            if (genreId != null) {
-                genreId = em.getReference(genreId.getClass(), genreId.getId());
-                movie.setGenreId(genreId);
+            Genre genre = movie.getGenre();
+            if (genre != null) {
+                genre = em.getReference(genre.getClass(), genre.getId());
+                movie.setGenre(genre);
             }
-            Nationality nationalityId = movie.getNationalityId();
-            if (nationalityId != null) {
-                nationalityId = em.getReference(nationalityId.getClass(), nationalityId.getId());
-                movie.setNationalityId(nationalityId);
+            Nationality nationality = movie.getNationality();
+            if (nationality != null) {
+                nationality = em.getReference(nationality.getClass(), nationality.getId());
+                movie.setNationality(nationality);
             }
             List<Label> attachedLabelList = new ArrayList<Label>();
             for (Label labelListLabelToAttach : movie.getLabelList()) {
@@ -112,25 +112,25 @@ public class MovieJpaController implements Serializable {
             }
             movie.setCommentList(attachedCommentList);
             em.persist(movie);
-            if (ageClassificationId != null) {
-                ageClassificationId.getMovieList().add(movie);
-                ageClassificationId = em.merge(ageClassificationId);
+            if (ageClassification != null) {
+                ageClassification.getMovieList().add(movie);
+                ageClassification = em.merge(ageClassification);
             }
-            if (directorId != null) {
-                directorId.getMovieList().add(movie);
-                directorId = em.merge(directorId);
+            if (director != null) {
+                director.getMovieList().add(movie);
+                director = em.merge(director);
             }
-            if (distributorId != null) {
-                distributorId.getMovieList().add(movie);
-                distributorId = em.merge(distributorId);
+            if (distributor != null) {
+                distributor.getMovieList().add(movie);
+                distributor = em.merge(distributor);
             }
-            if (genreId != null) {
-                genreId.getMovieList().add(movie);
-                genreId = em.merge(genreId);
+            if (genre != null) {
+                genre.getMovieList().add(movie);
+                genre = em.merge(genre);
             }
-            if (nationalityId != null) {
-                nationalityId.getMovieList().add(movie);
-                nationalityId = em.merge(nationalityId);
+            if (nationality != null) {
+                nationality.getMovieList().add(movie);
+                nationality = em.merge(nationality);
             }
             for (Label labelListLabel : movie.getLabelList()) {
                 labelListLabel.getMovieList().add(movie);
@@ -141,21 +141,21 @@ public class MovieJpaController implements Serializable {
                 actorListActor = em.merge(actorListActor);
             }
             for (Session sessionListSession : movie.getSessionList()) {
-                Movie oldMovieIdOfSessionListSession = sessionListSession.getMovieId();
-                sessionListSession.setMovieId(movie);
+                Movie oldMovieOfSessionListSession = sessionListSession.getMovie();
+                sessionListSession.setMovie(movie);
                 sessionListSession = em.merge(sessionListSession);
-                if (oldMovieIdOfSessionListSession != null) {
-                    oldMovieIdOfSessionListSession.getSessionList().remove(sessionListSession);
-                    oldMovieIdOfSessionListSession = em.merge(oldMovieIdOfSessionListSession);
+                if (oldMovieOfSessionListSession != null) {
+                    oldMovieOfSessionListSession.getSessionList().remove(sessionListSession);
+                    oldMovieOfSessionListSession = em.merge(oldMovieOfSessionListSession);
                 }
             }
             for (Comment commentListComment : movie.getCommentList()) {
-                Movie oldMovieIdOfCommentListComment = commentListComment.getMovieId();
-                commentListComment.setMovieId(movie);
+                Movie oldMovieOfCommentListComment = commentListComment.getMovie();
+                commentListComment.setMovie(movie);
                 commentListComment = em.merge(commentListComment);
-                if (oldMovieIdOfCommentListComment != null) {
-                    oldMovieIdOfCommentListComment.getCommentList().remove(commentListComment);
-                    oldMovieIdOfCommentListComment = em.merge(oldMovieIdOfCommentListComment);
+                if (oldMovieOfCommentListComment != null) {
+                    oldMovieOfCommentListComment.getCommentList().remove(commentListComment);
+                    oldMovieOfCommentListComment = em.merge(oldMovieOfCommentListComment);
                 }
             }
             utx.commit();
@@ -179,16 +179,16 @@ public class MovieJpaController implements Serializable {
             utx.begin();
             em = getEntityManager();
             Movie persistentMovie = em.find(Movie.class, movie.getId());
-            AgeClassification ageClassificationIdOld = persistentMovie.getAgeClassificationId();
-            AgeClassification ageClassificationIdNew = movie.getAgeClassificationId();
-            Director directorIdOld = persistentMovie.getDirectorId();
-            Director directorIdNew = movie.getDirectorId();
-            Distributor distributorIdOld = persistentMovie.getDistributorId();
-            Distributor distributorIdNew = movie.getDistributorId();
-            Genre genreIdOld = persistentMovie.getGenreId();
-            Genre genreIdNew = movie.getGenreId();
-            Nationality nationalityIdOld = persistentMovie.getNationalityId();
-            Nationality nationalityIdNew = movie.getNationalityId();
+            AgeClassification ageClassificationOld = persistentMovie.getAgeClassification();
+            AgeClassification ageClassificationNew = movie.getAgeClassification();
+            Director directorOld = persistentMovie.getDirector();
+            Director directorNew = movie.getDirector();
+            Distributor distributorOld = persistentMovie.getDistributor();
+            Distributor distributorNew = movie.getDistributor();
+            Genre genreOld = persistentMovie.getGenre();
+            Genre genreNew = movie.getGenre();
+            Nationality nationalityOld = persistentMovie.getNationality();
+            Nationality nationalityNew = movie.getNationality();
             List<Label> labelListOld = persistentMovie.getLabelList();
             List<Label> labelListNew = movie.getLabelList();
             List<Actor> actorListOld = persistentMovie.getActorList();
@@ -203,7 +203,7 @@ public class MovieJpaController implements Serializable {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Session " + sessionListOldSession + " since its movieId field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Session " + sessionListOldSession + " since its movie field is not nullable.");
                 }
             }
             for (Comment commentListOldComment : commentListOld) {
@@ -211,31 +211,31 @@ public class MovieJpaController implements Serializable {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Comment " + commentListOldComment + " since its movieId field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Comment " + commentListOldComment + " since its movie field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            if (ageClassificationIdNew != null) {
-                ageClassificationIdNew = em.getReference(ageClassificationIdNew.getClass(), ageClassificationIdNew.getId());
-                movie.setAgeClassificationId(ageClassificationIdNew);
+            if (ageClassificationNew != null) {
+                ageClassificationNew = em.getReference(ageClassificationNew.getClass(), ageClassificationNew.getId());
+                movie.setAgeClassification(ageClassificationNew);
             }
-            if (directorIdNew != null) {
-                directorIdNew = em.getReference(directorIdNew.getClass(), directorIdNew.getId());
-                movie.setDirectorId(directorIdNew);
+            if (directorNew != null) {
+                directorNew = em.getReference(directorNew.getClass(), directorNew.getId());
+                movie.setDirector(directorNew);
             }
-            if (distributorIdNew != null) {
-                distributorIdNew = em.getReference(distributorIdNew.getClass(), distributorIdNew.getId());
-                movie.setDistributorId(distributorIdNew);
+            if (distributorNew != null) {
+                distributorNew = em.getReference(distributorNew.getClass(), distributorNew.getId());
+                movie.setDistributor(distributorNew);
             }
-            if (genreIdNew != null) {
-                genreIdNew = em.getReference(genreIdNew.getClass(), genreIdNew.getId());
-                movie.setGenreId(genreIdNew);
+            if (genreNew != null) {
+                genreNew = em.getReference(genreNew.getClass(), genreNew.getId());
+                movie.setGenre(genreNew);
             }
-            if (nationalityIdNew != null) {
-                nationalityIdNew = em.getReference(nationalityIdNew.getClass(), nationalityIdNew.getId());
-                movie.setNationalityId(nationalityIdNew);
+            if (nationalityNew != null) {
+                nationalityNew = em.getReference(nationalityNew.getClass(), nationalityNew.getId());
+                movie.setNationality(nationalityNew);
             }
             List<Label> attachedLabelListNew = new ArrayList<Label>();
             for (Label labelListNewLabelToAttach : labelListNew) {
@@ -266,45 +266,45 @@ public class MovieJpaController implements Serializable {
             commentListNew = attachedCommentListNew;
             movie.setCommentList(commentListNew);
             movie = em.merge(movie);
-            if (ageClassificationIdOld != null && !ageClassificationIdOld.equals(ageClassificationIdNew)) {
-                ageClassificationIdOld.getMovieList().remove(movie);
-                ageClassificationIdOld = em.merge(ageClassificationIdOld);
+            if (ageClassificationOld != null && !ageClassificationOld.equals(ageClassificationNew)) {
+                ageClassificationOld.getMovieList().remove(movie);
+                ageClassificationOld = em.merge(ageClassificationOld);
             }
-            if (ageClassificationIdNew != null && !ageClassificationIdNew.equals(ageClassificationIdOld)) {
-                ageClassificationIdNew.getMovieList().add(movie);
-                ageClassificationIdNew = em.merge(ageClassificationIdNew);
+            if (ageClassificationNew != null && !ageClassificationNew.equals(ageClassificationOld)) {
+                ageClassificationNew.getMovieList().add(movie);
+                ageClassificationNew = em.merge(ageClassificationNew);
             }
-            if (directorIdOld != null && !directorIdOld.equals(directorIdNew)) {
-                directorIdOld.getMovieList().remove(movie);
-                directorIdOld = em.merge(directorIdOld);
+            if (directorOld != null && !directorOld.equals(directorNew)) {
+                directorOld.getMovieList().remove(movie);
+                directorOld = em.merge(directorOld);
             }
-            if (directorIdNew != null && !directorIdNew.equals(directorIdOld)) {
-                directorIdNew.getMovieList().add(movie);
-                directorIdNew = em.merge(directorIdNew);
+            if (directorNew != null && !directorNew.equals(directorOld)) {
+                directorNew.getMovieList().add(movie);
+                directorNew = em.merge(directorNew);
             }
-            if (distributorIdOld != null && !distributorIdOld.equals(distributorIdNew)) {
-                distributorIdOld.getMovieList().remove(movie);
-                distributorIdOld = em.merge(distributorIdOld);
+            if (distributorOld != null && !distributorOld.equals(distributorNew)) {
+                distributorOld.getMovieList().remove(movie);
+                distributorOld = em.merge(distributorOld);
             }
-            if (distributorIdNew != null && !distributorIdNew.equals(distributorIdOld)) {
-                distributorIdNew.getMovieList().add(movie);
-                distributorIdNew = em.merge(distributorIdNew);
+            if (distributorNew != null && !distributorNew.equals(distributorOld)) {
+                distributorNew.getMovieList().add(movie);
+                distributorNew = em.merge(distributorNew);
             }
-            if (genreIdOld != null && !genreIdOld.equals(genreIdNew)) {
-                genreIdOld.getMovieList().remove(movie);
-                genreIdOld = em.merge(genreIdOld);
+            if (genreOld != null && !genreOld.equals(genreNew)) {
+                genreOld.getMovieList().remove(movie);
+                genreOld = em.merge(genreOld);
             }
-            if (genreIdNew != null && !genreIdNew.equals(genreIdOld)) {
-                genreIdNew.getMovieList().add(movie);
-                genreIdNew = em.merge(genreIdNew);
+            if (genreNew != null && !genreNew.equals(genreOld)) {
+                genreNew.getMovieList().add(movie);
+                genreNew = em.merge(genreNew);
             }
-            if (nationalityIdOld != null && !nationalityIdOld.equals(nationalityIdNew)) {
-                nationalityIdOld.getMovieList().remove(movie);
-                nationalityIdOld = em.merge(nationalityIdOld);
+            if (nationalityOld != null && !nationalityOld.equals(nationalityNew)) {
+                nationalityOld.getMovieList().remove(movie);
+                nationalityOld = em.merge(nationalityOld);
             }
-            if (nationalityIdNew != null && !nationalityIdNew.equals(nationalityIdOld)) {
-                nationalityIdNew.getMovieList().add(movie);
-                nationalityIdNew = em.merge(nationalityIdNew);
+            if (nationalityNew != null && !nationalityNew.equals(nationalityOld)) {
+                nationalityNew.getMovieList().add(movie);
+                nationalityNew = em.merge(nationalityNew);
             }
             for (Label labelListOldLabel : labelListOld) {
                 if (!labelListNew.contains(labelListOldLabel)) {
@@ -332,23 +332,23 @@ public class MovieJpaController implements Serializable {
             }
             for (Session sessionListNewSession : sessionListNew) {
                 if (!sessionListOld.contains(sessionListNewSession)) {
-                    Movie oldMovieIdOfSessionListNewSession = sessionListNewSession.getMovieId();
-                    sessionListNewSession.setMovieId(movie);
+                    Movie oldMovieOfSessionListNewSession = sessionListNewSession.getMovie();
+                    sessionListNewSession.setMovie(movie);
                     sessionListNewSession = em.merge(sessionListNewSession);
-                    if (oldMovieIdOfSessionListNewSession != null && !oldMovieIdOfSessionListNewSession.equals(movie)) {
-                        oldMovieIdOfSessionListNewSession.getSessionList().remove(sessionListNewSession);
-                        oldMovieIdOfSessionListNewSession = em.merge(oldMovieIdOfSessionListNewSession);
+                    if (oldMovieOfSessionListNewSession != null && !oldMovieOfSessionListNewSession.equals(movie)) {
+                        oldMovieOfSessionListNewSession.getSessionList().remove(sessionListNewSession);
+                        oldMovieOfSessionListNewSession = em.merge(oldMovieOfSessionListNewSession);
                     }
                 }
             }
             for (Comment commentListNewComment : commentListNew) {
                 if (!commentListOld.contains(commentListNewComment)) {
-                    Movie oldMovieIdOfCommentListNewComment = commentListNewComment.getMovieId();
-                    commentListNewComment.setMovieId(movie);
+                    Movie oldMovieOfCommentListNewComment = commentListNewComment.getMovie();
+                    commentListNewComment.setMovie(movie);
                     commentListNewComment = em.merge(commentListNewComment);
-                    if (oldMovieIdOfCommentListNewComment != null && !oldMovieIdOfCommentListNewComment.equals(movie)) {
-                        oldMovieIdOfCommentListNewComment.getCommentList().remove(commentListNewComment);
-                        oldMovieIdOfCommentListNewComment = em.merge(oldMovieIdOfCommentListNewComment);
+                    if (oldMovieOfCommentListNewComment != null && !oldMovieOfCommentListNewComment.equals(movie)) {
+                        oldMovieOfCommentListNewComment.getCommentList().remove(commentListNewComment);
+                        oldMovieOfCommentListNewComment = em.merge(oldMovieOfCommentListNewComment);
                     }
                 }
             }
@@ -392,42 +392,42 @@ public class MovieJpaController implements Serializable {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Movie (" + movie + ") cannot be destroyed since the Session " + sessionListOrphanCheckSession + " in its sessionList field has a non-nullable movieId field.");
+                illegalOrphanMessages.add("This Movie (" + movie + ") cannot be destroyed since the Session " + sessionListOrphanCheckSession + " in its sessionList field has a non-nullable movie field.");
             }
             List<Comment> commentListOrphanCheck = movie.getCommentList();
             for (Comment commentListOrphanCheckComment : commentListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Movie (" + movie + ") cannot be destroyed since the Comment " + commentListOrphanCheckComment + " in its commentList field has a non-nullable movieId field.");
+                illegalOrphanMessages.add("This Movie (" + movie + ") cannot be destroyed since the Comment " + commentListOrphanCheckComment + " in its commentList field has a non-nullable movie field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            AgeClassification ageClassificationId = movie.getAgeClassificationId();
-            if (ageClassificationId != null) {
-                ageClassificationId.getMovieList().remove(movie);
-                ageClassificationId = em.merge(ageClassificationId);
+            AgeClassification ageClassification = movie.getAgeClassification();
+            if (ageClassification != null) {
+                ageClassification.getMovieList().remove(movie);
+                ageClassification = em.merge(ageClassification);
             }
-            Director directorId = movie.getDirectorId();
-            if (directorId != null) {
-                directorId.getMovieList().remove(movie);
-                directorId = em.merge(directorId);
+            Director director = movie.getDirector();
+            if (director != null) {
+                director.getMovieList().remove(movie);
+                director = em.merge(director);
             }
-            Distributor distributorId = movie.getDistributorId();
-            if (distributorId != null) {
-                distributorId.getMovieList().remove(movie);
-                distributorId = em.merge(distributorId);
+            Distributor distributor = movie.getDistributor();
+            if (distributor != null) {
+                distributor.getMovieList().remove(movie);
+                distributor = em.merge(distributor);
             }
-            Genre genreId = movie.getGenreId();
-            if (genreId != null) {
-                genreId.getMovieList().remove(movie);
-                genreId = em.merge(genreId);
+            Genre genre = movie.getGenre();
+            if (genre != null) {
+                genre.getMovieList().remove(movie);
+                genre = em.merge(genre);
             }
-            Nationality nationalityId = movie.getNationalityId();
-            if (nationalityId != null) {
-                nationalityId.getMovieList().remove(movie);
-                nationalityId = em.merge(nationalityId);
+            Nationality nationality = movie.getNationality();
+            if (nationality != null) {
+                nationality.getMovieList().remove(movie);
+                nationality = em.merge(nationality);
             }
             List<Label> labelList = movie.getLabelList();
             for (Label labelListLabel : labelList) {

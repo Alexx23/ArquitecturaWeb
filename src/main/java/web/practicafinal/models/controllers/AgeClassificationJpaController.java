@@ -53,12 +53,12 @@ public class AgeClassificationJpaController implements Serializable {
             ageClassification.setMovieList(attachedMovieList);
             em.persist(ageClassification);
             for (Movie movieListMovie : ageClassification.getMovieList()) {
-                AgeClassification oldAgeClassificationIdOfMovieListMovie = movieListMovie.getAgeClassificationId();
-                movieListMovie.setAgeClassificationId(ageClassification);
+                AgeClassification oldAgeClassificationOfMovieListMovie = movieListMovie.getAgeClassification();
+                movieListMovie.setAgeClassification(ageClassification);
                 movieListMovie = em.merge(movieListMovie);
-                if (oldAgeClassificationIdOfMovieListMovie != null) {
-                    oldAgeClassificationIdOfMovieListMovie.getMovieList().remove(movieListMovie);
-                    oldAgeClassificationIdOfMovieListMovie = em.merge(oldAgeClassificationIdOfMovieListMovie);
+                if (oldAgeClassificationOfMovieListMovie != null) {
+                    oldAgeClassificationOfMovieListMovie.getMovieList().remove(movieListMovie);
+                    oldAgeClassificationOfMovieListMovie = em.merge(oldAgeClassificationOfMovieListMovie);
                 }
             }
             utx.commit();
@@ -90,7 +90,7 @@ public class AgeClassificationJpaController implements Serializable {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Movie " + movieListOldMovie + " since its ageClassificationId field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Movie " + movieListOldMovie + " since its ageClassification field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -106,12 +106,12 @@ public class AgeClassificationJpaController implements Serializable {
             ageClassification = em.merge(ageClassification);
             for (Movie movieListNewMovie : movieListNew) {
                 if (!movieListOld.contains(movieListNewMovie)) {
-                    AgeClassification oldAgeClassificationIdOfMovieListNewMovie = movieListNewMovie.getAgeClassificationId();
-                    movieListNewMovie.setAgeClassificationId(ageClassification);
+                    AgeClassification oldAgeClassificationOfMovieListNewMovie = movieListNewMovie.getAgeClassification();
+                    movieListNewMovie.setAgeClassification(ageClassification);
                     movieListNewMovie = em.merge(movieListNewMovie);
-                    if (oldAgeClassificationIdOfMovieListNewMovie != null && !oldAgeClassificationIdOfMovieListNewMovie.equals(ageClassification)) {
-                        oldAgeClassificationIdOfMovieListNewMovie.getMovieList().remove(movieListNewMovie);
-                        oldAgeClassificationIdOfMovieListNewMovie = em.merge(oldAgeClassificationIdOfMovieListNewMovie);
+                    if (oldAgeClassificationOfMovieListNewMovie != null && !oldAgeClassificationOfMovieListNewMovie.equals(ageClassification)) {
+                        oldAgeClassificationOfMovieListNewMovie.getMovieList().remove(movieListNewMovie);
+                        oldAgeClassificationOfMovieListNewMovie = em.merge(oldAgeClassificationOfMovieListNewMovie);
                     }
                 }
             }
@@ -155,7 +155,7 @@ public class AgeClassificationJpaController implements Serializable {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This AgeClassification (" + ageClassification + ") cannot be destroyed since the Movie " + movieListOrphanCheckMovie + " in its movieList field has a non-nullable ageClassificationId field.");
+                illegalOrphanMessages.add("This AgeClassification (" + ageClassification + ") cannot be destroyed since the Movie " + movieListOrphanCheckMovie + " in its movieList field has a non-nullable ageClassification field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
