@@ -1,6 +1,7 @@
 package web.practicafinal.controllers;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,7 +33,7 @@ public class LoginController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            LoginDTO loginDTO = new LoginDTO(request.getParameter("username"), request.getParameter("password"));
+            LoginDTO loginDTO = new LoginDTO(request.getParameter("email"), request.getParameter("password"));
             
             Request.validateViolations(loginDTO);
            
@@ -41,10 +42,10 @@ public class LoginController extends HttpServlet {
             return;
         }
         
-        String username = request.getParameter("username");
+        String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-        User user = UserHelper.getUserByUsernameEmail(username);
+        User user = UserHelper.getUserByUsernameEmail(email);
         if (user == null) {
             Response.outputMessage(response, 400, "Usuario o contraseña incorrectos.");
             return;

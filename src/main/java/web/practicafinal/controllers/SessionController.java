@@ -90,8 +90,8 @@ public class SessionController extends HttpServlet {
         Room room = ModelController.getRoom().findRoom(roomId);
         
         Session session = new Session();
-        session.setMovieId(movie);
-        session.setRoomId(room);
+        session.setMovie(movie);
+        session.setRoom(room);
         session.setDatetime(dates.get("datetime"));
 
         try {

@@ -28,7 +28,7 @@ public class AdminFilter implements Filter {
         // Obtener el usuario (nunca será nulo porque antes se ha ejecutado el filtro 'auth')
         User user = (User) request.getAttribute("user_session");
         
-        if (user.getRoleId().getId() != RoleEnum.ADMIN.getId()) {
+        if (user.getRole().getId() != RoleEnum.ADMIN.getId()) {
             Response.outputMessage(httpResponse, 401, "Acceso no autorizado");
             return;
         }

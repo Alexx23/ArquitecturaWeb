@@ -38,7 +38,7 @@ public class RegisterController extends HttpServlet {
         try {
             
             RegisterDTO registerDTO = new RegisterDTO(request.getParameter("name"), request.getParameter("username"), request.getParameter("email"), 
-                    request.getParameter("password"), request.getParameter("password_confirmation"));
+                    request.getParameter("password"), request.getParameter("passwordConfirmation"));
             
             Request.validateViolations(registerDTO);
             
@@ -51,7 +51,7 @@ public class RegisterController extends HttpServlet {
         String username = request.getParameter("username").toLowerCase();
         String email = request.getParameter("email").toLowerCase();
         String password = request.getParameter("password");
-        String passwordConfirmation = request.getParameter("password_confirmation");
+        String passwordConfirmation = request.getParameter("passwordConfirmation");
         
         if (!password.equals(passwordConfirmation)) {
             Response.outputMessage(response, 400, "Las contraseñas no coinciden");
@@ -68,7 +68,7 @@ public class RegisterController extends HttpServlet {
         user.setUsername(username);
         user.setEmail(email);
         user.setPassword(hashPassword);
-        user.setRoleId(role);
+        user.setRole(role);
 
         try {
             ModelController.getUser().create(user);

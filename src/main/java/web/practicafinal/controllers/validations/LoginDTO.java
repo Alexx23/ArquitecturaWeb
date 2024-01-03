@@ -11,7 +11,7 @@ public class LoginDTO {
     
     @NotNull
     @Size(min = 1, max = 255)
-    private String username;
+    private String email;
     
     @NotNull
     @Size(min = 1, max = 255)
@@ -19,8 +19,8 @@ public class LoginDTO {
     
     public LoginDTO() {}
 
-    public LoginDTO(String username, String password) {
-        this.username = username;
+    public LoginDTO(String email, String password) {
+        this.email = email;
         this.password = password;
     }
     

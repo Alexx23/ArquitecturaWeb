@@ -26,7 +26,8 @@ public class InstanceConverter {
                 if (value == null) continue;
 
                 // Verificar si los tipos son compatibles
-                if (isCompatibleType(targetClass.getDeclaredField(sourceField.getName()).getType(), sourceFieldType)) {
+                if (hasDeclaredFieldName(targetClass, sourceField.getName()) && 
+                        isCompatibleType(targetClass.getDeclaredField(sourceField.getName()).getType(), sourceFieldType)) {
                     // Actualizar el valor correspondiente en la instancia de la clase objetivo
                     Field targetField = targetClass.getDeclaredField(sourceField.getName());
                     targetField.setAccessible(true);
@@ -36,7 +37,11 @@ public class InstanceConverter {
                     // Actualizar el valor correspondiente compatible en la instancia de la clase objetivo
                     Object valueCompatible = getCompatibleType(sourceField.getName(), value);
                     if (valueCompatible == null) continue;
-                    Field targetField = targetClass.getDeclaredField(sourceField.getName());
+                    // Eliminar el final de la String. Ejemplo: genreId ahora es genre
+                    // Explicación: en la request se usa 'genreId' (Integer), pero en el objeto final se usa 'genre' (Genre object)
+                    String sourceFieldName = sourceField.getName().substring(0, sourceField.getName().length() - 2);
+                    Field targetField = targetClass.getDeclaredField(sourceFieldName);
+                    if (targetField == null) continue;
                     targetField.setAccessible(true);
                     targetField.set(targetObject, valueCompatible);
                     
@@ -50,6 +55,15 @@ public class InstanceConverter {
     private static boolean isCompatibleType(Class<?> target, Class<?> source) {
         // Verificar compatibilidad teniendo en cuenta tipos primitivos y sus equivalentes de clase
         return target.isAssignableFrom(source) || (target.isPrimitive() && getWrapperClass(target).equals(source));
+    }
+    
+    private static boolean hasDeclaredFieldName(Class<?> classParam, String name) {
+        boolean result = false;
+        for (Field field: classParam.getDeclaredFields()) {
+            if (result) continue;
+            if (field.getName().equals(name)) result = true;
+        }
+        return result;
     }
     
     private static Class<?> getWrapperClass(Class<?> primitiveType) {

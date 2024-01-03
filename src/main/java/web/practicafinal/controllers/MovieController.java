@@ -109,11 +109,11 @@ public class MovieController extends HttpServlet {
         movie.setOriginalTitle(request.getParameter("original_title"));
         movie.setDuration(shorts.get("duration"));
         movie.setYear(shorts.get("year"));
-        movie.setAgeClassificationId(ageClassification);
-        movie.setDirectorId(director);
-        movie.setDistributorId(distributor);
-        movie.setGenreId(genre);
-        movie.setNationalityId(nationality);
+        movie.setAgeClassification(ageClassification);
+        movie.setDirector(director);
+        movie.setDistributor(distributor);
+        movie.setGenre(genre);
+        movie.setNationality(nationality);
 
         try {
             ModelController.getMovie().create(movie);
