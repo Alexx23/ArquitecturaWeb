@@ -4,7 +4,6 @@
  */
 package web.practicafinal.models;
 
-import com.fasterxml.jackson.annotation.JsonFilter;
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -41,7 +40,7 @@ public class Genre implements Serializable {
     @Basic(optional = false)
     @Column(name = "name")
     private String name;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "genreId", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "genre", fetch = FetchType.LAZY)
     private List<Movie> movieList;
 
     public Genre() {

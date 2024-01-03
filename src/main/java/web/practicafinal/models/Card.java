@@ -43,7 +43,7 @@ public class Card implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @Column(name = "card_number")
-    private int cardNumber;
+    private long cardNumber;
     @Basic(optional = false)
     @Column(name = "expiration")
     @Temporal(TemporalType.DATE)
@@ -53,7 +53,7 @@ public class Card implements Serializable {
     private int cvv;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private User userId;
+    private User user;
 
     public Card() {
     }
@@ -62,7 +62,7 @@ public class Card implements Serializable {
         this.id = id;
     }
 
-    public Card(Integer id, int cardNumber, Date expiration, int cvv) {
+    public Card(Integer id, long cardNumber, Date expiration, int cvv) {
         this.id = id;
         this.cardNumber = cardNumber;
         this.expiration = expiration;
@@ -77,11 +77,11 @@ public class Card implements Serializable {
         this.id = id;
     }
 
-    public int getCardNumber() {
+    public long getCardNumber() {
         return cardNumber;
     }
 
-    public void setCardNumber(int cardNumber) {
+    public void setCardNumber(long cardNumber) {
         this.cardNumber = cardNumber;
     }
 
@@ -101,12 +101,12 @@ public class Card implements Serializable {
         this.cvv = cvv;
     }
 
-    public User getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(User userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override

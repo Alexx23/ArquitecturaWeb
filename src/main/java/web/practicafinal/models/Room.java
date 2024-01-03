@@ -4,7 +4,6 @@
  */
 package web.practicafinal.models;
 
-import com.fasterxml.jackson.annotation.JsonFilter;
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -49,7 +48,7 @@ public class Room implements Serializable {
     @Basic(optional = false)
     @Column(name = "cols")
     private short cols;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "roomId", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "room", fetch = FetchType.LAZY)
     private List<Session> sessionList;
 
     public Room() {

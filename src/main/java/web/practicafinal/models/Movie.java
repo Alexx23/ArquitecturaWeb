@@ -4,7 +4,6 @@
  */
 package web.practicafinal.models;
 
-import com.fasterxml.jackson.annotation.JsonFilter;
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -66,22 +65,22 @@ public class Movie implements Serializable {
     private List<Actor> actorList;
     @JoinColumn(name = "age_classification_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private AgeClassification ageClassificationId;
+    private AgeClassification ageClassification;
     @JoinColumn(name = "director_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private Director directorId;
+    private Director director;
     @JoinColumn(name = "distributor_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private Distributor distributorId;
+    private Distributor distributor;
     @JoinColumn(name = "genre_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private Genre genreId;
+    private Genre genre;
     @JoinColumn(name = "nationality_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private Nationality nationalityId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "movieId", fetch = FetchType.LAZY)
+    private Nationality nationality;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "movie", fetch = FetchType.LAZY)
     private List<Session> sessionList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "movieId", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "movie", fetch = FetchType.LAZY)
     private List<Comment> commentList;
 
     public Movie() {
@@ -164,44 +163,44 @@ public class Movie implements Serializable {
         this.actorList = actorList;
     }
 
-    public AgeClassification getAgeClassificationId() {
-        return ageClassificationId;
+    public AgeClassification getAgeClassification() {
+        return ageClassification;
     }
 
-    public void setAgeClassificationId(AgeClassification ageClassificationId) {
-        this.ageClassificationId = ageClassificationId;
+    public void setAgeClassification(AgeClassification ageClassification) {
+        this.ageClassification = ageClassification;
     }
 
-    public Director getDirectorId() {
-        return directorId;
+    public Director getDirector() {
+        return director;
     }
 
-    public void setDirectorId(Director directorId) {
-        this.directorId = directorId;
+    public void setDirector(Director director) {
+        this.director = director;
     }
 
-    public Distributor getDistributorId() {
-        return distributorId;
+    public Distributor getDistributor() {
+        return distributor;
     }
 
-    public void setDistributorId(Distributor distributorId) {
-        this.distributorId = distributorId;
+    public void setDistributor(Distributor distributor) {
+        this.distributor = distributor;
     }
 
-    public Genre getGenreId() {
-        return genreId;
+    public Genre getGenre() {
+        return genre;
     }
 
-    public void setGenreId(Genre genreId) {
-        this.genreId = genreId;
+    public void setGenre(Genre genre) {
+        this.genre = genre;
     }
 
-    public Nationality getNationalityId() {
-        return nationalityId;
+    public Nationality getNationality() {
+        return nationality;
     }
 
-    public void setNationalityId(Nationality nationalityId) {
-        this.nationalityId = nationalityId;
+    public void setNationality(Nationality nationality) {
+        this.nationality = nationality;
     }
 
     public List<Session> getSessionList() {
