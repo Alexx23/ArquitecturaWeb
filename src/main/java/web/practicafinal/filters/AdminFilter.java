@@ -29,7 +29,7 @@ public class AdminFilter implements Filter {
         User user = (User) request.getAttribute("user_session");
         
         if (user.getRole().getId() != RoleEnum.ADMIN.getId()) {
-            Response.outputMessage(httpResponse, 401, "Acceso no autorizado");
+            Response.outputMessage(httpResponse, 403, "Acceso no autorizado");
             return;
         }
 
