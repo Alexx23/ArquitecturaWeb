@@ -17,7 +17,8 @@ import web.practicafinal.utils.Response;
  *
  * @author Alex
  */
-@WebFilter(filterName="admin", urlPatterns = {"/movie/*", "/room/*", "/session/*", "/ticket/*"})
+@WebFilter(filterName="admin", urlPatterns = {
+    "/movie/*", "/room/*", "/session/*", "/ticket/*", "/director/*", "/distributor/*", "/genre/*", "/nationality/*"})
 public class AdminFilter implements Filter {
 
     @Override

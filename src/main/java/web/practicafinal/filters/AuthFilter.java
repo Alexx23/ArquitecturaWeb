@@ -13,14 +13,15 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import web.practicafinal.models.User;
 import web.practicafinal.models.controllers.ModelController;
-import web.practicafinal.models.controllers.UserJpaController;
 import web.practicafinal.utils.Response;
 
 /**
  *
  * @author Alex
  */
-@WebFilter(filterName="auth", urlPatterns = {"/logout", "/movie/*", "/room/*", "/session/*", "/ticket/*"})
+@WebFilter(filterName="auth", urlPatterns = {
+    "/logout", 
+    "/movie/*", "/room/*", "/session/*", "/ticket/*", "/director/*", "/distributor/*", "/genre/*", "/nationality/*"})
 public class AuthFilter implements Filter {
 
     @Override
