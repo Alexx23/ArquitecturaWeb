@@ -38,6 +38,7 @@ web\practicafinal\controllers\validations\annotations\ValidGenre$GenreValidator.
 web\practicafinal\controllers\LogoutController.class
 web\practicafinal\models\controllers\exceptions\NonexistentEntityException.class
 web\practicafinal\utils\JsonUtils$TimestampSerializer.class
+web\practicafinal\models\helpers\PaginationHelper.class
 web\practicafinal\controllers\validations\annotations\UniqueEmail$UserValidator.class
 web\practicafinal\controllers\validations\DirectorUpdateDTO.class
 web\practicafinal\models\controllers\CardJpaController.class
@@ -103,6 +104,7 @@ web\practicafinal\controllers\RegisterController.class
 web\practicafinal\controllers\LoginController.class
 web\practicafinal\models\controllers\AgeClassificationJpaController.class
 web\practicafinal\utils\JsonUtils$LocalDateTimeDeserializer.class
+web\practicafinal\models\helpers\PaginationHelper$DataListContainer.class
 web\practicafinal\models\Ticket.class
 web\practicafinal\controllers\validations\MovieCreateDTO.class
 web\practicafinal\controllers\validations\RoomCreateDTO.class

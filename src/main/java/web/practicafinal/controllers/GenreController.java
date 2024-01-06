@@ -7,12 +7,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import web.practicafinal.controllers.validations.GenreCreateDTO;
 import web.practicafinal.controllers.validations.GenreUpdateDTO;
 import web.practicafinal.exceptions.ValidateException;
 import web.practicafinal.models.Genre;
 import web.practicafinal.models.controllers.ModelController;
 import web.practicafinal.models.controllers.exceptions.RollbackFailureException;
+import web.practicafinal.models.helpers.PaginationHelper;
 import web.practicafinal.utils.CustomLogger;
 import web.practicafinal.utils.InstanceConverter;
 import web.practicafinal.utils.Request;
@@ -39,8 +41,15 @@ public class GenreController extends HttpServlet {
         String genreIdStr = Request.getURLValue(request);
         
         if (genreIdStr == null) {
-            List<Genre> genres = ModelController.getGenre().findGenreEntities();
-            Response.outputData(response, 200, genres);
+            Map<String, Integer> integers = null;
+            try {
+                integers = Request.validateInteger(request, "page");
+            } catch (ValidateException ex) {
+                Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+                return;            
+            }
+            int actualPage = integers.get("page") != null ? integers.get("page") : 1;
+            Response.outputData(response, 200, PaginationHelper.getPaginated(Genre.class, actualPage, request.getParameter("name")));
             return;
         }
         

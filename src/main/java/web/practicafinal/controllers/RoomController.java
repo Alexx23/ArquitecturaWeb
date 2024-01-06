@@ -14,6 +14,7 @@ import web.practicafinal.exceptions.ValidateException;
 import web.practicafinal.models.Room;
 import web.practicafinal.models.controllers.ModelController;
 import web.practicafinal.models.controllers.exceptions.RollbackFailureException;
+import web.practicafinal.models.helpers.PaginationHelper;
 import web.practicafinal.utils.CustomLogger;
 import web.practicafinal.utils.InstanceConverter;
 import web.practicafinal.utils.Request;
@@ -40,8 +41,15 @@ public class RoomController extends HttpServlet {
         String roomIdStr = Request.getURLValue(request);
         
         if (roomIdStr == null) {
-            List<Room> rooms = ModelController.getRoom().findRoomEntities();
-            Response.outputData(response, 200, rooms);
+            Map<String, Integer> integers = null;
+            try {
+                integers = Request.validateInteger(request, "page");
+            } catch (ValidateException ex) {
+                Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+                return;            
+            }
+            int actualPage = integers.get("page") != null ? integers.get("page") : 1;
+            Response.outputData(response, 200, PaginationHelper.getPaginated(Room.class, actualPage, request.getParameter("name")));
             return;
         }
         

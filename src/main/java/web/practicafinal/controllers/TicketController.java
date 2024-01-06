@@ -7,8 +7,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import web.practicafinal.exceptions.ValidateException;
 import web.practicafinal.models.Ticket;
 import web.practicafinal.models.controllers.ModelController;
+import web.practicafinal.models.helpers.PaginationHelper;
 import web.practicafinal.utils.Request;
 import web.practicafinal.utils.Response;
 
@@ -33,8 +36,15 @@ public class TicketController extends HttpServlet {
         String ticketIdStr = Request.getURLValue(request);
         
         if (ticketIdStr == null) {
-            List<Ticket> tickets = ModelController.getTicket().findTicketEntities();
-            Response.outputData(response, 200, tickets);
+            Map<String, Integer> integers = null;
+            try {
+                integers = Request.validateInteger(request, "page");
+            } catch (ValidateException ex) {
+                Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+                return;            
+            }
+            int actualPage = integers.get("page") != null ? integers.get("page") : 1;
+            Response.outputData(response, 200, PaginationHelper.getPaginated(Ticket.class, actualPage, null));
             return;
         }
         

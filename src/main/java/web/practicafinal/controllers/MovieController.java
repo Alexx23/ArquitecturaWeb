@@ -8,6 +8,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import web.practicafinal.controllers.validations.MovieCreateDTO;
 import web.practicafinal.controllers.validations.MovieUpdateDTO;
 import web.practicafinal.exceptions.ValidateException;
@@ -25,6 +27,7 @@ import web.practicafinal.models.controllers.ModelController;
 import web.practicafinal.models.controllers.MovieJpaController;
 import web.practicafinal.models.controllers.NationalityJpaController;
 import web.practicafinal.models.controllers.exceptions.RollbackFailureException;
+import web.practicafinal.models.helpers.PaginationHelper;
 import web.practicafinal.utils.CustomLogger;
 import web.practicafinal.utils.InstanceConverter;
 import web.practicafinal.utils.Request;
@@ -51,8 +54,15 @@ public class MovieController extends HttpServlet {
         String movieIdStr = Request.getURLValue(request);
         
         if (movieIdStr == null) {
-            List<Movie> movies = ModelController.getMovie().findMovieEntities();
-            Response.outputData(response, 200, movies);
+            Map<String, Integer> integers = null;
+            try {
+                integers = Request.validateInteger(request, "page");
+            } catch (ValidateException ex) {
+                Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+                return;            
+            }
+            int actualPage = integers.get("page") != null ? integers.get("page") : 1;
+            Response.outputData(response, 200, PaginationHelper.getPaginated(Movie.class, actualPage, request.getParameter("name")));
             return;
         }
         

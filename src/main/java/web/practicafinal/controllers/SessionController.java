@@ -19,6 +19,7 @@ import web.practicafinal.models.Session;
 import web.practicafinal.models.controllers.ModelController;
 import web.practicafinal.models.controllers.SessionJpaController;
 import web.practicafinal.models.controllers.exceptions.RollbackFailureException;
+import web.practicafinal.models.helpers.PaginationHelper;
 import web.practicafinal.utils.CustomLogger;
 import web.practicafinal.utils.InstanceConverter;
 import web.practicafinal.utils.Request;
@@ -45,8 +46,15 @@ public class SessionController extends HttpServlet {
         String sessionIdStr = Request.getURLValue(request);
         
         if (sessionIdStr == null) {
-            List<Session> sessions = ModelController.getSession().findSessionEntities();
-            Response.outputData(response, 200, sessions);
+            Map<String, Integer> integers = null;
+            try {
+                integers = Request.validateInteger(request, "page");
+            } catch (ValidateException ex) {
+                Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+                return;            
+            }
+            int actualPage = integers.get("page") != null ? integers.get("page") : 1;
+            Response.outputData(response, 200, PaginationHelper.getPaginated(Session.class, actualPage, null));
             return;
         }
         
