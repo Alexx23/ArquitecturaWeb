@@ -9,6 +9,7 @@ D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\controllers\validations\annotations\ValidAgeClassification.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\controllers\LogoutController.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\models\controllers\MovieJpaController.java
+D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\controllers\validations\ActorUpdateDTO.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\models\Card.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\controllers\validations\annotations\ValidMovie.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\models\controllers\ModelController.java
@@ -24,10 +25,12 @@ D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\models\controllers\NationalityJpaController.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\models\helpers\PaginationHelper.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\models\controllers\TicketJpaController.java
+D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\controllers\ActorController.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\controllers\validations\DistributorCreateDTO.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\models\Role.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\models\Movie.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\controllers\TicketController.java
+D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\controllers\validations\ActorCreateDTO.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\models\controllers\AgeClassificationJpaController.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\controllers\AgeClassificationController.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\utils\JsonUtils.java

@@ -21,7 +21,7 @@ import web.practicafinal.utils.Response;
  */
 @WebFilter(filterName="auth", urlPatterns = {
     "/logout", 
-    "/movie/*", "/room/*", "/session/*", "/ticket/*", "/director/*", "/distributor/*", "/genre/*", "/nationality/*"})
+    "/actor/*", "/ageclassification/*", "/director/*", "/distributor/*", "/genre/*", "/movie/*", "/nationality/*", "/room/*", "/session/*", "/ticket/*", "/user/*"})
 public class AuthFilter implements Filter {
 
     @Override

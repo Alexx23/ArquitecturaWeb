@@ -16,6 +16,7 @@ web\practicafinal\models\Genre.class
 web\practicafinal\controllers\validations\annotations\UniqueUsername$UserValidator.class
 web\practicafinal\controllers\NationalityController.class
 web\practicafinal\controllers\validations\NationalityCreateDTO.class
+web\practicafinal\controllers\validations\ActorCreateDTO.class
 web\practicafinal\exceptions\ValidateException.class
 web\practicafinal\models\controllers\ActorJpaController.class
 web\practicafinal\models\Role.class
@@ -42,7 +43,6 @@ web\practicafinal\models\helpers\PaginationHelper.class
 web\practicafinal\controllers\validations\annotations\UniqueEmail$UserValidator.class
 web\practicafinal\controllers\validations\DirectorUpdateDTO.class
 web\practicafinal\models\controllers\CardJpaController.class
-web\practicafinal\controllers\TestController.class
 web\practicafinal\controllers\validations\DistributorUpdateDTO.class
 web\practicafinal\filters\AdminFilter.class
 web\practicafinal\models\controllers\MovieJpaController.class
@@ -65,6 +65,7 @@ web\practicafinal\controllers\validations\LoginDTO.class
 web\practicafinal\controllers\DistributorController.class
 web\practicafinal\controllers\RoomController.class
 web\practicafinal\models\helpers\UserHelper.class
+web\practicafinal\controllers\validations\ActorUpdateDTO.class
 web\practicafinal\controllers\validations\MovieUpdateDTO.class
 web\practicafinal\controllers\AgeClassificationController.class
 web\practicafinal\controllers\validations\annotations\UniqueNationalityName.class
@@ -115,4 +116,5 @@ web\practicafinal\controllers\validations\annotations\ValidDistributor.class
 web\practicafinal\controllers\validations\annotations\UniqueGenreName$GenreValidator.class
 web\practicafinal\utils\InstanceConverter.class
 web\practicafinal\models\Distributor.class
+web\practicafinal\controllers\ActorController.class
 web\practicafinal\models\AgeClassification.class
