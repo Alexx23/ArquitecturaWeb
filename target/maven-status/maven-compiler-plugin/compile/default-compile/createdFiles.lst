@@ -66,6 +66,7 @@ web\practicafinal\controllers\DistributorController.class
 web\practicafinal\controllers\RoomController.class
 web\practicafinal\models\helpers\UserHelper.class
 web\practicafinal\controllers\validations\MovieUpdateDTO.class
+web\practicafinal\controllers\AgeClassificationController.class
 web\practicafinal\controllers\validations\annotations\UniqueNationalityName.class
 web\practicafinal\models\helpers\RoomHelper.class
 web\practicafinal\controllers\validations\RegisterDTO.class
@@ -89,6 +90,7 @@ web\practicafinal\models\controllers\DirectorJpaController.class
 web\practicafinal\exceptions\HttpException.class
 web\practicafinal\controllers\validations\annotations\ValidRoom.class
 web\practicafinal\models\controllers\UserJpaController.class
+web\practicafinal\controllers\UserController.class
 web\practicafinal\models\helpers\GenreHelper.class
 web\practicafinal\controllers\validations\RoomUpdateDTO.class
 web\practicafinal\models\Room.class
