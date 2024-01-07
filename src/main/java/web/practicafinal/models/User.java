@@ -18,7 +18,10 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -33,7 +36,8 @@ import java.util.List;
     @NamedQuery(name = "User.findByName", query = "SELECT u FROM User u WHERE u.name = :name"),
     @NamedQuery(name = "User.findByUsername", query = "SELECT u FROM User u WHERE u.username = :username"),
     @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email"),
-    @NamedQuery(name = "User.findByPassword", query = "SELECT u FROM User u WHERE u.password = :password")})
+    @NamedQuery(name = "User.findByPassword", query = "SELECT u FROM User u WHERE u.password = :password"),
+    @NamedQuery(name = "User.findByCreatedAt", query = "SELECT u FROM User u WHERE u.createdAt = :createdAt")})
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -54,6 +58,10 @@ public class User implements Serializable {
     @Basic(optional = false)
     @Column(name = "password")
     private String password;
+    @Basic(optional = false)
+    @Column(name = "created_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
     private List<Ticket> ticketList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
@@ -71,12 +79,13 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    public User(Integer id, String name, String username, String email, String password) {
+    public User(Integer id, String name, String username, String email, String password, Date createdAt) {
         this.id = id;
         this.name = name;
         this.username = username;
         this.email = email;
         this.password = password;
+        this.createdAt = createdAt;
     }
 
     public Integer getId() {
@@ -117,6 +126,14 @@ public class User implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
     public List<Ticket> getTicketList() {
