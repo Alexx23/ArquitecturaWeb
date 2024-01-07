@@ -16,7 +16,10 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  *
@@ -29,7 +32,8 @@ import java.io.Serializable;
     @NamedQuery(name = "Ticket.findById", query = "SELECT t FROM Ticket t WHERE t.id = :id"),
     @NamedQuery(name = "Ticket.findByRow", query = "SELECT t FROM Ticket t WHERE t.row = :row"),
     @NamedQuery(name = "Ticket.findByCol", query = "SELECT t FROM Ticket t WHERE t.col = :col"),
-    @NamedQuery(name = "Ticket.findByCode", query = "SELECT t FROM Ticket t WHERE t.code = :code")})
+    @NamedQuery(name = "Ticket.findByCode", query = "SELECT t FROM Ticket t WHERE t.code = :code"),
+    @NamedQuery(name = "Ticket.findByCreatedAt", query = "SELECT t FROM Ticket t WHERE t.createdAt = :createdAt")})
 public class Ticket implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -47,6 +51,10 @@ public class Ticket implements Serializable {
     @Basic(optional = false)
     @Column(name = "code")
     private String code;
+    @Basic(optional = false)
+    @Column(name = "created_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
     @JoinColumn(name = "session_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Session session;
@@ -61,11 +69,12 @@ public class Ticket implements Serializable {
         this.id = id;
     }
 
-    public Ticket(Integer id, short row, short col, String code) {
+    public Ticket(Integer id, short row, short col, String code, Date createdAt) {
         this.id = id;
         this.row = row;
         this.col = col;
         this.code = code;
+        this.createdAt = createdAt;
     }
 
     public Integer getId() {
@@ -98,6 +107,14 @@ public class Ticket implements Serializable {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
     public Session getSession() {
