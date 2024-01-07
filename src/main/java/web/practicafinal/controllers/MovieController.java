@@ -66,6 +66,12 @@ public class MovieController extends HttpServlet {
             return;
         }
         
+        if (movieIdStr.equalsIgnoreCase("all")) {
+            List<Movie> movies = ModelController.getMovie().findMovieEntities();
+            Response.outputData(response, 200, movies);
+            return;
+        }
+        
         int movieId = Integer.parseInt(movieIdStr);
         Movie movie = ModelController.getMovie().findMovie(movieId);
         if (movie == null) {

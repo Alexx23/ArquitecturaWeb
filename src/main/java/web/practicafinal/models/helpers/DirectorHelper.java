@@ -12,9 +12,14 @@ import web.practicafinal.models.controllers.ModelController;
  */
 public class DirectorHelper {
     
-    private static EntityManager em = ModelController.getEMF().createEntityManager();
+    public EntityManager getEntityManager() {
+        return ModelController.getEMF().createEntityManager();
+    }
     
     public static Director getDirectorByName(String name) {
+        DirectorHelper directorHelper = new DirectorHelper();
+        EntityManager em = directorHelper.getEntityManager();
+        
         TypedQuery<Director> query = em.createNamedQuery("Director.findByName", Director.class); 
         query.setParameter("name", name);
         List<Director> results = query.getResultList();

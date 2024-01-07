@@ -12,9 +12,14 @@ import web.practicafinal.models.controllers.ModelController;
  */
 public class NationalityHelper {
     
-    private static EntityManager em = ModelController.getEMF().createEntityManager();
+    public EntityManager getEntityManager() {
+        return ModelController.getEMF().createEntityManager();
+    }
     
     public static Nationality getNationalityByName(String name) {
+        NationalityHelper nationalityHelper = new NationalityHelper();
+        EntityManager em = nationalityHelper.getEntityManager();
+        
         TypedQuery<Nationality> query = em.createNamedQuery("Nationality.findByName", Nationality.class); 
         query.setParameter("name", name);
         List<Nationality> results = query.getResultList();

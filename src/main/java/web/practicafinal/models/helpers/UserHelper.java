@@ -12,9 +12,14 @@ import web.practicafinal.models.controllers.ModelController;
  */
 public class UserHelper {
     
-    private static EntityManager em = ModelController.getEMF().createEntityManager();
+    public EntityManager getEntityManager() {
+        return ModelController.getEMF().createEntityManager();
+    }
     
     public static User getUserById(int id) {
+        UserHelper userHelper = new UserHelper();
+        EntityManager em = userHelper.getEntityManager();
+        
         TypedQuery<User> query = em.createNamedQuery("User.findById", User.class); 
         query.setParameter("id", id);
         List<User> results = query.getResultList();
@@ -23,6 +28,9 @@ public class UserHelper {
     }
     
     public static User getUserByUsername(String username) {
+        UserHelper userHelper = new UserHelper();
+        EntityManager em = userHelper.getEntityManager();
+        
         TypedQuery<User> queryUsername = em.createNamedQuery("User.findByUsername", User.class); 
         queryUsername.setParameter("username", username);
         List<User> resultsUsername = queryUsername.getResultList();
@@ -31,6 +39,9 @@ public class UserHelper {
     }
     
     public static User getUserByEmail(String email) {
+        UserHelper userHelper = new UserHelper();
+        EntityManager em = userHelper.getEntityManager();
+        
         TypedQuery<User> queryEmail = em.createNamedQuery("User.findByEmail", User.class); 
         queryEmail.setParameter("email", email);
         List<User> resultsEmail = queryEmail.getResultList();
@@ -39,6 +50,9 @@ public class UserHelper {
     }
     
     public static User getUserByUsernameEmail(String username) {
+        UserHelper userHelper = new UserHelper();
+        EntityManager em = userHelper.getEntityManager();
+        
         TypedQuery<User> query = em.createQuery("SELECT u FROM User u WHERE u.username = :username OR u.email = :email", User.class);
         query.setParameter("username", username);
         query.setParameter("email", username);

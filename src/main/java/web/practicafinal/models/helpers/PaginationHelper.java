@@ -1,13 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package web.practicafinal.models.helpers;
 
+import jakarta.persistence.Cacheable;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import java.util.List;
+import web.practicafinal.models.Movie;
 import web.practicafinal.models.controllers.ModelController;
 import web.practicafinal.utils.Response;
 
@@ -17,18 +15,30 @@ import web.practicafinal.utils.Response;
  */
 public class PaginationHelper {
     
+    public EntityManager getEntityManager() {
+        return ModelController.getEMF().createEntityManager();
+    }
+    
     public static <T> DataListContainer getPaginated(Class<T> entityClass, int actualPage, String nameValue) {
         int pageSize = 20;
+        
+        PaginationHelper paginationHelper = new PaginationHelper();
+        
+        EntityManager em = paginationHelper.getEntityManager();
 
-        List<T> data = getEntitiesPagination(entityClass, actualPage, pageSize, nameValue);
-        long totalSize = getTotalCount(entityClass, nameValue);
+        List<T> data = getEntitiesPagination(em, entityClass, actualPage, pageSize, nameValue);
+        for (T dataElement: data) {
+            if (dataElement instanceof Movie) {
+                Movie movie = (Movie) dataElement;
+                System.out.println(movie.getName());
+            }
+        }
+        long totalSize = getTotalCount(em, entityClass, nameValue);
         
         return new DataListContainer(data, actualPage, pageSize, totalSize);
     }
     
-    private static EntityManager em = ModelController.getEMF().createEntityManager();
-    
-    private static <T> List<T> getEntitiesPagination(Class<T> entityClass, int actualPage, int pageSize, String nameValue) {
+    private static <T> List<T> getEntitiesPagination(EntityManager em, Class<T> entityClass, int actualPage, int pageSize, String nameValue) {
         TypedQuery<T> query = null;
         if (nameValue != null) {
             query = em.createQuery("SELECT e FROM " + entityClass.getSimpleName() + " e WHERE e.name LIKE :name", entityClass);
@@ -43,7 +53,7 @@ public class PaginationHelper {
         return resultList;
     }
 
-    private static <T> long getTotalCount(Class<T> entityClass, String nameValue) {
+    private static <T> long getTotalCount(EntityManager em, Class<T> entityClass, String nameValue) {
         Query queryTotal = null;
         if (nameValue != null) {
             queryTotal = em.createQuery("SELECT COUNT(e) FROM " + entityClass.getSimpleName() + " e WHERE e.name LIKE :name", entityClass);
@@ -55,6 +65,10 @@ public class PaginationHelper {
         return (long) queryTotal.getSingleResult();
     }
     
+    private DataListContainer createDataListContainer(Object data, int actualPage, int pageSize, long totalSize) {
+        return new DataListContainer(data, actualPage, pageSize, totalSize);
+    }
+    
     private static class DataListContainer {
         private Object data;
         private int actualPage;
@@ -62,7 +76,7 @@ public class PaginationHelper {
         private long totalSize;
         private boolean hasMore;
         
-
+        
         public DataListContainer(Object data, int actualPage, int pageSize, long totalSize) {
             this.data = data;
             this.actualPage = actualPage;

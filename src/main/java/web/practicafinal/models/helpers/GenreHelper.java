@@ -12,9 +12,14 @@ import web.practicafinal.models.controllers.ModelController;
  */
 public class GenreHelper {
     
-    private static EntityManager em = ModelController.getEMF().createEntityManager();
+    public EntityManager getEntityManager() {
+        return ModelController.getEMF().createEntityManager();
+    }
     
     public static Genre getGenreByName(String name) {
+        GenreHelper genreHelper = new GenreHelper();
+        EntityManager em = genreHelper.getEntityManager();
+        
         TypedQuery<Genre> query = em.createNamedQuery("Genre.findByName", Genre.class); 
         query.setParameter("name", name);
         List<Genre> results = query.getResultList();
