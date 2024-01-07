@@ -18,7 +18,7 @@ import web.practicafinal.utils.Response;
 public class PaginationHelper {
     
     public static <T> DataListContainer getPaginated(Class<T> entityClass, int actualPage, String nameValue) {
-        int pageSize = 1;
+        int pageSize = 20;
 
         List<T> data = getEntitiesPagination(entityClass, actualPage, pageSize, nameValue);
         long totalSize = getTotalCount(entityClass, nameValue);

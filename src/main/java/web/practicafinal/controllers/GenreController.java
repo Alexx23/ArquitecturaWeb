@@ -49,7 +49,7 @@ public class GenreController extends HttpServlet {
                 return;            
             }
             int actualPage = integers.get("page") != null ? integers.get("page") : 1;
-            Response.outputData(response, 200, PaginationHelper.getPaginated(Genre.class, actualPage, request.getParameter("name")));
+            Response.outputData(response, 200, PaginationHelper.getPaginated(Genre.class, actualPage, request.getParameter("name")), 4);
             return;
         }
         

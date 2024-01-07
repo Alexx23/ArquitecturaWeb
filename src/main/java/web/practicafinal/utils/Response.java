@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonStreamContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.PropertyWriter;
@@ -56,12 +57,16 @@ public class Response {
 
     }
     
-    @JsonFilter("depth_3")
+    @JsonFilter("depth")
     @JsonIgnoreProperties({ "password", "cvv", "cardNumber" })
     interface FilterMixin {
     }
-        
+    
     public static void outputData(HttpServletResponse response, int status, Object payload) {
+        outputData(response, status, payload, 3);
+    }
+        
+    public static void outputData(HttpServletResponse response, int status, Object payload, int depth) {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.setStatus(status);
@@ -70,9 +75,10 @@ public class Response {
             if (payload != null) {
                 ObjectMapper objectMapper = new ObjectMapper();
                 objectMapper.addMixIn(Object.class, FilterMixin.class);
-                SimpleFilterProvider depthFilter = new SimpleFilterProvider().addFilter("depth_3", new DeepFieldFilter(3));
+                SimpleFilterProvider depthFilter = new SimpleFilterProvider().addFilter("depth", new DeepFieldFilter(depth));
                 objectMapper.setFilterProvider(depthFilter);
                 objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+                objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
                 String result = objectMapper.writeValueAsString(payload);
                 
                 PrintWriter out = response.getWriter();

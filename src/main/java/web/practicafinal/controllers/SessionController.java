@@ -54,7 +54,7 @@ public class SessionController extends HttpServlet {
                 return;            
             }
             int actualPage = integers.get("page") != null ? integers.get("page") : 1;
-            Response.outputData(response, 200, PaginationHelper.getPaginated(Session.class, actualPage, null));
+            Response.outputData(response, 200, PaginationHelper.getPaginated(Session.class, actualPage, null), 4);
             return;
         }
         
