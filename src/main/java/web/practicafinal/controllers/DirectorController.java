@@ -53,6 +53,12 @@ public class DirectorController extends HttpServlet {
             return;
         }
         
+        if (directorIdStr.equalsIgnoreCase("all")) {
+            List<Director> directors = ModelController.getDirector().findDirectorEntities();
+            Response.outputData(response, 200, directors);
+            return;
+        }
+        
         int directorId = Integer.parseInt(directorIdStr);
         Director director = ModelController.getDirector().findDirector(directorId);
         if (director == null) {

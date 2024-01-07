@@ -53,6 +53,12 @@ public class RoomController extends HttpServlet {
             return;
         }
         
+        if (roomIdStr.equalsIgnoreCase("all")) {
+            List<Room> rooms = ModelController.getRoom().findRoomEntities();
+            Response.outputData(response, 200, rooms);
+            return;
+        }
+        
         int roomId = Integer.parseInt(roomIdStr);
         Room room = ModelController.getRoom().findRoom(roomId);
         if (room == null) {

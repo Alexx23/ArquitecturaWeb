@@ -53,6 +53,12 @@ public class GenreController extends HttpServlet {
             return;
         }
         
+        if (genreIdStr.equalsIgnoreCase("all")) {
+            List<Genre> genres = ModelController.getGenre().findGenreEntities();
+            Response.outputData(response, 200, genres);
+            return;
+        }
+        
         int genreId = Integer.parseInt(genreIdStr);
         Genre genre = ModelController.getGenre().findGenre(genreId);
         if (genre == null) {

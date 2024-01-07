@@ -53,6 +53,12 @@ public class DistributorController extends HttpServlet {
             return;
         }
         
+        if (distributorIdStr.equalsIgnoreCase("all")) {
+            List<Distributor> distributors = ModelController.getDistributor().findDistributorEntities();
+            Response.outputData(response, 200, distributors);
+            return;
+        }
+        
         int distributorId = Integer.parseInt(distributorIdStr);
         Distributor distributor = ModelController.getDistributor().findDistributor(distributorId);
         if (distributor == null) {

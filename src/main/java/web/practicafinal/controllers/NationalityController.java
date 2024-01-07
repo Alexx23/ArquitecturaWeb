@@ -53,6 +53,12 @@ public class NationalityController extends HttpServlet {
             return;
         }
         
+        if (nationalityIdStr.equalsIgnoreCase("all")) {
+            List<Nationality> nationalities = ModelController.getNationality().findNationalityEntities();
+            Response.outputData(response, 200, nationalities);
+            return;
+        }
+        
         int nationalityId = Integer.parseInt(nationalityIdStr);
         Nationality nationality = ModelController.getNationality().findNationality(nationalityId);
         if (nationality == null) {
