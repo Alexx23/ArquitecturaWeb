@@ -68,6 +68,7 @@ CREATE TABLE IF NOT EXISTS `web_practicafinal`.`movie` (
   `original_title` VARCHAR(255) NOT NULL,
   `duration` SMALLINT UNSIGNED NOT NULL,
   `year` SMALLINT UNSIGNED NOT NULL,
+  `synopsis` TEXT NOT NULL DEFAULT '',
   `genre_id` INT UNSIGNED NOT NULL,
   `nationality_id` INT UNSIGNED NOT NULL,
   `distributor_id` INT UNSIGNED NOT NULL,

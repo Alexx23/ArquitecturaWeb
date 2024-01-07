@@ -13,6 +13,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
@@ -59,6 +60,10 @@ public class Movie implements Serializable {
     @Basic(optional = false)
     @Column(name = "year")
     private short year;
+    @Basic(optional = false)
+    @Lob
+    @Column(name = "synopsis")
+    private String synopsis;
     @ManyToMany(mappedBy = "movieList", fetch = FetchType.LAZY)
     private List<Label> labelList;
     @ManyToMany(mappedBy = "movieList", fetch = FetchType.LAZY)
@@ -90,13 +95,14 @@ public class Movie implements Serializable {
         this.id = id;
     }
 
-    public Movie(Integer id, String name, String web, String originalTitle, short duration, short year) {
+    public Movie(Integer id, String name, String web, String originalTitle, short duration, short year, String synopsis) {
         this.id = id;
         this.name = name;
         this.web = web;
         this.originalTitle = originalTitle;
         this.duration = duration;
         this.year = year;
+        this.synopsis = synopsis;
     }
 
     public Integer getId() {
@@ -145,6 +151,14 @@ public class Movie implements Serializable {
 
     public void setYear(short year) {
         this.year = year;
+    }
+
+    public String getSynopsis() {
+        return synopsis;
+    }
+
+    public void setSynopsis(String synopsis) {
+        this.synopsis = synopsis;
     }
 
     public List<Label> getLabelList() {

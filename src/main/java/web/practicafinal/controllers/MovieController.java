@@ -96,7 +96,7 @@ public class MovieController extends HttpServlet {
             integers = Request.validateInteger(request, "genre_id", "nationality_id", "distributor_id", "director_id", "age_classification_id");
             
             MovieCreateDTO movieCreateDTO = new MovieCreateDTO(request.getParameter("name"), request.getParameter("web"), request.getParameter("original_title"),
-                shorts.get("year"), shorts.get("duration"), integers.get("genre_id"), integers.get("nationality_id"), integers.get("distributor_id"), 
+                shorts.get("year"), shorts.get("duration"), request.getParameter("synopsis"), integers.get("genre_id"), integers.get("nationality_id"), integers.get("distributor_id"), 
                 integers.get("director_id"), integers.get("age_classification_id"));
 
             Request.validateViolations(movieCreateDTO);
@@ -125,6 +125,7 @@ public class MovieController extends HttpServlet {
         movie.setOriginalTitle(request.getParameter("original_title"));
         movie.setDuration(shorts.get("duration"));
         movie.setYear(shorts.get("year"));
+        movie.setSynopsis(request.getParameter("synopsis"));
         movie.setAgeClassification(ageClassification);
         movie.setDirector(director);
         movie.setDistributor(distributor);
@@ -156,7 +157,7 @@ public class MovieController extends HttpServlet {
             Map<String, Integer> integers = Request.validateInteger(request, "genre_id", "nationality_id", "distributor_id", "director_id", "age_classification_id");
 
             movieUpdateDTO = new MovieUpdateDTO(request.getParameter("name"), request.getParameter("web"), request.getParameter("original_title"),
-                shorts.get("year"), shorts.get("duration"), integers.get("genre_id"), integers.get("nationality_id"), integers.get("distributor_id"), 
+                shorts.get("year"), shorts.get("duration"), request.getParameter("synopsis"), integers.get("genre_id"), integers.get("nationality_id"), integers.get("distributor_id"), 
                 integers.get("director_id"), integers.get("age_classification_id"));
 
             Request.validateViolations(movieUpdateDTO);

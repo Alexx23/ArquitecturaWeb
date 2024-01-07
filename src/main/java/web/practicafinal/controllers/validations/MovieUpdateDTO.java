@@ -29,6 +29,9 @@ public class MovieUpdateDTO {
     @Min(value = 0)
     private Short year;
     
+    @Size(max = 2000)
+    private String synopsis;
+    
     @Min(value = 1)
     @ValidGenre
     private Integer genreId;
@@ -51,12 +54,13 @@ public class MovieUpdateDTO {
     
     public MovieUpdateDTO() {}
 
-    public MovieUpdateDTO(String name, String web, String originalTitle, Short duration, Short year, Integer genreId, Integer nationalityId, Integer distributorId, Integer directorId, Integer ageClassificationId) {
+    public MovieUpdateDTO(String name, String web, String originalTitle, Short duration, Short year, String synopsis, Integer genreId, Integer nationalityId, Integer distributorId, Integer directorId, Integer ageClassificationId) {
         this.name = name;
         this.web = web;
         this.originalTitle = originalTitle;
         this.duration = duration;
         this.year = year;
+        this.synopsis = synopsis;
         this.genreId = genreId;
         this.nationalityId = nationalityId;
         this.distributorId = distributorId;
