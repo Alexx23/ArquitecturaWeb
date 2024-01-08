@@ -49,11 +49,11 @@ D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\models\controllers\RoomJpaController.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\controllers\validations\GenreCreateDTO.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\models\Comment.java
-D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\controllers\TestController.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\models\helpers\UserHelper.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\filters\AuthFilter.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\models\Actor.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\models\controllers\UserJpaController.java
+D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\models\helpers\ActorHelper.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\models\controllers\exceptions\NonexistentEntityException.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\models\helpers\DirectorHelper.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\controllers\validations\GenreUpdateDTO.java

@@ -52,6 +52,7 @@ web\practicafinal\controllers\validations\annotations\ValidDistributor$Distribut
 web\practicafinal\utils\JsonUtils.class
 web\practicafinal\controllers\validations\annotations\ValidRoom$RoomValidator.class
 web\practicafinal\filters\CORSFilter.class
+web\practicafinal\models\helpers\ActorHelper.class
 web\practicafinal\controllers\TicketController.class
 web\practicafinal\controllers\validations\annotations\UniqueUsername.class
 web\practicafinal\controllers\validations\annotations\ValidDirector$DirectorValidator.class

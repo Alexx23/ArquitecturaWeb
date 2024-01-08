@@ -1,18 +1,25 @@
 package web.practicafinal.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import web.practicafinal.controllers.validations.MovieCreateDTO;
 import web.practicafinal.controllers.validations.MovieUpdateDTO;
 import web.practicafinal.exceptions.ValidateException;
+import web.practicafinal.models.Actor;
 import web.practicafinal.models.AgeClassification;
 import web.practicafinal.models.Director;
 import web.practicafinal.models.Distributor;
@@ -27,6 +34,7 @@ import web.practicafinal.models.controllers.ModelController;
 import web.practicafinal.models.controllers.MovieJpaController;
 import web.practicafinal.models.controllers.NationalityJpaController;
 import web.practicafinal.models.controllers.exceptions.RollbackFailureException;
+import web.practicafinal.models.helpers.ActorHelper;
 import web.practicafinal.models.helpers.PaginationHelper;
 import web.practicafinal.utils.CustomLogger;
 import web.practicafinal.utils.InstanceConverter;
@@ -62,7 +70,7 @@ public class MovieController extends HttpServlet {
                 return;            
             }
             int actualPage = integers.get("page") != null ? integers.get("page") : 1;
-            Response.outputData(response, 200, PaginationHelper.getPaginated(Movie.class, actualPage, request.getParameter("name")), 4);
+            Response.outputData(response, 200, PaginationHelper.getPaginated(Movie.class, actualPage, request.getParameter("name")), 5);
             return;
         }
         
@@ -87,6 +95,12 @@ public class MovieController extends HttpServlet {
     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        // Si está llamado a /movies/{id}/actors
+        if (request.getRequestURI().endsWith("/actor")) {
+            doPostActor(request, response);
+            return;
+        }
         
         // Validar parámetros de la solicitud
         Map<String, Short> shorts = null;
@@ -227,6 +241,51 @@ public class MovieController extends HttpServlet {
             Response.outputMessage(response, 500, "No se ha podido eliminar la película");
         }
         
+    }
+    
+    private void doPostActor(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        String movieIdStr = Request.getURLValue(request);
+        if (movieIdStr == null) {
+            Response.outputMessage(response, 400, "No se ha seleccionado ninguna película.");
+            return;
+        }
+        int movieId = Integer.parseInt(movieIdStr);
+        
+        List<Integer> numbers = new ArrayList<Integer>();
+        
+        // Leer las ids de los actores y guardarlas en una lista de enteros
+        boolean continueReading = true;
+        int count = 0;
+        while (continueReading) {
+            String parameterStr = request.getParameter(""+count);
+            if (parameterStr != null) {
+                numbers.add(Integer.parseInt(parameterStr));
+                count++;
+            } else {
+                continueReading = false;
+            }
+        }
+        
+        List<Actor> actors = new ArrayList<Actor>();
+
+        if (!numbers.isEmpty()) {
+            actors = ActorHelper.getByIds(numbers);
+        }
+        Movie movie = ModelController.getMovie().findMovie(movieId);
+        movie.setActorList(actors);
+        
+        try {
+            ModelController.getMovie().edit(movie);
+            Response.outputData(response, 200, movie);
+        } catch (Exception ex) {
+            CustomLogger.errorThrow(MovieController.class.getName(), ex);
+            Response.outputMessage(response, 500, "Ha ocurrido un error interno.");
+            return;
+        }
+        
+        Response.outputMessage(response, 200, "Actores actualizados correctamente");
+        return;
     }
     
 }

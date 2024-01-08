@@ -1,13 +1,10 @@
 package web.practicafinal.models.helpers;
 
-import jakarta.persistence.Cacheable;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import java.util.List;
-import web.practicafinal.models.Movie;
 import web.practicafinal.models.controllers.ModelController;
-import web.practicafinal.utils.Response;
 
 /**
  *
@@ -27,12 +24,6 @@ public class PaginationHelper {
         EntityManager em = paginationHelper.getEntityManager();
 
         List<T> data = getEntitiesPagination(em, entityClass, actualPage, pageSize, nameValue);
-        for (T dataElement: data) {
-            if (dataElement instanceof Movie) {
-                Movie movie = (Movie) dataElement;
-                System.out.println(movie.getName());
-            }
-        }
         long totalSize = getTotalCount(em, entityClass, nameValue);
         
         return new DataListContainer(data, actualPage, pageSize, totalSize);
