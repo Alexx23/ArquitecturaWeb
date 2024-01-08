@@ -9,7 +9,7 @@ import web.practicafinal.utils.CustomLogger;
 public class SessionException extends HttpException {
 
     /*
-        Excepción que indica cuando no se ha validado correctamente una request.
+        Excepción que indica cuando no hay una sesión iniciada.
     */
 
     public SessionException (String str) {

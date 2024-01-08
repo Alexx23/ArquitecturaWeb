@@ -8,8 +8,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import web.practicafinal.controllers.validations.ActorCreateDTO;
 import web.practicafinal.controllers.validations.ActorUpdateDTO;
+import web.practicafinal.exceptions.SessionException;
+import web.practicafinal.exceptions.UnauthorizedException;
 import web.practicafinal.exceptions.ValidateException;
 import web.practicafinal.models.Actor;
 import web.practicafinal.models.controllers.ModelController;
@@ -17,6 +21,7 @@ import web.practicafinal.models.controllers.exceptions.RollbackFailureException;
 import web.practicafinal.models.helpers.PaginationHelper;
 import web.practicafinal.utils.CustomLogger;
 import web.practicafinal.utils.InstanceConverter;
+import web.practicafinal.utils.Middleware;
 import web.practicafinal.utils.Request;
 import web.practicafinal.utils.Response;
 
@@ -28,11 +33,25 @@ public class ActorController extends HttpServlet {
     }
 
     /*
-    /actor -> Ver lista con todos los actores
+    /actor -> Ver lista paginada con todos los actores
     /actor/{id} -> Ver información del actor con id = {id}
+    /actor/all -> Ver lista con todos
     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        //////////////////////
+        // RUTA SOLO PARA ADMINS
+        //////////////////////
+        try {
+            Middleware.adminRoute(request);
+        } catch (SessionException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;
+        } catch (UnauthorizedException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;        
+        }
         
         String actorIdStr = Request.getURLValue(request);
         
@@ -71,6 +90,20 @@ public class ActorController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
+        //////////////////////
+        // RUTA SOLO PARA ADMINS
+        //////////////////////
+        try {
+            Middleware.adminRoute(request);
+        } catch (SessionException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;
+        } catch (UnauthorizedException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;        
+        }
+        
+        
         // Validar parámetros de la solicitud
         try {
             ActorCreateDTO actorCreateDTO = new ActorCreateDTO(request.getParameter("name"));
@@ -103,6 +136,19 @@ public class ActorController extends HttpServlet {
     */
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        //////////////////////
+        // RUTA SOLO PARA ADMINS
+        //////////////////////
+        try {
+            Middleware.adminRoute(request);
+        } catch (SessionException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;
+        } catch (UnauthorizedException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;        
+        }
         
         // Validar parámetros de la solicitud
         ActorUpdateDTO actorUpdateDTO = null;
@@ -149,6 +195,19 @@ public class ActorController extends HttpServlet {
     */
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        //////////////////////
+        // RUTA SOLO PARA ADMINS
+        //////////////////////
+        try {
+            Middleware.adminRoute(request);
+        } catch (SessionException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;
+        } catch (UnauthorizedException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;        
+        }
 
         String actorIdStr = Request.getURLValue(request);
         

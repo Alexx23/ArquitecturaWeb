@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 import web.practicafinal.controllers.validations.SessionCreateDTO;
 import web.practicafinal.controllers.validations.SessionUpdateDTO;
+import web.practicafinal.exceptions.SessionException;
+import web.practicafinal.exceptions.UnauthorizedException;
 import web.practicafinal.exceptions.ValidateException;
 import web.practicafinal.models.Movie;
 import web.practicafinal.models.Room;
@@ -24,6 +26,7 @@ import web.practicafinal.models.controllers.exceptions.RollbackFailureException;
 import web.practicafinal.models.helpers.PaginationHelper;
 import web.practicafinal.utils.CustomLogger;
 import web.practicafinal.utils.InstanceConverter;
+import web.practicafinal.utils.Middleware;
 import web.practicafinal.utils.Request;
 import web.practicafinal.utils.Response;
 
@@ -35,12 +38,15 @@ public class SessionController extends HttpServlet {
     }
 
     /*
-    /session -> Ver lista con todas las sesiones
+    /session -> Ver lista paginada con todas las sesiones
     /session/{id} -> Ver información de la sesión con id = {id}
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+        //////////////////////
+        // RUTA PÚBLICA
+        //////////////////////
         String sessionIdStr = Request.getURLValue(request);
 
         if (sessionIdStr == null) {
@@ -157,6 +163,16 @@ public class SessionController extends HttpServlet {
      */
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        try {
+            Middleware.adminRoute(request);
+        } catch (SessionException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;
+        } catch (UnauthorizedException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;        
+        }
 
         // Validar parámetros de la solicitud
         SessionUpdateDTO sessionUpdateDTO = null;
@@ -206,6 +222,16 @@ public class SessionController extends HttpServlet {
      */
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        try {
+            Middleware.adminRoute(request);
+        } catch (SessionException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;
+        } catch (UnauthorizedException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;        
+        }
 
         String sessionIdStr = Request.getURLValue(request);
 

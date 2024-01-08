@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import web.practicafinal.controllers.validations.NationalityCreateDTO;
 import web.practicafinal.controllers.validations.NationalityUpdateDTO;
+import web.practicafinal.exceptions.SessionException;
+import web.practicafinal.exceptions.UnauthorizedException;
 import web.practicafinal.exceptions.ValidateException;
 import web.practicafinal.models.Nationality;
 import web.practicafinal.models.controllers.ModelController;
@@ -18,6 +20,7 @@ import web.practicafinal.models.helpers.NationalityHelper;
 import web.practicafinal.models.helpers.PaginationHelper;
 import web.practicafinal.utils.CustomLogger;
 import web.practicafinal.utils.InstanceConverter;
+import web.practicafinal.utils.Middleware;
 import web.practicafinal.utils.Request;
 import web.practicafinal.utils.Response;
 
@@ -29,11 +32,25 @@ public class NationalityController extends HttpServlet {
     }
 
     /*
-    /nationality -> Ver lista con todas las nacionalidades
+    /nationality -> Ver lista paginada con todas las nacionalidades
     /nationality/{id} -> Ver información de la nacionalidad con id = {id}
+    /nationality/all -> Ver lista con todos
     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        //////////////////////
+        // RUTA SOLO PARA ADMINS
+        //////////////////////
+        try {
+            Middleware.adminRoute(request);
+        } catch (SessionException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;
+        } catch (UnauthorizedException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;        
+        }
         
         String nationalityIdStr = Request.getURLValue(request);
         
@@ -72,6 +89,19 @@ public class NationalityController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
+        //////////////////////
+        // RUTA SOLO PARA ADMINS
+        //////////////////////
+        try {
+            Middleware.adminRoute(request);
+        } catch (SessionException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;
+        } catch (UnauthorizedException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;        
+        }
+        
         // Validar parámetros de la solicitud
         try {
             NationalityCreateDTO nationalityCreateDTO = new NationalityCreateDTO(request.getParameter("name"));
@@ -104,6 +134,19 @@ public class NationalityController extends HttpServlet {
     */
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        //////////////////////
+        // RUTA SOLO PARA ADMINS
+        //////////////////////
+        try {
+            Middleware.adminRoute(request);
+        } catch (SessionException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;
+        } catch (UnauthorizedException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;        
+        }
         
         // Validar parámetros de la solicitud
         NationalityUpdateDTO nationalityUpdateDTO = null;
@@ -158,6 +201,19 @@ public class NationalityController extends HttpServlet {
     */
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        //////////////////////
+        // RUTA SOLO PARA ADMINS
+        //////////////////////
+        try {
+            Middleware.adminRoute(request);
+        } catch (SessionException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;
+        } catch (UnauthorizedException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;        
+        }
 
         String nationalityIdStr = Request.getURLValue(request);
         

@@ -7,11 +7,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
+import web.practicafinal.exceptions.SessionException;
+import web.practicafinal.exceptions.UnauthorizedException;
 import web.practicafinal.exceptions.ValidateException;
 import web.practicafinal.models.Ticket;
 import web.practicafinal.models.controllers.ModelController;
 import web.practicafinal.models.helpers.PaginationHelper;
 import web.practicafinal.utils.CustomLogger;
+import web.practicafinal.utils.Middleware;
 import web.practicafinal.utils.Request;
 import web.practicafinal.utils.Response;
 
@@ -23,11 +26,24 @@ public class TicketController extends HttpServlet {
     }
 
     /*
-    /ticket -> Ver lista con todas los tickets
+    /ticket -> Ver lista paginada con todas los tickets
     /ticket/{id} -> Ver información del ticket con id = {id}
     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        //////////////////////
+        // RUTA SOLO PARA ADMINS
+        //////////////////////
+        try {
+            Middleware.adminRoute(request);
+        } catch (SessionException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;
+        } catch (UnauthorizedException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;        
+        }
         
         String ticketIdStr = Request.getURLValue(request);
         

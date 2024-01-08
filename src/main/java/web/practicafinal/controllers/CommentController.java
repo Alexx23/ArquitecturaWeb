@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.Map;
 import web.practicafinal.controllers.validations.CommentCreateDTO;
 import web.practicafinal.exceptions.SessionException;
+import web.practicafinal.exceptions.UnauthorizedException;
 import web.practicafinal.exceptions.ValidateException;
 import web.practicafinal.models.Comment;
 import web.practicafinal.models.Movie;
@@ -19,6 +20,7 @@ import web.practicafinal.models.controllers.ModelController;
 import web.practicafinal.models.controllers.exceptions.RollbackFailureException;
 import web.practicafinal.models.helpers.PaginationHelper;
 import web.practicafinal.utils.CustomLogger;
+import web.practicafinal.utils.Middleware;
 import web.practicafinal.utils.Request;
 import web.practicafinal.utils.Response;
 
@@ -39,6 +41,16 @@ public class CommentController extends HttpServlet {
     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        //////////////////////
+        // RUTA PARA CLIENTES
+        //////////////////////
+        try {
+            Middleware.authRoute(request);
+        } catch (SessionException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;
+        }
         
         // Validar parámetros de la solicitud
         Map<String, Integer> integers = null;
@@ -88,6 +100,16 @@ public class CommentController extends HttpServlet {
     */
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        //////////////////////
+        // RUTA PARA CLIENTES
+        //////////////////////
+        try {
+            Middleware.authRoute(request);
+        } catch (SessionException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;
+        }
 
         String commentIdStr = Request.getURLValue(request);
         

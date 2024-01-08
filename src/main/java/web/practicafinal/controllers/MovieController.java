@@ -19,6 +19,8 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import web.practicafinal.controllers.validations.MovieCreateDTO;
 import web.practicafinal.controllers.validations.MovieUpdateDTO;
+import web.practicafinal.exceptions.SessionException;
+import web.practicafinal.exceptions.UnauthorizedException;
 import web.practicafinal.exceptions.ValidateException;
 import web.practicafinal.models.Actor;
 import web.practicafinal.models.AgeClassification;
@@ -40,6 +42,7 @@ import web.practicafinal.models.helpers.ActorHelper;
 import web.practicafinal.models.helpers.PaginationHelper;
 import web.practicafinal.utils.CustomLogger;
 import web.practicafinal.utils.InstanceConverter;
+import web.practicafinal.utils.Middleware;
 import web.practicafinal.utils.Request;
 import web.practicafinal.utils.Response;
 
@@ -51,11 +54,16 @@ public class MovieController extends HttpServlet {
     }
 
     /*
-    /movie -> Ver lista con todas las peliculas
+    /movie -> Ver lista paginada con todas las peliculas
     /movie/{id} -> Ver información de la película con id = {id}
     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        
+        //////////////////////
+        // RUTA PÚBLICA
+        //////////////////////
         
         // Si está llamado a /movies/{id}/actors
         if (request.getRequestURI().endsWith("/comment")) {
@@ -78,12 +86,6 @@ public class MovieController extends HttpServlet {
             return;
         }
         
-        if (movieIdStr.equalsIgnoreCase("all")) {
-            List<Movie> movies = ModelController.getMovie().findMovieEntities();
-            Response.outputData(response, 200, movies);
-            return;
-        }
-        
         int movieId = Integer.parseInt(movieIdStr);
         Movie movie = ModelController.getMovie().findMovie(movieId);
         if (movie == null) {
@@ -99,6 +101,19 @@ public class MovieController extends HttpServlet {
     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        //////////////////////
+        // RUTA SOLO PARA ADMINS
+        //////////////////////
+        try {
+            Middleware.adminRoute(request);
+        } catch (SessionException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;
+        } catch (UnauthorizedException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;        
+        }
         
         // Si está llamado a /movies/{id}/actors
         if (request.getRequestURI().endsWith("/actor")) {
@@ -168,6 +183,19 @@ public class MovieController extends HttpServlet {
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
+        //////////////////////
+        // RUTA SOLO PARA ADMINS
+        //////////////////////
+        try {
+            Middleware.adminRoute(request);
+        } catch (SessionException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;
+        } catch (UnauthorizedException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;        
+        }
+        
         // Validar parámetros de la solicitud
         MovieUpdateDTO movieUpdateDTO = null;
         try {
@@ -218,6 +246,19 @@ public class MovieController extends HttpServlet {
     */
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        //////////////////////
+        // RUTA SOLO PARA ADMINS
+        //////////////////////
+        try {
+            Middleware.adminRoute(request);
+        } catch (SessionException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;
+        } catch (UnauthorizedException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;        
+        }
 
         String movieIdStr = Request.getURLValue(request);
         

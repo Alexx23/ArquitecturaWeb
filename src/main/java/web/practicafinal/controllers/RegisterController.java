@@ -31,6 +31,11 @@ public class RegisterController extends HttpServlet {
     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        //////////////////////
+        // RUTA PÚBLICA
+        //////////////////////
+        
         try {
             
             RegisterDTO registerDTO = new RegisterDTO(request.getParameter("name"), request.getParameter("username"), request.getParameter("email"), 

@@ -1,4 +1,5 @@
 web\practicafinal\controllers\validations\annotations\UniqueRoomName.class
+web\practicafinal\utils\Middleware.class
 web\practicafinal\models\controllers\LabelJpaController.class
 web\practicafinal\enums\AgeClassificationEnum.class
 web\practicafinal\utils\Request.class
@@ -87,6 +88,7 @@ web\practicafinal\models\Actor.class
 web\practicafinal\models\helpers\NationalityHelper.class
 web\practicafinal\controllers\validations\annotations\UniqueNationalityName$NationalityValidator.class
 web\practicafinal\utils\CustomLogger.class
+web\practicafinal\exceptions\UnauthorizedException.class
 web\practicafinal\models\controllers\RoleJpaController.class
 web\practicafinal\controllers\validations\annotations\UniqueGenreName.class
 web\practicafinal\controllers\validations\annotations\ValidNationality.class

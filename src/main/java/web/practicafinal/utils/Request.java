@@ -112,6 +112,9 @@ public class Request {
     
     public static User getUser(HttpServletRequest httpRequest) throws SessionException {
         HttpSession session = httpRequest.getSession(false);
+        if (session == null) {
+            throw new SessionException("Sesión no iniciada.");
+        }
         
         // Comprobar que existe el atributo 'user_id' en la sesión
         Object userIdObj = session.getAttribute("user_id");
