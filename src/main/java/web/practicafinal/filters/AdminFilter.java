@@ -8,9 +8,12 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import web.practicafinal.enums.RoleEnum;
+import web.practicafinal.exceptions.SessionException;
 import web.practicafinal.models.User;
+import web.practicafinal.utils.Request;
 import web.practicafinal.utils.Response;
 
 /**
@@ -26,10 +29,17 @@ public class AdminFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         
-        // Obtener el usuario (nunca será nulo porque antes se ha ejecutado el filtro 'auth')
-        User user = (User) request.getAttribute("user_session");
+        // Obtener usuario
+        User userSession;
+        try {
+            userSession = Request.getUser(httpRequest);
+        } catch (SessionException ex) {
+            Response.outputMessage(httpResponse, ex.getHttpErrorCode(), ex.getMessage());
+            return;
+        }
         
-        if (user.getRole().getId() != RoleEnum.ADMIN.getId()) {
+        // Comprobar role del usuario
+        if (userSession.getRole().getId() != RoleEnum.ADMIN.getId()) {
             Response.outputMessage(httpResponse, 403, "Acceso no autorizado");
             return;
         }

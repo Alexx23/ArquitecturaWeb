@@ -1,6 +1,8 @@
 package web.practicafinal.utils;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -10,7 +12,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import web.practicafinal.exceptions.SessionException;
 import web.practicafinal.exceptions.ValidateException;
+import web.practicafinal.models.User;
+import web.practicafinal.models.controllers.ModelController;
 
 /**
  *
@@ -103,6 +108,26 @@ public class Request {
             ConstraintViolation<T> firstViolation = violations.iterator().next();
             throw new ValidateException("El campo "+firstViolation.getPropertyPath()+" "+firstViolation.getMessage()+".");
         }
+    }
+    
+    public static User getUser(HttpServletRequest httpRequest) throws SessionException {
+        HttpSession session = httpRequest.getSession(false);
+        
+        // Comprobar que existe el atributo 'user_id' en la sesión
+        Object userIdObj = session.getAttribute("user_id");
+        if (userIdObj == null) {
+            throw new SessionException("Sesión no válida.");
+        }
+        
+        // Obtener instancia del usuario
+        int userId = (int) userIdObj;
+        User user = ModelController.getUser().findUser(userId);
+        if (user == null) {
+            throw new SessionException("Sesión con usuario no válido.");
+        }
+        
+        return user;
+        
     }
     
 }

@@ -11,8 +11,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import web.practicafinal.exceptions.SessionException;
 import web.practicafinal.models.User;
 import web.practicafinal.models.controllers.ModelController;
+import web.practicafinal.utils.CustomLogger;
+import web.practicafinal.utils.Request;
 import web.practicafinal.utils.Response;
 
 /**
@@ -36,23 +41,13 @@ public class AuthFilter implements Filter {
             return;
         }
         
-        // Comprobar que existe el atributo 'user_id' en la sesión
-        Object userIdObj = session.getAttribute("user_id");
-        if (userIdObj == null) {
-            Response.outputMessage(httpResponse, 401, "Sesión no válida.");
+        // Comprobar validez del usuario
+        try {
+            Request.getUser(httpRequest);
+        } catch (SessionException ex) {
+            Response.outputMessage(httpResponse, ex.getHttpErrorCode(), ex.getMessage());
             return;
         }
-        
-        // Obtener instancia del usuario
-        int userId = (int) userIdObj;
-        User user = ModelController.getUser().findUser(userId);
-        if (user == null) {
-            Response.outputMessage(httpResponse, 401, "Sesión con usuario no válido.");
-            return;
-        }
-        
-        // Pasar la instancia del usuario como atributo para poder usarlo posteriormente
-        request.setAttribute("user_session", user);
         chain.doFilter(request, response);
     }
     

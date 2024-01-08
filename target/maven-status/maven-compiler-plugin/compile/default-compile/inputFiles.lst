@@ -1,3 +1,4 @@
+D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\controllers\validations\CommentCreateDTO.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\models\controllers\LabelJpaController.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\models\Session.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\models\Nationality.java
@@ -22,6 +23,7 @@ D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\models\controllers\CardJpaController.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\filters\CORSFilter.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\controllers\validations\annotations\UniqueEmail.java
+D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\controllers\CommentController.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\models\controllers\NationalityJpaController.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\models\helpers\PaginationHelper.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\models\controllers\TicketJpaController.java
@@ -61,6 +63,7 @@ D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\utils\InstanceConverter.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\utils\CustomLogger.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\controllers\DirectorController.java
+D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\exceptions\SessionException.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\controllers\RoomController.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\controllers\validations\annotations\ValidRoom.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\models\controllers\RoleJpaController.java
