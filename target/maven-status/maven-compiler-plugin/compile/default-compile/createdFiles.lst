@@ -1,6 +1,5 @@
 web\practicafinal\controllers\validations\annotations\UniqueRoomName.class
 web\practicafinal\utils\Middleware.class
-web\practicafinal\models\controllers\LabelJpaController.class
 web\practicafinal\enums\AgeClassificationEnum.class
 web\practicafinal\utils\Request.class
 web\practicafinal\controllers\validations\annotations\ValidAgeClassification$AgeClassificationValidator.class
@@ -24,7 +23,6 @@ web\practicafinal\models\Role.class
 web\practicafinal\controllers\validations\GenreUpdateDTO.class
 web\practicafinal\models\Comment.class
 web\practicafinal\models\seeders\RoleSeeder.class
-web\practicafinal\models\Label.class
 web\practicafinal\controllers\validations\annotations\UniqueEmail.class
 web\practicafinal\models\helpers\DirectorHelper.class
 web\practicafinal\models\User.class

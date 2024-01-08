@@ -65,8 +65,6 @@ public class Movie implements Serializable {
     @Column(name = "synopsis")
     private String synopsis;
     @ManyToMany(mappedBy = "movieList", fetch = FetchType.LAZY)
-    private List<Label> labelList;
-    @ManyToMany(mappedBy = "movieList", fetch = FetchType.LAZY)
     private List<Actor> actorList;
     @JoinColumn(name = "age_classification_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
@@ -159,14 +157,6 @@ public class Movie implements Serializable {
 
     public void setSynopsis(String synopsis) {
         this.synopsis = synopsis;
-    }
-
-    public List<Label> getLabelList() {
-        return labelList;
-    }
-
-    public void setLabelList(List<Label> labelList) {
-        this.labelList = labelList;
     }
 
     public List<Actor> getActorList() {

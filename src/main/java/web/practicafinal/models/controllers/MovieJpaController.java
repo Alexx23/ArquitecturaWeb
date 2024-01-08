@@ -17,10 +17,9 @@ import web.practicafinal.models.Director;
 import web.practicafinal.models.Distributor;
 import web.practicafinal.models.Genre;
 import web.practicafinal.models.Nationality;
-import web.practicafinal.models.Label;
+import web.practicafinal.models.Actor;
 import java.util.ArrayList;
 import java.util.List;
-import web.practicafinal.models.Actor;
 import web.practicafinal.models.Session;
 import web.practicafinal.models.Comment;
 import web.practicafinal.models.Movie;
@@ -46,9 +45,6 @@ public class MovieJpaController implements Serializable {
     }
 
     public void create(Movie movie) throws RollbackFailureException, Exception {
-        if (movie.getLabelList() == null) {
-            movie.setLabelList(new ArrayList<Label>());
-        }
         if (movie.getActorList() == null) {
             movie.setActorList(new ArrayList<Actor>());
         }
@@ -87,12 +83,6 @@ public class MovieJpaController implements Serializable {
                 nationality = em.getReference(nationality.getClass(), nationality.getId());
                 movie.setNationality(nationality);
             }
-            List<Label> attachedLabelList = new ArrayList<Label>();
-            for (Label labelListLabelToAttach : movie.getLabelList()) {
-                labelListLabelToAttach = em.getReference(labelListLabelToAttach.getClass(), labelListLabelToAttach.getId());
-                attachedLabelList.add(labelListLabelToAttach);
-            }
-            movie.setLabelList(attachedLabelList);
             List<Actor> attachedActorList = new ArrayList<Actor>();
             for (Actor actorListActorToAttach : movie.getActorList()) {
                 actorListActorToAttach = em.getReference(actorListActorToAttach.getClass(), actorListActorToAttach.getId());
@@ -131,10 +121,6 @@ public class MovieJpaController implements Serializable {
             if (nationality != null) {
                 nationality.getMovieList().add(movie);
                 nationality = em.merge(nationality);
-            }
-            for (Label labelListLabel : movie.getLabelList()) {
-                labelListLabel.getMovieList().add(movie);
-                labelListLabel = em.merge(labelListLabel);
             }
             for (Actor actorListActor : movie.getActorList()) {
                 actorListActor.getMovieList().add(movie);
@@ -189,8 +175,6 @@ public class MovieJpaController implements Serializable {
             Genre genreNew = movie.getGenre();
             Nationality nationalityOld = persistentMovie.getNationality();
             Nationality nationalityNew = movie.getNationality();
-            List<Label> labelListOld = persistentMovie.getLabelList();
-            List<Label> labelListNew = movie.getLabelList();
             List<Actor> actorListOld = persistentMovie.getActorList();
             List<Actor> actorListNew = movie.getActorList();
             List<Session> sessionListOld = persistentMovie.getSessionList();
@@ -237,13 +221,6 @@ public class MovieJpaController implements Serializable {
                 nationalityNew = em.getReference(nationalityNew.getClass(), nationalityNew.getId());
                 movie.setNationality(nationalityNew);
             }
-            List<Label> attachedLabelListNew = new ArrayList<Label>();
-            for (Label labelListNewLabelToAttach : labelListNew) {
-                labelListNewLabelToAttach = em.getReference(labelListNewLabelToAttach.getClass(), labelListNewLabelToAttach.getId());
-                attachedLabelListNew.add(labelListNewLabelToAttach);
-            }
-            labelListNew = attachedLabelListNew;
-            movie.setLabelList(labelListNew);
             List<Actor> attachedActorListNew = new ArrayList<Actor>();
             for (Actor actorListNewActorToAttach : actorListNew) {
                 actorListNewActorToAttach = em.getReference(actorListNewActorToAttach.getClass(), actorListNewActorToAttach.getId());
@@ -305,18 +282,6 @@ public class MovieJpaController implements Serializable {
             if (nationalityNew != null && !nationalityNew.equals(nationalityOld)) {
                 nationalityNew.getMovieList().add(movie);
                 nationalityNew = em.merge(nationalityNew);
-            }
-            for (Label labelListOldLabel : labelListOld) {
-                if (!labelListNew.contains(labelListOldLabel)) {
-                    labelListOldLabel.getMovieList().remove(movie);
-                    labelListOldLabel = em.merge(labelListOldLabel);
-                }
-            }
-            for (Label labelListNewLabel : labelListNew) {
-                if (!labelListOld.contains(labelListNewLabel)) {
-                    labelListNewLabel.getMovieList().add(movie);
-                    labelListNewLabel = em.merge(labelListNewLabel);
-                }
             }
             for (Actor actorListOldActor : actorListOld) {
                 if (!actorListNew.contains(actorListOldActor)) {
@@ -428,11 +393,6 @@ public class MovieJpaController implements Serializable {
             if (nationality != null) {
                 nationality.getMovieList().remove(movie);
                 nationality = em.merge(nationality);
-            }
-            List<Label> labelList = movie.getLabelList();
-            for (Label labelListLabel : labelList) {
-                labelListLabel.getMovieList().remove(movie);
-                labelListLabel = em.merge(labelListLabel);
             }
             List<Actor> actorList = movie.getActorList();
             for (Actor actorListActor : actorList) {

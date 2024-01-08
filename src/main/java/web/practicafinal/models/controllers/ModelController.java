@@ -21,7 +21,6 @@ public class ModelController {
     private static DirectorJpaController director = null;
     private static DistributorJpaController distributor = null;
     private static GenreJpaController genre = null;
-    private static LabelJpaController label = null;
     private static MovieJpaController movie = null;
     private static NationalityJpaController nationality = null;
     private static RoleJpaController role = null;
@@ -40,7 +39,6 @@ public class ModelController {
         director = new DirectorJpaController(utx, emf);
         distributor = new DistributorJpaController(utx, emf);
         genre = new GenreJpaController(utx, emf);
-        label = new LabelJpaController(utx, emf);
         movie = new MovieJpaController(utx, emf);
         nationality = new NationalityJpaController(utx, emf);
         role = new RoleJpaController(utx, emf);
@@ -80,10 +78,6 @@ public class ModelController {
 
     public static GenreJpaController getGenre() {
         return genre;
-    }
-
-    public static LabelJpaController getLabel() {
-        return label;
     }
     
     public static MovieJpaController getMovie() {
