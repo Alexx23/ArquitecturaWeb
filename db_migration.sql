@@ -135,17 +135,6 @@ CREATE TABLE IF NOT EXISTS `web_practicafinal`.`actor` (
 
 
 -- -----------------------------------------------------
--- Table `web_practicafinal`.`label`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `web_practicafinal`.`label` (
-  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC))
-;
-
-
--- -----------------------------------------------------
 -- Table `web_practicafinal`.`session`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `web_practicafinal`.`session` (
@@ -277,28 +266,6 @@ CREATE TABLE IF NOT EXISTS `web_practicafinal`.`movie_actor` (
   CONSTRAINT `fk_movie_has_actor_actor1`
     FOREIGN KEY (`actor_id`)
     REFERENCES `web_practicafinal`.`actor` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-;
-
-
--- -----------------------------------------------------
--- Table `web_practicafinal`.`movie_label`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `web_practicafinal`.`movie_label` (
-  `movie_id` INT UNSIGNED NOT NULL,
-  `label_id` INT UNSIGNED NOT NULL,
-  PRIMARY KEY (`movie_id`, `label_id`),
-  INDEX `fk_movie_has_label_label1_idx` (`label_id` ASC),
-  INDEX `fk_movie_has_label_movie1_idx` (`movie_id` ASC),
-  CONSTRAINT `fk_movie_has_label_movie1`
-    FOREIGN KEY (`movie_id`)
-    REFERENCES `web_practicafinal`.`movie` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_movie_has_label_label1`
-    FOREIGN KEY (`label_id`)
-    REFERENCES `web_practicafinal`.`label` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ;

@@ -22,7 +22,6 @@ web\practicafinal\exceptions\ValidateException.class
 web\practicafinal\models\controllers\ActorJpaController.class
 web\practicafinal\models\Role.class
 web\practicafinal\controllers\validations\GenreUpdateDTO.class
-web\practicafinal\filters\AuthFilter.class
 web\practicafinal\models\Comment.class
 web\practicafinal\models\seeders\RoleSeeder.class
 web\practicafinal\models\Label.class
@@ -46,7 +45,6 @@ web\practicafinal\controllers\validations\annotations\UniqueEmail$UserValidator.
 web\practicafinal\controllers\validations\DirectorUpdateDTO.class
 web\practicafinal\models\controllers\CardJpaController.class
 web\practicafinal\controllers\validations\DistributorUpdateDTO.class
-web\practicafinal\filters\AdminFilter.class
 web\practicafinal\models\controllers\MovieJpaController.class
 web\practicafinal\models\controllers\SessionJpaController.class
 web\practicafinal\models\controllers\ModelController.class
@@ -60,6 +58,7 @@ web\practicafinal\controllers\validations\annotations\UniqueUsername.class
 web\practicafinal\controllers\validations\annotations\ValidDirector$DirectorValidator.class
 web\practicafinal\listeners\CustomServletContextListener.class
 web\practicafinal\models\Movie.class
+web\practicafinal\controllers\UserSessionController.class
 web\practicafinal\controllers\validations\CommentCreateDTO.class
 web\practicafinal\models\helpers\DistributorHelper.class
 web\practicafinal\utils\Response$FilterMixin.class
