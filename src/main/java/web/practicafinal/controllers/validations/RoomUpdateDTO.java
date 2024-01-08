@@ -2,7 +2,6 @@ package web.practicafinal.controllers.validations;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
-import web.practicafinal.controllers.validations.annotations.UniqueRoomName;
 
 /**
  *
@@ -11,7 +10,6 @@ import web.practicafinal.controllers.validations.annotations.UniqueRoomName;
 public class RoomUpdateDTO {
     
     @Size(min = 1, max = 255)
-    @UniqueRoomName
     private String name;
 
     @Min(value = 1)

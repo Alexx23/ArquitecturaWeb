@@ -14,6 +14,7 @@ import web.practicafinal.exceptions.ValidateException;
 import web.practicafinal.models.Nationality;
 import web.practicafinal.models.controllers.ModelController;
 import web.practicafinal.models.controllers.exceptions.RollbackFailureException;
+import web.practicafinal.models.helpers.NationalityHelper;
 import web.practicafinal.models.helpers.PaginationHelper;
 import web.practicafinal.utils.CustomLogger;
 import web.practicafinal.utils.InstanceConverter;
@@ -133,6 +134,14 @@ public class NationalityController extends HttpServlet {
         Nationality nationality = ModelController.getNationality().findNationality(nationalityId);
         if (nationality == null) {
             Response.outputMessage(response, 404, "No se ha encontrado la nacionalidad solicitada");
+            return;
+        }
+        
+        // Comprobar que el nombre de la nacionalidad sea único
+        if (request.getParameter("name") != null && 
+                !nationality.getName().equalsIgnoreCase(request.getParameter("name")) &&
+                NationalityHelper.getNationalityByName(request.getParameter("name")) != null) {
+            Response.outputMessage(response, 404, "Ese nombre ya está siendo utilizado por otra nacionalidad");
             return;
         }
 

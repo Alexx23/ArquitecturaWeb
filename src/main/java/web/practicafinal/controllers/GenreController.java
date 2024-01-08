@@ -14,6 +14,7 @@ import web.practicafinal.exceptions.ValidateException;
 import web.practicafinal.models.Genre;
 import web.practicafinal.models.controllers.ModelController;
 import web.practicafinal.models.controllers.exceptions.RollbackFailureException;
+import web.practicafinal.models.helpers.GenreHelper;
 import web.practicafinal.models.helpers.PaginationHelper;
 import web.practicafinal.utils.CustomLogger;
 import web.practicafinal.utils.InstanceConverter;
@@ -133,6 +134,14 @@ public class GenreController extends HttpServlet {
         Genre genre = ModelController.getGenre().findGenre(genreId);
         if (genre == null) {
             Response.outputMessage(response, 404, "No se ha encontrado el género solicitado");
+            return;
+        }
+        
+        // Comprobar que el nombre del género sea único
+        if (request.getParameter("name") != null && 
+                !genre.getName().equalsIgnoreCase(request.getParameter("name")) &&
+                GenreHelper.getGenreByName(request.getParameter("name")) != null) {
+            Response.outputMessage(response, 404, "Ese nombre ya está siendo utilizado por otro género");
             return;
         }
 

@@ -1,7 +1,6 @@
 package web.practicafinal.controllers.validations;
 
 import jakarta.validation.constraints.Size;
-import web.practicafinal.controllers.validations.annotations.UniqueGenreName;
 
 /**
  *
@@ -10,7 +9,6 @@ import web.practicafinal.controllers.validations.annotations.UniqueGenreName;
 public class GenreUpdateDTO {
     
     @Size(min = 1, max = 255)
-    @UniqueGenreName
     private String name;
     
     public GenreUpdateDTO() {}

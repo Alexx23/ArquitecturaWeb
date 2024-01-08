@@ -15,6 +15,7 @@ import web.practicafinal.models.Room;
 import web.practicafinal.models.controllers.ModelController;
 import web.practicafinal.models.controllers.exceptions.RollbackFailureException;
 import web.practicafinal.models.helpers.PaginationHelper;
+import web.practicafinal.models.helpers.RoomHelper;
 import web.practicafinal.utils.CustomLogger;
 import web.practicafinal.utils.InstanceConverter;
 import web.practicafinal.utils.Request;
@@ -140,6 +141,14 @@ public class RoomController extends HttpServlet {
         Room room = ModelController.getRoom().findRoom(roomId);
         if (room == null) {
             Response.outputMessage(response, 404, "No se ha encontrado la sala solicitada");
+            return;
+        }
+        
+        // Comprobar que el nombre de la sala sea único
+        if (request.getParameter("name") != null && 
+                !room.getName().equalsIgnoreCase(request.getParameter("name")) &&
+                RoomHelper.getRoomByName(request.getParameter("name")) != null) {
+            Response.outputMessage(response, 404, "Ese nombre ya está siendo utilizado por otra sala");
             return;
         }
 
