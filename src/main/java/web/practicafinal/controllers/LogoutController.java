@@ -11,10 +11,6 @@ import web.practicafinal.models.controllers.ModelController;
 import web.practicafinal.models.controllers.UserJpaController;
 import web.practicafinal.utils.Response;
 
-/**
- *
- * @author Alex
- */
 @WebServlet("/logout")
 public class LogoutController extends HttpServlet {
 

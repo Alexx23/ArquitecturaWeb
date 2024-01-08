@@ -11,10 +11,6 @@ import web.practicafinal.models.AgeClassification;
 import web.practicafinal.models.controllers.ModelController;
 import web.practicafinal.utils.Response;
 
-/**
- *
- * @author Alex
- */
 @WebServlet("/ageclassification/*")
 public class AgeClassificationController extends HttpServlet {
 

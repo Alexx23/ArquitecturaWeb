@@ -16,10 +16,6 @@ import web.practicafinal.models.helpers.UserHelper;
 import web.practicafinal.utils.Request;
 import web.practicafinal.utils.Response;
 
-/**
- *
- * @author Alex
- */
 @WebServlet("/login")
 public class LoginController extends HttpServlet {
 

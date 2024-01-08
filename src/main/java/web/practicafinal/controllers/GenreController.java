@@ -21,10 +21,6 @@ import web.practicafinal.utils.InstanceConverter;
 import web.practicafinal.utils.Request;
 import web.practicafinal.utils.Response;
 
-/**
- *
- * @author Alex
- */
 @WebServlet("/genre/*")
 public class GenreController extends HttpServlet {
 

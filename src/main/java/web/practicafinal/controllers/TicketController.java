@@ -6,19 +6,15 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 import web.practicafinal.exceptions.ValidateException;
 import web.practicafinal.models.Ticket;
 import web.practicafinal.models.controllers.ModelController;
 import web.practicafinal.models.helpers.PaginationHelper;
+import web.practicafinal.utils.CustomLogger;
 import web.practicafinal.utils.Request;
 import web.practicafinal.utils.Response;
 
-/**
- *
- * @author Alex
- */
 @WebServlet("/ticket/*")
 public class TicketController extends HttpServlet {
 
@@ -57,5 +53,5 @@ public class TicketController extends HttpServlet {
         Response.outputData(response, 200, ticket);
         
     }
-    
+   
 }
