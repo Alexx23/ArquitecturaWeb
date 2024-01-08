@@ -11,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -21,6 +22,7 @@ import web.practicafinal.controllers.validations.MovieUpdateDTO;
 import web.practicafinal.exceptions.ValidateException;
 import web.practicafinal.models.Actor;
 import web.practicafinal.models.AgeClassification;
+import web.practicafinal.models.Comment;
 import web.practicafinal.models.Director;
 import web.practicafinal.models.Distributor;
 import web.practicafinal.models.Genre;
@@ -54,6 +56,12 @@ public class MovieController extends HttpServlet {
     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        // Si está llamado a /movies/{id}/actors
+        if (request.getRequestURI().endsWith("/comment")) {
+            doGetComment(request, response);
+            return;
+        }
         
         String movieIdStr = Request.getURLValue(request);
         
@@ -269,6 +277,10 @@ public class MovieController extends HttpServlet {
             actors = ActorHelper.getByIds(numbers);
         }
         Movie movie = ModelController.getMovie().findMovie(movieId);
+        if (movie == null) {
+            Response.outputMessage(response, 404, "No se ha encontrado la película solicitada");
+            return;
+        }
         movie.setActorList(actors);
         
         try {
@@ -282,6 +294,37 @@ public class MovieController extends HttpServlet {
         
         Response.outputMessage(response, 200, "Actores actualizados correctamente");
         return;
+    }
+    
+    
+    private void doGetComment(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        String movieIdStr = Request.getURLValue(request);
+        if (movieIdStr == null) {
+            Response.outputMessage(response, 400, "No se ha seleccionado ninguna película.");
+            return;
+        }
+        int movieId = Integer.parseInt(movieIdStr);
+        Movie movie = ModelController.getMovie().findMovie(movieId);
+        if (movie == null) {
+            Response.outputMessage(response, 404, "No se ha encontrado la película solicitada");
+            return;
+        }
+        
+        // Validar parámetros de la solicitud
+        Map<String, Integer> integers = null;
+        try {
+            integers = Request.validateInteger(request, "page");
+        } catch (ValidateException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;            
+        }
+        int actualPage = integers.get("page") != null ? integers.get("page") : 1;
+        Map<String, Object> mapParameters = new HashMap<>();
+        mapParameters.put("movie", movie);
+        Response.outputData(response, 200, PaginationHelper.getPaginatedWithFilters(Comment.class, actualPage, mapParameters), 4);
+        return;
+        
     }
     
 }
