@@ -32,7 +32,8 @@ import java.util.Date;
     @NamedQuery(name = "Card.findById", query = "SELECT c FROM Card c WHERE c.id = :id"),
     @NamedQuery(name = "Card.findByCardNumber", query = "SELECT c FROM Card c WHERE c.cardNumber = :cardNumber"),
     @NamedQuery(name = "Card.findByExpiration", query = "SELECT c FROM Card c WHERE c.expiration = :expiration"),
-    @NamedQuery(name = "Card.findByCvv", query = "SELECT c FROM Card c WHERE c.cvv = :cvv")})
+    @NamedQuery(name = "Card.findByCvv", query = "SELECT c FROM Card c WHERE c.cvv = :cvv"),
+    @NamedQuery(name = "Card.findByCreatedAt", query = "SELECT c FROM Card c WHERE c.createdAt = :createdAt")})
 public class Card implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -51,6 +52,10 @@ public class Card implements Serializable {
     @Basic(optional = false)
     @Column(name = "cvv")
     private int cvv;
+    @Basic(optional = false)
+    @Column(name = "created_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private User user;
@@ -62,11 +67,12 @@ public class Card implements Serializable {
         this.id = id;
     }
 
-    public Card(Integer id, long cardNumber, Date expiration, int cvv) {
+    public Card(Integer id, long cardNumber, Date expiration, int cvv, Date createdAt) {
         this.id = id;
         this.cardNumber = cardNumber;
         this.expiration = expiration;
         this.cvv = cvv;
+        this.createdAt = createdAt;
     }
 
     public Integer getId() {
@@ -99,6 +105,14 @@ public class Card implements Serializable {
 
     public void setCvv(int cvv) {
         this.cvv = cvv;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
     public User getUser() {

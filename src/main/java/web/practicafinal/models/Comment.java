@@ -17,7 +17,10 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  *
@@ -27,7 +30,8 @@ import java.io.Serializable;
 @Table(name = "comment")
 @NamedQueries({
     @NamedQuery(name = "Comment.findAll", query = "SELECT c FROM Comment c"),
-    @NamedQuery(name = "Comment.findById", query = "SELECT c FROM Comment c WHERE c.id = :id")})
+    @NamedQuery(name = "Comment.findById", query = "SELECT c FROM Comment c WHERE c.id = :id"),
+    @NamedQuery(name = "Comment.findByCreatedAt", query = "SELECT c FROM Comment c WHERE c.createdAt = :createdAt")})
 public class Comment implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -38,8 +42,12 @@ public class Comment implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @Lob
-    @Column(name = "text")
-    private String text;
+    @Column(name = "content")
+    private String content;
+    @Basic(optional = false)
+    @Column(name = "created_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
     @JoinColumn(name = "movie_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Movie movie;
@@ -54,9 +62,10 @@ public class Comment implements Serializable {
         this.id = id;
     }
 
-    public Comment(Integer id, String text) {
+    public Comment(Integer id, String content, Date createdAt) {
         this.id = id;
-        this.text = text;
+        this.content = content;
+        this.createdAt = createdAt;
     }
 
     public Integer getId() {
@@ -67,12 +76,20 @@ public class Comment implements Serializable {
         this.id = id;
     }
 
-    public String getText() {
-        return text;
+    public String getContent() {
+        return content;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
     public Movie getMovie() {
