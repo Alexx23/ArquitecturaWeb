@@ -19,10 +19,6 @@ import web.practicafinal.utils.CustomLogger;
 import web.practicafinal.utils.Request;
 import web.practicafinal.utils.Response;
 
-/**
- *
- * @author Alex
- */
 @WebServlet("/register")
 public class RegisterController extends HttpServlet {
 

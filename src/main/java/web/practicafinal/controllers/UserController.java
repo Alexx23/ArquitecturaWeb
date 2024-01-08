@@ -14,10 +14,6 @@ import web.practicafinal.models.helpers.PaginationHelper;
 import web.practicafinal.utils.Request;
 import web.practicafinal.utils.Response;
 
-/**
- *
- * @author Alex
- */
 @WebServlet("/user/*")
 public class UserController extends HttpServlet {
 
