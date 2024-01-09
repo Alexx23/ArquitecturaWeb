@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import web.practicafinal.controllers.validations.RegisterDTO;
 import web.practicafinal.enums.RoleEnum;
@@ -70,6 +71,7 @@ public class RegisterController extends HttpServlet {
         user.setEmail(email);
         user.setPassword(hashPassword);
         user.setRole(role);
+        user.setCreatedAt(new Date());
 
         try {
             ModelController.getUser().create(user);

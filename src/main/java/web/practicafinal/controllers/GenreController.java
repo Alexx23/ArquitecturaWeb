@@ -180,7 +180,7 @@ public class GenreController extends HttpServlet {
         if (request.getParameter("name") != null && 
                 !genre.getName().equalsIgnoreCase(request.getParameter("name")) &&
                 GenreHelper.getGenreByName(request.getParameter("name")) != null) {
-            Response.outputMessage(response, 404, "Ese nombre ya está siendo utilizado por otro género");
+            Response.outputMessage(response, 400, "Ese nombre ya está siendo utilizado por otro género");
             return;
         }
 

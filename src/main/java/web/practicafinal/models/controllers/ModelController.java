@@ -17,6 +17,7 @@ public class ModelController {
     
     private static ActorJpaController actor = null;
     private static AgeClassificationJpaController ageClassification = null;
+    private static CardJpaController card = null;
     private static CommentJpaController comment = null;
     private static DirectorJpaController director = null;
     private static DistributorJpaController distributor = null;
@@ -35,6 +36,7 @@ public class ModelController {
         
         actor = new ActorJpaController(utx, emf);
         ageClassification = new AgeClassificationJpaController(utx, emf);
+        card = new CardJpaController(utx, emf);
         comment = new CommentJpaController(utx, emf);
         director = new DirectorJpaController(utx, emf);
         distributor = new DistributorJpaController(utx, emf);
@@ -62,6 +64,10 @@ public class ModelController {
     
     public static AgeClassificationJpaController getAgeClassification() {
         return ageClassification;
+    }
+    
+    public static CardJpaController getCard() {
+        return card;
     }
     
     public static CommentJpaController getComment() {

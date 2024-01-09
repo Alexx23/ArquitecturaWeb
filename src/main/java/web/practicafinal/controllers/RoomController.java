@@ -187,7 +187,7 @@ public class RoomController extends HttpServlet {
         if (request.getParameter("name") != null && 
                 !room.getName().equalsIgnoreCase(request.getParameter("name")) &&
                 RoomHelper.getRoomByName(request.getParameter("name")) != null) {
-            Response.outputMessage(response, 404, "Ese nombre ya está siendo utilizado por otra sala");
+            Response.outputMessage(response, 400, "Ese nombre ya está siendo utilizado por otra sala");
             return;
         }
 

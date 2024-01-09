@@ -68,7 +68,7 @@ public class MovieController extends HttpServlet {
         // RUTA PÚBLICA
         //////////////////////
         
-        // Si está llamado a /movies/{id}/comment
+        // Si está llamado a /movie/{id}/comment
         if (request.getRequestURI().endsWith("/comment")) {
             doGetComment(request, response);
             return;
@@ -129,7 +129,7 @@ public class MovieController extends HttpServlet {
             return;        
         }
         
-        // Si está llamado a /movies/{id}/actors
+        // Si está llamado a /movie/{id}/actors
         if (request.getRequestURI().endsWith("/actor")) {
             doPostActor(request, response);
             return;

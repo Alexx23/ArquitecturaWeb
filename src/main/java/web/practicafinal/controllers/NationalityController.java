@@ -180,7 +180,7 @@ public class NationalityController extends HttpServlet {
         if (request.getParameter("name") != null && 
                 !nationality.getName().equalsIgnoreCase(request.getParameter("name")) &&
                 NationalityHelper.getNationalityByName(request.getParameter("name")) != null) {
-            Response.outputMessage(response, 404, "Ese nombre ya está siendo utilizado por otra nacionalidad");
+            Response.outputMessage(response, 400, "Ese nombre ya está siendo utilizado por otra nacionalidad");
             return;
         }
 
