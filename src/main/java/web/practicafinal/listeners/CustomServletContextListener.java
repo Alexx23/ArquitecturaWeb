@@ -3,6 +3,7 @@ package web.practicafinal.listeners;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
+import java.util.TimeZone;
 import javax.naming.NamingException;
 import web.practicafinal.models.controllers.ModelController;
 import web.practicafinal.models.seeders.AgeClassificationSeeder;
@@ -18,6 +19,7 @@ public class CustomServletContextListener implements ServletContextListener {
     
     @Override
     public void contextInitialized(ServletContextEvent sce) {
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
         try {
             ModelController.init();
         } catch (NamingException ex) {
@@ -26,6 +28,7 @@ public class CustomServletContextListener implements ServletContextListener {
         RoleSeeder.seed();
         AgeClassificationSeeder.seed();
         CustomLogger.info("Aplicacion web arrancada.");
+        CustomLogger.info("TimeZone: "+TimeZone.getDefault());
     }
  
     @Override
