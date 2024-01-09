@@ -39,6 +39,7 @@ import web.practicafinal.models.controllers.MovieJpaController;
 import web.practicafinal.models.controllers.NationalityJpaController;
 import web.practicafinal.models.controllers.exceptions.RollbackFailureException;
 import web.practicafinal.models.helpers.ActorHelper;
+import web.practicafinal.models.helpers.MovieHelper;
 import web.practicafinal.models.helpers.PaginationHelper;
 import web.practicafinal.utils.CustomLogger;
 import web.practicafinal.utils.InstanceConverter;
@@ -56,6 +57,8 @@ public class MovieController extends HttpServlet {
     /*
     /movie -> Ver lista paginada con todas las peliculas
     /movie/{id} -> Ver información de la película con id = {id}
+    /movie/{id}/comment -> Ver comentarios paginados de película con id = {id}
+    /movie/available -> Ver lista paginada con todas las peliculas disponibles para ver
     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -65,7 +68,7 @@ public class MovieController extends HttpServlet {
         // RUTA PÚBLICA
         //////////////////////
         
-        // Si está llamado a /movies/{id}/actors
+        // Si está llamado a /movies/{id}/comment
         if (request.getRequestURI().endsWith("/comment")) {
             doGetComment(request, response);
             return;
@@ -83,6 +86,17 @@ public class MovieController extends HttpServlet {
             }
             int actualPage = integers.get("page") != null ? integers.get("page") : 1;
             Response.outputData(response, 200, PaginationHelper.getPaginated(Movie.class, actualPage, request.getParameter("name")), 5);
+            return;
+        }
+        
+        if (movieIdStr.equalsIgnoreCase("available")) {
+            doGetMovieAvailable(request, response);
+            return;
+        }
+        
+        if (movieIdStr.equalsIgnoreCase("all")) {
+            List<Movie> movies = ModelController.getMovie().findMovieEntities();
+            Response.outputData(response, 200, movies);
             return;
         }
         
@@ -366,6 +380,21 @@ public class MovieController extends HttpServlet {
         Response.outputData(response, 200, PaginationHelper.getPaginatedWithFilters(Comment.class, actualPage, mapParameters), 4);
         return;
         
+    }
+    
+    private void doGetMovieAvailable(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        Map<String, Integer> integers = null;
+        try {
+            integers = Request.validateInteger(request, "page");
+        } catch (ValidateException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;            
+        }
+        int actualPage = integers.get("page") != null ? integers.get("page") : 1;
+        Response.outputData(response, 200, PaginationHelper.getPaginatedWithQuery(Movie.class, actualPage, MovieHelper.getAvailablesMovies(), MovieHelper.getAvailablesMoviesTotalCount()), 5);
+        return;
+    
     }
     
 }
