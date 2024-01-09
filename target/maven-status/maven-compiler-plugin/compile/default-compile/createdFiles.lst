@@ -117,6 +117,7 @@ web\practicafinal\models\helpers\MovieHelper.class
 web\practicafinal\controllers\validations\annotations\ValidEmail$UserValidator.class
 web\practicafinal\controllers\RegisterController.class
 web\practicafinal\controllers\LoginController.class
+web\practicafinal\controllers\validations\RequestPasswordDTO.class
 web\practicafinal\controllers\validations\CardCreateDTO.class
 web\practicafinal\models\controllers\AgeClassificationJpaController.class
 web\practicafinal\utils\JsonUtils$LocalDateTimeDeserializer.class
@@ -128,6 +129,7 @@ web\practicafinal\models\controllers\DistributorJpaController.class
 web\practicafinal\controllers\validations\annotations\ValidDistributor.class
 web\practicafinal\controllers\validations\annotations\UniqueGenreName$GenreValidator.class
 web\practicafinal\controllers\CommentController.class
+web\practicafinal\controllers\RequestPasswordController.class
 web\practicafinal\models\helpers\CardHelper.class
 web\practicafinal\utils\InstanceConverter.class
 web\practicafinal\models\Distributor.class
