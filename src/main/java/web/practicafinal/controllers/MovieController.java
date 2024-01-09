@@ -391,8 +391,10 @@ public class MovieController extends HttpServlet {
             Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
             return;            
         }
+        String movieName = request.getParameter("name");
+        if (movieName == null) movieName = "";
         int actualPage = integers.get("page") != null ? integers.get("page") : 1;
-        Response.outputData(response, 200, PaginationHelper.getPaginatedWithQuery(Movie.class, actualPage, MovieHelper.getAvailablesMovies(), MovieHelper.getAvailablesMoviesTotalCount()), 5);
+        Response.outputData(response, 200, PaginationHelper.getPaginatedWithQuery(Movie.class, actualPage, MovieHelper.getAvailablesMoviesQuery(movieName), MovieHelper.getAvailablesMoviesTotalCountQuery(movieName)), 4);
         return;
     
     }

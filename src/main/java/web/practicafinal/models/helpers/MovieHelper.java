@@ -18,22 +18,30 @@ public class MovieHelper {
         return ModelController.getEMF().createEntityManager();
     }
     
-    public static TypedQuery<Movie> getAvailablesMovies() {
+    public static TypedQuery<Movie> getAvailablesMoviesQuery(String name) {
         MovieHelper movieHelper = new MovieHelper();
         EntityManager em = movieHelper.getEntityManager();
         
-        TypedQuery<Movie> query = em.createQuery("SELECT DISTINCT m FROM Movie m JOIN m.sessionList s WHERE s.datetime > :now", Movie.class); 
+        TypedQuery<Movie> query = null;
+        try {
+        query = em.createQuery("SELECT DISTINCT m FROM Movie m JOIN m.sessionList s WHERE s.datetime > :now AND m.name LIKE :name", Movie.class); 
         query.setParameter("now", new Date());
+        query.setParameter("name", "%"+name+"%");
+        } catch (Exception ex) 
+        {
+        ex.printStackTrace();
+        }
         
         return query;
     }
     
-    public static Query getAvailablesMoviesTotalCount() {
+    public static Query getAvailablesMoviesTotalCountQuery(String name) {
         MovieHelper movieHelper = new MovieHelper();
         EntityManager em = movieHelper.getEntityManager();
         
-        Query query = em.createQuery("SELECT DISTINCT COUNT(m) FROM Movie m JOIN m.sessionList s WHERE s.datetime > :now", Movie.class); 
+        Query query = em.createQuery("SELECT DISTINCT COUNT(m) FROM Movie m JOIN m.sessionList s WHERE s.datetime > :now AND m.name LIKE :name", Movie.class); 
         query.setParameter("now", new Date());
+        query.setParameter("name", "%"+name+"%");
         
         return query;
     }
