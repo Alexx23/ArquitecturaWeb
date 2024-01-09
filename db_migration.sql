@@ -276,6 +276,7 @@ CREATE TABLE IF NOT EXISTS `web_practicafinal`.`movie_actor` (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `web_practicafinal`.`card` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `title` VARCHAR(255) NOT NULL,
   `card_number` BIGINT(16) UNSIGNED NOT NULL,
   `expiration` DATE NOT NULL,
   `cvv` INT(5) UNSIGNED NOT NULL,

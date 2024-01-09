@@ -30,6 +30,7 @@ import java.util.Date;
 @NamedQueries({
     @NamedQuery(name = "Card.findAll", query = "SELECT c FROM Card c"),
     @NamedQuery(name = "Card.findById", query = "SELECT c FROM Card c WHERE c.id = :id"),
+    @NamedQuery(name = "Card.findByTitle", query = "SELECT c FROM Card c WHERE c.title = :title"),
     @NamedQuery(name = "Card.findByCardNumber", query = "SELECT c FROM Card c WHERE c.cardNumber = :cardNumber"),
     @NamedQuery(name = "Card.findByExpiration", query = "SELECT c FROM Card c WHERE c.expiration = :expiration"),
     @NamedQuery(name = "Card.findByCvv", query = "SELECT c FROM Card c WHERE c.cvv = :cvv"),
@@ -42,6 +43,9 @@ public class Card implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+    @Basic(optional = false)
+    @Column(name = "title")
+    private String title;
     @Basic(optional = false)
     @Column(name = "card_number")
     private long cardNumber;
@@ -67,8 +71,9 @@ public class Card implements Serializable {
         this.id = id;
     }
 
-    public Card(Integer id, long cardNumber, Date expiration, int cvv, Date createdAt) {
+    public Card(Integer id, String title, long cardNumber, Date expiration, int cvv, Date createdAt) {
         this.id = id;
+        this.title = title;
         this.cardNumber = cardNumber;
         this.expiration = expiration;
         this.cvv = cvv;
@@ -81,6 +86,14 @@ public class Card implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public long getCardNumber() {
