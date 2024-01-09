@@ -35,6 +35,36 @@ public class Request {
         return pathParts[1];
     }
     
+    public static String getSecondURLValue(HttpServletRequest request) {
+        String pathInfo = request.getPathInfo();
+        if (pathInfo == null) return null;
+        String[] pathParts = pathInfo.split("/");
+        if (pathParts.length <= 2) return null;
+        return pathParts[2];
+    }
+    
+    /*
+        Valida que si existen estos parámetros en la request, sean Long
+        Si existen, se devolverán como Long. Si no existen, se devolverán como null
+    */
+    public static Map<String, Long> validateLong(HttpServletRequest request, String... parameters) throws ValidateException {
+        Map<String, Long> result = new HashMap<>();
+        for (String parameter : parameters) {
+            String value = request.getParameter(parameter);
+            if (value == null) {
+                result.put(parameter, null);
+                continue;
+            }
+            try {
+                Long long_ = Long.parseLong(value);
+                result.put(parameter, long_);
+            } catch (NumberFormatException e) {
+                throw new ValidateException("El campo "+parameter+" debe ser un número entero.");
+            }
+        }
+        return result;
+    }
+    
     /*
         Valida que si existen estos parámetros en la request, sean Integer
         Si existen, se devolverán como Integer. Si no existen, se devolverán como null

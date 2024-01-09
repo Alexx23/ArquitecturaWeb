@@ -1,5 +1,6 @@
 web\practicafinal\controllers\validations\annotations\UniqueRoomName.class
 web\practicafinal\utils\Middleware.class
+web\practicafinal\controllers\validations\annotations\ValidUsername$UserValidator.class
 web\practicafinal\enums\AgeClassificationEnum.class
 web\practicafinal\utils\Request.class
 web\practicafinal\controllers\validations\annotations\ValidAgeClassification$AgeClassificationValidator.class
@@ -9,6 +10,7 @@ web\practicafinal\utils\Response.class
 web\practicafinal\controllers\validations\DistributorCreateDTO.class
 web\practicafinal\controllers\validations\DirectorCreateDTO.class
 web\practicafinal\controllers\validations\SessionUpdateDTO.class
+web\practicafinal\controllers\validations\annotations\ValidEmail.class
 web\practicafinal\controllers\validations\annotations\UniqueRoomName$RoomValidator.class
 web\practicafinal\models\controllers\RoomJpaController.class
 web\practicafinal\controllers\validations\annotations\ValidGenre.class
@@ -52,6 +54,7 @@ web\practicafinal\utils\JsonUtils.class
 web\practicafinal\controllers\validations\annotations\ValidRoom$RoomValidator.class
 web\practicafinal\filters\CORSFilter.class
 web\practicafinal\models\helpers\ActorHelper.class
+web\practicafinal\controllers\validations\UserUpdateDTO.class
 web\practicafinal\controllers\TicketController.class
 web\practicafinal\controllers\validations\annotations\UniqueUsername.class
 web\practicafinal\controllers\validations\annotations\ValidDirector$DirectorValidator.class
@@ -60,6 +63,7 @@ web\practicafinal\models\Movie.class
 web\practicafinal\controllers\UserSessionController.class
 web\practicafinal\controllers\validations\CommentCreateDTO.class
 web\practicafinal\models\helpers\DistributorHelper.class
+web\practicafinal\controllers\validations\PasswordCreateDTO.class
 web\practicafinal\utils\Response$FilterMixin.class
 web\practicafinal\controllers\validations\annotations\ValidMovie.class
 web\practicafinal\controllers\GenreController.class
@@ -69,6 +73,7 @@ web\practicafinal\controllers\RoomController.class
 web\practicafinal\models\helpers\UserHelper.class
 web\practicafinal\controllers\validations\ActorUpdateDTO.class
 web\practicafinal\controllers\validations\MovieUpdateDTO.class
+web\practicafinal\utils\DateUtils.class
 web\practicafinal\controllers\AgeClassificationController.class
 web\practicafinal\controllers\validations\annotations\UniqueNationalityName.class
 web\practicafinal\models\helpers\RoomHelper.class
@@ -79,6 +84,7 @@ web\practicafinal\utils\JsonUtils$TimestampDeserializer.class
 web\practicafinal\controllers\validations\annotations\ValidMovie$MovieValidator.class
 web\practicafinal\models\controllers\NationalityJpaController.class
 web\practicafinal\controllers\validations\SessionCreateDTO.class
+web\practicafinal\controllers\validations\annotations\ValidUsername.class
 web\practicafinal\controllers\validations\annotations\ValidNationality$NationalityValidator.class
 web\practicafinal\models\controllers\exceptions\IllegalOrphanException.class
 web\practicafinal\models\seeders\AgeClassificationSeeder.class
@@ -107,8 +113,10 @@ web\practicafinal\controllers\validations\GenreCreateDTO.class
 web\practicafinal\models\Director.class
 web\practicafinal\models\Card.class
 web\practicafinal\models\helpers\MovieHelper.class
+web\practicafinal\controllers\validations\annotations\ValidEmail$UserValidator.class
 web\practicafinal\controllers\RegisterController.class
 web\practicafinal\controllers\LoginController.class
+web\practicafinal\controllers\validations\CardCreateDTO.class
 web\practicafinal\models\controllers\AgeClassificationJpaController.class
 web\practicafinal\utils\JsonUtils$LocalDateTimeDeserializer.class
 web\practicafinal\models\helpers\PaginationHelper$DataListContainer.class
