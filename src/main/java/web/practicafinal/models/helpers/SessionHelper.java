@@ -9,6 +9,7 @@ import java.util.List;
 import web.practicafinal.models.Movie;
 import web.practicafinal.models.Session;
 import web.practicafinal.models.controllers.ModelController;
+import web.practicafinal.utils.DateUtils;
 
 /**
  *
@@ -23,7 +24,7 @@ public class SessionHelper {
     public static List<Session> getByDay(Date date) {
         SessionHelper sessionHelper = new SessionHelper();
         EntityManager em = sessionHelper.getEntityManager();
-        Date startDate = truncateTime(date);
+        Date startDate = DateUtils.truncateTime(date);
         Calendar c = Calendar.getInstance(); 
         c.setTime(startDate); 
         c.add(Calendar.DATE, 1);
@@ -44,7 +45,7 @@ public class SessionHelper {
         SessionHelper sessionHelper = new SessionHelper();
         EntityManager em = sessionHelper.getEntityManager();
         
-        Date startDate = truncateTime(date);
+        Date startDate = DateUtils.truncateTime(date);
         Calendar c = Calendar.getInstance(); 
         c.setTime(startDate); 
         c.add(Calendar.DATE, 1);
@@ -57,22 +58,4 @@ public class SessionHelper {
         
         return query.getResultList();
     }
-    
-    private static Date truncateTime(Date date) {
-        if (date == null) {
-            return null;
-        }
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-
-        return calendar.getTime();
-    }
-
-    
-
 }
