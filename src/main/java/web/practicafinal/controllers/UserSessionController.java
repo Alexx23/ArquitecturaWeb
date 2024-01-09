@@ -264,6 +264,7 @@ public class UserSessionController extends HttpServlet {
         card.setExpiration(DateUtils.truncateDay(dates.get("expiration")));
         card.setCvv(integers.get("cvv"));
         card.setUser(userSession);
+        card.setCreatedAt(new Date());
         
         try {
             ModelController.getCard().create(card);
