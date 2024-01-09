@@ -12,6 +12,7 @@ web\practicafinal\controllers\validations\SessionUpdateDTO.class
 web\practicafinal\controllers\validations\annotations\UniqueRoomName$RoomValidator.class
 web\practicafinal\models\controllers\RoomJpaController.class
 web\practicafinal\controllers\validations\annotations\ValidGenre.class
+web\practicafinal\models\helpers\SessionHelper.class
 web\practicafinal\models\Genre.class
 web\practicafinal\controllers\validations\annotations\UniqueUsername$UserValidator.class
 web\practicafinal\controllers\NationalityController.class
@@ -105,6 +106,7 @@ web\practicafinal\utils\Response$DeepFieldFilter.class
 web\practicafinal\controllers\validations\GenreCreateDTO.class
 web\practicafinal\models\Director.class
 web\practicafinal\models\Card.class
+web\practicafinal\models\helpers\MovieHelper.class
 web\practicafinal\controllers\RegisterController.class
 web\practicafinal\controllers\LoginController.class
 web\practicafinal\models\controllers\AgeClassificationJpaController.class

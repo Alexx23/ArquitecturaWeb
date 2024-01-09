@@ -30,6 +30,19 @@ public class PaginationHelper {
         return new DataListContainer(data, actualPage, pageSize, totalSize);
     }
     
+    public static <T> DataListContainer getPaginatedWithQuery(Class<T> entityClass, int actualPage, TypedQuery<T> query, Query queryTotalCount) {
+        int pageSize = 20;
+        
+        PaginationHelper paginationHelper = new PaginationHelper();
+        
+        EntityManager em = paginationHelper.getEntityManager();
+
+        List<T> data = getEntitiesPagination(em, entityClass, actualPage, pageSize, query);
+        long totalSize = getTotalCount(queryTotalCount);
+        
+        return new DataListContainer(data, actualPage, pageSize, totalSize);
+    }
+    
     public static <T> DataListContainer getPaginatedWithFilters(Class<T> entityClass, int actualPage, Map<String, Object> filters) {
         int pageSize = 20;
         
@@ -43,6 +56,10 @@ public class PaginationHelper {
         return new DataListContainer(data, actualPage, pageSize, totalSize);
     }
     
+    
+    //  PAGINATIONS
+    /////////////////
+    
     private static <T> List<T> getEntitiesPagination(EntityManager em, Class<T> entityClass, int actualPage, int pageSize, String nameValue) {
         TypedQuery<T> query = null;
         if (nameValue != null) {
@@ -52,6 +69,13 @@ public class PaginationHelper {
             query = em.createQuery("SELECT e FROM " + entityClass.getSimpleName() + " e ORDER BY e.id DESC", entityClass);
         }
         
+        query.setFirstResult((actualPage - 1) * pageSize);
+        query.setMaxResults(pageSize);
+        List<T> resultList = query.getResultList();
+        return resultList;
+    }
+    
+    private static <T> List<T> getEntitiesPagination(EntityManager em, Class<T> entityClass, int actualPage, int pageSize, TypedQuery<T> query) {
         query.setFirstResult((actualPage - 1) * pageSize);
         query.setMaxResults(pageSize);
         List<T> resultList = query.getResultList();
@@ -84,6 +108,9 @@ public class PaginationHelper {
 
         return query.getResultList();
     }
+    
+    //  TOTAL COUNT
+    /////////////////
 
     private static <T> long getTotalCount(EntityManager em, Class<T> entityClass, String nameValue) {
         Query queryTotal = null;
@@ -94,6 +121,10 @@ public class PaginationHelper {
             queryTotal = em.createQuery("SELECT COUNT(e) FROM " + entityClass.getSimpleName() + " e");
         }
         
+        return (long) queryTotal.getSingleResult();
+    }
+    
+    private static <T> long getTotalCount(Query queryTotal) {
         return (long) queryTotal.getSingleResult();
     }
     

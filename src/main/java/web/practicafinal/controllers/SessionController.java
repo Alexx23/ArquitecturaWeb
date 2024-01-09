@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -24,6 +25,7 @@ import web.practicafinal.models.controllers.ModelController;
 import web.practicafinal.models.controllers.SessionJpaController;
 import web.practicafinal.models.controllers.exceptions.RollbackFailureException;
 import web.practicafinal.models.helpers.PaginationHelper;
+import web.practicafinal.models.helpers.SessionHelper;
 import web.practicafinal.utils.CustomLogger;
 import web.practicafinal.utils.InstanceConverter;
 import web.practicafinal.utils.Middleware;
@@ -38,7 +40,7 @@ public class SessionController extends HttpServlet {
     }
 
     /*
-    /session -> Ver lista paginada con todas las sesiones
+    /session -> Ver lista con todas las sesiones por día o película
     /session/{id} -> Ver información de la sesión con id = {id}
      */
     @Override
@@ -50,15 +52,33 @@ public class SessionController extends HttpServlet {
         String sessionIdStr = Request.getURLValue(request);
 
         if (sessionIdStr == null) {
+            // Validar parámetros de la solicitud
             Map<String, Integer> integers = null;
+            Map<String, Date> dates = null;
             try {
-                integers = Request.validateInteger(request, "page");
+                integers = Request.validateInteger(request, "movie_id");
+                dates = Request.validateDate(request, "date");
             } catch (ValidateException ex) {
                 Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
                 return;
             }
-            int actualPage = integers.get("page") != null ? integers.get("page") : 1;
-            Response.outputData(response, 200, PaginationHelper.getPaginated(Session.class, actualPage, null), 4);
+            
+            if (dates.get("date") == null) {
+                Response.outputMessage(response, 400, "El campo date es obligatorio");
+                return;
+            }
+            
+            String movieId = request.getParameter("movie_id");
+
+            List<Session> sessionList = new ArrayList<>();
+            if (movieId != null) {
+                Movie movie = ModelController.getMovie().findMovie(integers.get("movie_id"));
+                sessionList = SessionHelper.getByDayAndMovie(dates.get("date"), movie);
+            } else {
+                sessionList = SessionHelper.getByDay(dates.get("date"));
+            }
+            
+            Response.outputData(response, 200, sessionList);
             return;
         }
 
