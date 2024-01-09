@@ -17,6 +17,7 @@ import web.practicafinal.exceptions.ValidateException;
 import web.practicafinal.models.Card;
 import web.practicafinal.models.User;
 import web.practicafinal.models.controllers.ModelController;
+import web.practicafinal.models.helpers.CardHelper;
 import web.practicafinal.models.helpers.UserHelper;
 import web.practicafinal.utils.CustomLogger;
 import web.practicafinal.utils.DateUtils;
@@ -258,11 +259,13 @@ public class UserSessionController extends HttpServlet {
             return;
         }
         
+        String encryptedCvv = CardHelper.encryptCvv(integers.get("cvv").toString());
+        
         Card card = new Card();
         card.setTitle(request.getParameter("title"));
         card.setCardNumber(longs.get("card_number"));
         card.setExpiration(DateUtils.truncateDay(dates.get("expiration")));
-        card.setCvv(integers.get("cvv"));
+        card.setCvv(encryptedCvv);
         card.setUser(userSession);
         card.setCreatedAt(new Date());
         

@@ -55,7 +55,7 @@ public class Card implements Serializable {
     private Date expiration;
     @Basic(optional = false)
     @Column(name = "cvv")
-    private int cvv;
+    private String cvv;
     @Basic(optional = false)
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
@@ -71,7 +71,7 @@ public class Card implements Serializable {
         this.id = id;
     }
 
-    public Card(Integer id, String title, long cardNumber, Date expiration, int cvv, Date createdAt) {
+    public Card(Integer id, String title, long cardNumber, Date expiration, String cvv, Date createdAt) {
         this.id = id;
         this.title = title;
         this.cardNumber = cardNumber;
@@ -112,11 +112,11 @@ public class Card implements Serializable {
         this.expiration = expiration;
     }
 
-    public int getCvv() {
+    public String getCvv() {
         return cvv;
     }
 
-    public void setCvv(int cvv) {
+    public void setCvv(String cvv) {
         this.cvv = cvv;
     }
 

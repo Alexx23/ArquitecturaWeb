@@ -110,6 +110,7 @@ web\practicafinal\models\controllers\CommentJpaController.class
 web\practicafinal\models\controllers\exceptions\RollbackFailureException.class
 web\practicafinal\utils\Response$DeepFieldFilter.class
 web\practicafinal\controllers\validations\GenreCreateDTO.class
+web\practicafinal\utils\CypherUtils.class
 web\practicafinal\models\Director.class
 web\practicafinal\models\Card.class
 web\practicafinal\models\helpers\MovieHelper.class
@@ -127,6 +128,7 @@ web\practicafinal\models\controllers\DistributorJpaController.class
 web\practicafinal\controllers\validations\annotations\ValidDistributor.class
 web\practicafinal\controllers\validations\annotations\UniqueGenreName$GenreValidator.class
 web\practicafinal\controllers\CommentController.class
+web\practicafinal\models\helpers\CardHelper.class
 web\practicafinal\utils\InstanceConverter.class
 web\practicafinal\models\Distributor.class
 web\practicafinal\controllers\ActorController.class
