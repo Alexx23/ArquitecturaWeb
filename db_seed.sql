@@ -68,10 +68,10 @@ INSERT INTO `room` (`id`, `name`, `depth`, `seats`) VALUES
 (6, 'F', 8, 10);
 
 INSERT INTO `user` (`id`, `name`, `username`, `email`, `password`, `role_id`, `created_at`) VALUES
-(1, 'admin', 'admin', 'admin@admin.com', 'admin', 2, '2024-01-10 13:36:38'),
-(2, 'Javier', 'javi', 'javier@gmail.com', 'javi', 1, '2024-01-10 13:45:50'),
-(3, 'Alejandro', 'alex', 'alejandro@gmail.com', 'alex', 1, '2024-01-10 13:45:51'),
-(4, 'Carlos', 'carlos', 'carlos@gmail.com', 'carlos', 1, '2024-01-10 13:45:52');
+(1, 'Admin', 'admin', 'admin@admin.com', '$2a$10$AhjGV6Oh3Lh7E54iIUrFS.OoepOxJ7yQ28cJRsh0baHYJ8T0AGTc.', 2, '2024-01-10 16:40:56'),
+(2, 'javier', 'javi', 'javier@gmail.com', '$2a$10$.rvT.Cw3MZ6ejyaamSfy9uCvWS3XyQlVe7CJTGxGvIp3YwxAj.QVS', 1, '2024-01-10 17:28:00'),
+(3, 'Alejandro', 'alex', 'alejandro@gmail.com', '$2a$10$fjGjDVtM7JNOTeV1txP5MOrmMdTFKSfKewYsnrsUC4hWaINaHXZ1G', 1, '2024-01-10 17:30:28'),
+(4, 'Carlos', 'carlos', 'carlos@gmail.com', '$2a$10$oTVjsQO8nw4o0MR/c9k./.OywnEjMc9na.l7KTJdRfSjGrGEHcDrG', 1, '2024-01-10 17:30:53'),
 
 INSERT INTO `card` (`id`, `title`, `card_number`, `expiration`, `cvv`, `user_id`, `created_at`) VALUES
 (1, 'Javier Lombardía Castro', 4322321053405962, '2026-01-16', '123', 2, '2024-01-10 13:52:27'),
