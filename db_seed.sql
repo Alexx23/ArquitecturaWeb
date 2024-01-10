@@ -118,4 +118,6 @@ INSERT INTO `session` (`id`, `datetime`, `movie_id`, `room_id`) VALUES
 INSERT INTO `payment` (`id`, `reference`, `amount`, `card_title`, `card_number`, `user_id`, `created_at`) VALUES 
 (1, 'a1', '5', 'Javier Lombardía Castro', '4322321053405962', '2', current_timestamp());
 
+INSERT INTO `ticket` (`id`, `depth`, `seat`, `code`, `session_id`, `user_id`, `payment_id`, `created_at`) VALUES 
+(1, '1', '2', 'asdfa', '1', '2', '1', current_timestamp());
 
