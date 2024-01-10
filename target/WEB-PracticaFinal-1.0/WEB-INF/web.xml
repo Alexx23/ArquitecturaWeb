@@ -12,4 +12,8 @@
         <filter-name>cors</filter-name>
         <url-pattern />
     </filter-mapping>
+    <filter-mapping>
+        <filter-name>encoding</filter-name>
+        <url-pattern />
+    </filter-mapping>
 </web-app>

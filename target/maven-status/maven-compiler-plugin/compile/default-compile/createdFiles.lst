@@ -8,6 +8,7 @@ web\practicafinal\models\Nationality.class
 web\practicafinal\controllers\validations\annotations\ValidAgeClassification.class
 web\practicafinal\utils\Response.class
 web\practicafinal\controllers\validations\DistributorCreateDTO.class
+web\practicafinal\filters\EncodingFilter.class
 web\practicafinal\controllers\validations\DirectorCreateDTO.class
 web\practicafinal\controllers\validations\SessionUpdateDTO.class
 web\practicafinal\models\Payment.class

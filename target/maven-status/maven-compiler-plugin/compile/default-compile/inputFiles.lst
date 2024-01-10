@@ -47,6 +47,7 @@ D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\models\helpers\NationalityHelper.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\controllers\validations\annotations\ValidWeb.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\controllers\GenreController.java
+D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\controllers\PriceController.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\models\helpers\DistributorHelper.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\controllers\validations\RequestPasswordDTO.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\enums\RoleEnum.java
@@ -117,6 +118,7 @@ D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\models\helpers\GenreHelper.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\controllers\UserSessionController.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\exceptions\HttpException.java
+D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\filters\EncodingFilter.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\models\seeders\AgeClassificationSeeder.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\models\Director.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\models\helpers\CardHelper.java
