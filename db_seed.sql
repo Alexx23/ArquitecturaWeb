@@ -74,9 +74,9 @@ INSERT INTO `user` (`id`, `name`, `username`, `email`, `password`, `role_id`, `c
 (4, 'Carlos', 'carlos', 'carlos@gmail.com', '$2a$10$oTVjsQO8nw4o0MR/c9k./.OywnEjMc9na.l7KTJdRfSjGrGEHcDrG', 1, '2024-01-10 17:30:53'),
 
 INSERT INTO `card` (`id`, `title`, `card_number`, `expiration`, `cvv`, `user_id`, `created_at`) VALUES
-(1, 'Javier Lombardía Castro', 4322321053405962, '2026-01-16', '123', 2, '2024-01-10 13:52:27'),
-(2, 'Alejandro Santamaría Mercado', 1234567890123456, '2026-03-26', '123', 3, '2024-01-10 13:52:28'),
-(3, 'Carlos González Rubio', 0987654321653085, '2025-11-14', '123', 4, '2024-01-10 13:52:29');
+(1, 'Javier Lombardía Castro', 4322321053405962, '2026-01-16', 'uyh9tMHN9uceJ71Q0g1hNv3VXJ6EBVxdTtEa/tW3XZQ=', 2, '2024-01-10 13:52:27'),
+(2, 'Alejandro Santamaría Mercado', 1234567890123456, '2026-03-26', 'uyh9tMHN9uceJ71Q0g1hNv3VXJ6EBVxdTtEa/tW3XZQ=', 3, '2024-01-10 13:52:28'),
+(3, 'Carlos González Rubio', 0987654321653085, '2025-11-14', 'uyh9tMHN9uceJ71Q0g1hNv3VXJ6EBVxdTtEa/tW3XZQ=', 4, '2024-01-10 13:52:29');
 
 INSERT INTO `movie` (`id`, `name`, `web`, `original_title`, `duration`, `year`, `synopsis`, `genre_id`, `nationality_id`, `distributor_id`, `director_id`, `age_classification_id`) VALUES
 (1, 'Fast and furious 3', 'https://www.universalpictures.es', 'The Fast and the Furious: Tokyo Drift', 104, 2006, 'Shaun Boswell es un chico rebelde cuya única conexión con el mundo es a través de las carreras ilegales. Cuando la policía le amenaza con encarcelarle, se va a pasar una temporada con su tío, un militar destinado en Japón.', 1, 2, 5, 2, 5),
