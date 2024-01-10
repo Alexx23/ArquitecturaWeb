@@ -16,6 +16,7 @@ import web.practicafinal.controllers.validations.UserUpdateDTO;
 import web.practicafinal.exceptions.SessionException;
 import web.practicafinal.exceptions.ValidateException;
 import web.practicafinal.models.Card;
+import web.practicafinal.models.Payment;
 import web.practicafinal.models.Ticket;
 import web.practicafinal.models.User;
 import web.practicafinal.models.controllers.ModelController;
@@ -73,6 +74,12 @@ public class UserSessionController extends HttpServlet {
         // Si está llamado a /usersession/ticket
         if (parameter.equalsIgnoreCase("ticket")) {
             doGetTicket(request, response);
+            return;
+        }
+        
+        // Si está llamado a /usersession/payment
+        if (parameter.equalsIgnoreCase("payment")) {
+            doGetPayment(request, response);
             return;
         }
         
@@ -358,6 +365,30 @@ public class UserSessionController extends HttpServlet {
         Map<String, Object> mapParameters = new HashMap<>();
         mapParameters.put("user", userSession);
         Response.outputData(response, 200, PaginationHelper.getPaginatedWithFilters(Ticket.class, actualPage, mapParameters), 5);
+    
+    }
+    
+    private void doGetPayment(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        User userSession;
+        try {
+            userSession = Request.getUser(request);
+        } catch (SessionException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;
+        }
+        
+        Map<String, Integer> integers = null;
+        try {
+            integers = Request.validateInteger(request, "page");
+        } catch (ValidateException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;            
+        }
+        int actualPage = integers.get("page") != null ? integers.get("page") : 1;
+        Map<String, Object> mapParameters = new HashMap<>();
+        mapParameters.put("user", userSession);
+        Response.outputData(response, 200, PaginationHelper.getPaginatedWithFilters(Payment.class, actualPage, mapParameters), 5);
     
     }
     

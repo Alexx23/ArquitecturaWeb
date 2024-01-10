@@ -37,6 +37,39 @@ public class PaymentController extends HttpServlet {
         super();
     }
     
+    
+    /*
+    /payment -> Ver lista paginada con todas los pagos
+    */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        //////////////////////
+        // RUTA SOLO PARA ADMINS
+        //////////////////////
+        try {
+            Middleware.adminRoute(request);
+        } catch (SessionException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;
+        } catch (UnauthorizedException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;        
+        }
+        
+        Map<String, Integer> integers = null;
+        try {
+            integers = Request.validateInteger(request, "page");
+        } catch (ValidateException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;            
+        }
+        int actualPage = integers.get("page") != null ? integers.get("page") : 1;
+        // En este caso solicito más profundidad en la respuesta para poder mostrar más información al admin
+        Response.outputData(response, 200, PaginationHelper.getPaginated(Payment.class, actualPage, null), 4);
+        return;
+    }
+    
     /*
     /payment -> Crear un nuevo pago y genera tickets
     */
@@ -176,7 +209,7 @@ public class PaymentController extends HttpServlet {
             ticket.setDepth(requestedTicket.getDepth());
             ticket.setSeat(requestedTicket.getSeat());
             ticket.setCode(CypherUtils.randomString(20));
-            ticket.setCreatedAt(new Date());
+            ticket.setCreatedAt(createdDate);
             ticket.setSession(session);
             ticket.setUser(userSession);
             ticket.setPayment(payment);
