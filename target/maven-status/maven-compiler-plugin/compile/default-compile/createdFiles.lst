@@ -76,6 +76,7 @@ web\practicafinal\controllers\GenreController.class
 web\practicafinal\models\helpers\PaymentHelper.class
 web\practicafinal\controllers\validations\LoginDTO.class
 web\practicafinal\controllers\DistributorController.class
+web\practicafinal\controllers\PriceController$PriceContainer.class
 web\practicafinal\controllers\RoomController.class
 web\practicafinal\models\helpers\UserHelper.class
 web\practicafinal\controllers\validations\ActorUpdateDTO.class
@@ -145,6 +146,7 @@ web\practicafinal\controllers\RequestPasswordController.class
 web\practicafinal\controllers\validations\annotations\ValidSession.class
 web\practicafinal\models\helpers\CardHelper.class
 web\practicafinal\utils\InstanceConverter.class
+web\practicafinal\controllers\PriceController.class
 web\practicafinal\models\Distributor.class
 web\practicafinal\controllers\ActorController.class
 web\practicafinal\models\AgeClassification.class

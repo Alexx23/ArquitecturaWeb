@@ -180,10 +180,9 @@ public class PaymentController extends HttpServlet {
             ticket.setSession(session);
             ticket.setUser(userSession);
             ticket.setPayment(payment);
-            System.out.println("STEP8");
+            
             try {
                 ModelController.getTicket().create(ticket);
-                System.out.println("STEP9");
             } catch (Exception ex) {
                 CustomLogger.errorThrow(RegisterController.class.getName(), ex);
                 Response.outputMessage(response, 500, "Ha ocurrido un error interno.");
