@@ -105,9 +105,9 @@ public class RoomController extends HttpServlet {
         // Validar parámetros de la solicitud
         Map<String, Short> shorts = null;
         try {
-            shorts = Request.validateShort(request, "files", "cols");
+            shorts = Request.validateShort(request, "depth", "seats");
             
-            RoomCreateDTO roomCreateDTO = new RoomCreateDTO(request.getParameter("name"), shorts.get("files"), shorts.get("cols"));
+            RoomCreateDTO roomCreateDTO = new RoomCreateDTO(request.getParameter("name"), shorts.get("depth"), shorts.get("seats"));
 
             Request.validateViolations(roomCreateDTO);
             
@@ -119,8 +119,8 @@ public class RoomController extends HttpServlet {
         // Parámetros validados. Hacer comprobaciones y operaciones correspondientes
         Room room = new Room();
         room.setName(request.getParameter("name"));
-        room.setFiles(shorts.get("files"));
-        room.setCols(shorts.get("cols"));
+        room.setDepth(shorts.get("depth"));
+        room.setSeats(shorts.get("seats"));
 
         try {
             ModelController.getRoom().create(room);
@@ -156,9 +156,9 @@ public class RoomController extends HttpServlet {
         // Validar parámetros de la solicitud
         RoomUpdateDTO roomUpdateDTO = null;
         try {
-            Map<String, Short> shorts = Request.validateShort(request, "files", "cols");
+            Map<String, Short> shorts = Request.validateShort(request, "depth", "seats");
 
-            roomUpdateDTO = new RoomUpdateDTO(request.getParameter("name"), shorts.get("files"), shorts.get("cols"));
+            roomUpdateDTO = new RoomUpdateDTO(request.getParameter("name"), shorts.get("depth"), shorts.get("seats"));
 
             Request.validateViolations(roomUpdateDTO);
             

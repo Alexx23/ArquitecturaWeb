@@ -5,6 +5,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
+import java.util.Random;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -73,6 +74,22 @@ public class CypherUtils {
         byte[] result = cypher.doFinal(encyptedString, cypher.getBlockSize(), encyptedString.length - cypher.getBlockSize());
 
         return new String(result, "UTF-8");
+    }
+    
+
+    public static String randomString(int longitud) {
+        String caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        StringBuilder cadenaGenerada = new StringBuilder();
+
+        Random random = new Random();
+
+        for (int i = 0; i < longitud; i++) {
+            int indice = random.nextInt(caracteres.length());
+            char caracterAleatorio = caracteres.charAt(indice);
+            cadenaGenerada.append(caracterAleatorio);
+        }
+
+        return cadenaGenerada.toString();
     }
     
 }

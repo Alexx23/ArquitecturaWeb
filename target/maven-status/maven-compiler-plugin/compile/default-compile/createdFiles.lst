@@ -17,6 +17,7 @@ web\practicafinal\controllers\validations\annotations\ValidGenre.class
 web\practicafinal\models\helpers\SessionHelper.class
 web\practicafinal\models\Genre.class
 web\practicafinal\controllers\validations\annotations\UniqueUsername$UserValidator.class
+web\practicafinal\controllers\validations\TicketCreateDTO.class
 web\practicafinal\controllers\NationalityController.class
 web\practicafinal\controllers\validations\NationalityCreateDTO.class
 web\practicafinal\controllers\validations\ActorCreateDTO.class

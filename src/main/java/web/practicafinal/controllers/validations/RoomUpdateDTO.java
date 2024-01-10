@@ -13,17 +13,17 @@ public class RoomUpdateDTO {
     private String name;
 
     @Min(value = 1)
-    private Short files;
+    private Short depth;
     
     @Min(value = 1)
-    private Short cols;
+    private Short seats;
     
     public RoomUpdateDTO() {}
 
-    public RoomUpdateDTO(String name, Short files, Short cols) {
+    public RoomUpdateDTO(String name, Short depth, Short seats) {
         this.name = name;
-        this.files = files;
-        this.cols = cols;
+        this.depth = depth;
+        this.seats = seats;
     }
 
 

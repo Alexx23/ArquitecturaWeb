@@ -4,10 +4,8 @@
 CREATE TABLE IF NOT EXISTS `web_practicafinal`.`genre` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL,
-  `genrecol` VARCHAR(45) NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC),
-  UNIQUE INDEX `genrecol_UNIQUE` (`genrecol` ASC))
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC))
 ;
 
 
@@ -115,8 +113,8 @@ CREATE TABLE IF NOT EXISTS `web_practicafinal`.`movie` (
 CREATE TABLE IF NOT EXISTS `web_practicafinal`.`room` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL,
-  `files` SMALLINT UNSIGNED NOT NULL,
-  `cols` SMALLINT UNSIGNED NOT NULL,
+  `depth` SMALLINT UNSIGNED NOT NULL,
+  `seats` SMALLINT UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
   UNIQUE INDEX `name_UNIQUE` (`name` ASC))
@@ -139,9 +137,9 @@ CREATE TABLE IF NOT EXISTS `web_practicafinal`.`actor` (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `web_practicafinal`.`session` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `datetime` DATETIME NOT NULL,
   `movie_id` INT UNSIGNED NOT NULL,
   `room_id` INT UNSIGNED NOT NULL,
-  `datetime` DATETIME NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
   INDEX `fk_sessions_room1_idx` (`room_id` ASC),
@@ -195,21 +193,45 @@ CREATE TABLE IF NOT EXISTS `web_practicafinal`.`user` (
 
 
 -- -----------------------------------------------------
+-- Table `web_practicafinal`.`payment`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `web_practicafinal`.`payment` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `reference` VARCHAR(255) NOT NULL,
+  `amount` INT UNSIGNED NOT NULL,
+  `card_title` VARCHAR(255) NOT NULL,
+  `card_number` BIGINT(16) NOT NULL,
+  `user_id` INT UNSIGNED NOT NULL,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC),
+  INDEX `fk_payments_user1_idx` (`user_id` ASC),
+  CONSTRAINT `fk_payments_user1`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `web_practicafinal`.`user` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+;
+
+
+-- -----------------------------------------------------
 -- Table `web_practicafinal`.`ticket`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `web_practicafinal`.`ticket` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `depth` SMALLINT UNSIGNED NOT NULL,
+  `seat` SMALLINT UNSIGNED NOT NULL,
+  `code` VARCHAR(255) NOT NULL,
   `session_id` INT UNSIGNED NOT NULL,
   `user_id` INT UNSIGNED NOT NULL,
-  `row` SMALLINT UNSIGNED NOT NULL,
-  `col` SMALLINT UNSIGNED NOT NULL,
-  `code` VARCHAR(255) NOT NULL,
+  `payment_id` INT UNSIGNED NOT NULL,
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
   INDEX `fk_ticket_session1_idx` (`session_id` ASC),
   INDEX `fk_ticket_user1_idx` (`user_id` ASC),
   UNIQUE INDEX `code_UNIQUE` (`code` ASC),
+  INDEX `fk_ticket_payment1_idx` (`payment_id` ASC),
   CONSTRAINT `fk_ticket_session1`
     FOREIGN KEY (`session_id`)
     REFERENCES `web_practicafinal`.`session` (`id`)
@@ -218,6 +240,11 @@ CREATE TABLE IF NOT EXISTS `web_practicafinal`.`ticket` (
   CONSTRAINT `fk_ticket_user1`
     FOREIGN KEY (`user_id`)
     REFERENCES `web_practicafinal`.`user` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_ticket_payment1`
+    FOREIGN KEY (`payment_id`)
+    REFERENCES `web_practicafinal`.`payment` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ;
@@ -228,9 +255,9 @@ CREATE TABLE IF NOT EXISTS `web_practicafinal`.`ticket` (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `web_practicafinal`.`comment` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `content` TEXT NOT NULL,
   `user_id` INT UNSIGNED NOT NULL,
   `movie_id` INT UNSIGNED NOT NULL,
-  `content` TEXT NOT NULL,
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
@@ -281,6 +308,7 @@ CREATE TABLE IF NOT EXISTS `web_practicafinal`.`card` (
   `expiration` DATE NOT NULL,
   `cvv` VARCHAR(255) NOT NULL,
   `user_id` INT UNSIGNED NOT NULL,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
   INDEX `fk_card_user1_idx` (`user_id` ASC),

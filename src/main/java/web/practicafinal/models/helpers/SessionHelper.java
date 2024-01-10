@@ -41,19 +41,12 @@ public class SessionHelper {
         return query.getResultList();
     }
     
-    public static List<Session> getByDayAndMovie(Date date, Movie movie) {
+    public static List<Session> getAvailablesByMovie(Movie movie) {
         SessionHelper sessionHelper = new SessionHelper();
         EntityManager em = sessionHelper.getEntityManager();
         
-        Date startDate = DateUtils.truncateTime(date);
-        Calendar c = Calendar.getInstance(); 
-        c.setTime(startDate); 
-        c.add(Calendar.DATE, 1);
-        Date finalDate = c.getTime();
-        
-        TypedQuery<Session> query = em.createQuery("SELECT s FROM Session s WHERE s.datetime >= :startDate AND s.datetime < :finalDate AND s.movie = :movie ORDER BY s.datetime ASC", Session.class); 
-        query.setParameter("startDate", startDate);
-        query.setParameter("finalDate", finalDate);
+        TypedQuery<Session> query = em.createQuery("SELECT s FROM Session s WHERE s.datetime >= :now AND s.movie = :movie ORDER BY s.datetime ASC", Session.class); 
+        query.setParameter("now", new Date());
         query.setParameter("movie", movie);
         
         return query.getResultList();

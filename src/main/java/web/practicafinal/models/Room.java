@@ -29,8 +29,8 @@ import java.util.List;
     @NamedQuery(name = "Room.findAll", query = "SELECT r FROM Room r"),
     @NamedQuery(name = "Room.findById", query = "SELECT r FROM Room r WHERE r.id = :id"),
     @NamedQuery(name = "Room.findByName", query = "SELECT r FROM Room r WHERE r.name = :name"),
-    @NamedQuery(name = "Room.findByFiles", query = "SELECT r FROM Room r WHERE r.files = :files"),
-    @NamedQuery(name = "Room.findByCols", query = "SELECT r FROM Room r WHERE r.cols = :cols")})
+    @NamedQuery(name = "Room.findByDepth", query = "SELECT r FROM Room r WHERE r.depth = :depth"),
+    @NamedQuery(name = "Room.findBySeats", query = "SELECT r FROM Room r WHERE r.seats = :seats")})
 public class Room implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -43,11 +43,11 @@ public class Room implements Serializable {
     @Column(name = "name")
     private String name;
     @Basic(optional = false)
-    @Column(name = "files")
-    private short files;
+    @Column(name = "depth")
+    private short depth;
     @Basic(optional = false)
-    @Column(name = "cols")
-    private short cols;
+    @Column(name = "seats")
+    private short seats;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "room", fetch = FetchType.LAZY)
     private List<Session> sessionList;
 
@@ -58,11 +58,11 @@ public class Room implements Serializable {
         this.id = id;
     }
 
-    public Room(Integer id, String name, short files, short cols) {
+    public Room(Integer id, String name, short depth, short seats) {
         this.id = id;
         this.name = name;
-        this.files = files;
-        this.cols = cols;
+        this.depth = depth;
+        this.seats = seats;
     }
 
     public Integer getId() {
@@ -81,20 +81,20 @@ public class Room implements Serializable {
         this.name = name;
     }
 
-    public short getFiles() {
-        return files;
+    public short getDepth() {
+        return depth;
     }
 
-    public void setFiles(short files) {
-        this.files = files;
+    public void setDepth(short depth) {
+        this.depth = depth;
     }
 
-    public short getCols() {
-        return cols;
+    public short getSeats() {
+        return seats;
     }
 
-    public void setCols(short cols) {
-        this.cols = cols;
+    public void setSeats(short seats) {
+        this.seats = seats;
     }
 
     public List<Session> getSessionList() {

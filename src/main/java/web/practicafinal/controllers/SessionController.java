@@ -1,19 +1,23 @@
 package web.practicafinal.controllers;
 
+import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import web.practicafinal.controllers.validations.SessionCreateDTO;
 import web.practicafinal.controllers.validations.SessionUpdateDTO;
+import web.practicafinal.controllers.validations.TicketCreateDTO;
 import web.practicafinal.exceptions.SessionException;
 import web.practicafinal.exceptions.UnauthorizedException;
 import web.practicafinal.exceptions.ValidateException;
@@ -21,12 +25,14 @@ import web.practicafinal.models.Movie;
 import web.practicafinal.models.Room;
 import web.practicafinal.models.Session;
 import web.practicafinal.models.Ticket;
+import web.practicafinal.models.User;
 import web.practicafinal.models.controllers.ModelController;
 import web.practicafinal.models.controllers.SessionJpaController;
 import web.practicafinal.models.controllers.exceptions.RollbackFailureException;
 import web.practicafinal.models.helpers.PaginationHelper;
 import web.practicafinal.models.helpers.SessionHelper;
 import web.practicafinal.utils.CustomLogger;
+import web.practicafinal.utils.CypherUtils;
 import web.practicafinal.utils.InstanceConverter;
 import web.practicafinal.utils.Middleware;
 import web.practicafinal.utils.Request;
@@ -63,22 +69,24 @@ public class SessionController extends HttpServlet {
                 return;
             }
             
-            if (dates.get("date") == null) {
-                Response.outputMessage(response, 400, "El campo date es obligatorio");
+            if (dates.get("date") != null) {                
+                List<Session> sessionList = SessionHelper.getByDay(dates.get("date"));
+                Response.outputData(response, 200, sessionList);
                 return;
             }
             
-            String movieId = request.getParameter("movie_id");
-
-            List<Session> sessionList = new ArrayList<>();
-            if (movieId != null) {
+            if (integers.get("movie_id") != null) {
                 Movie movie = ModelController.getMovie().findMovie(integers.get("movie_id"));
-                sessionList = SessionHelper.getByDayAndMovie(dates.get("date"), movie);
-            } else {
-                sessionList = SessionHelper.getByDay(dates.get("date"));
+                if (movie == null) {
+                    Response.outputMessage(response, 400, "No se ha encontrado la película solicitada.");
+                    return;
+                }
+                List<Session> sessionList = SessionHelper.getAvailablesByMovie(movie);
+                Response.outputData(response, 200, sessionList, 4);
+                return;
             }
             
-            Response.outputData(response, 200, sessionList);
+            Response.outputData(response, 400, "El campo date o movie_id son obligatorio");
             return;
         }
 
@@ -98,8 +106,26 @@ public class SessionController extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
         String sessionIdStr = Request.getURLValue(request);
+        
         if (sessionIdStr == null) {
+            
+            //////////////////////
+            // RUTA SOLO PARA ADMINS
+            //////////////////////
+            
+            try {
+                Middleware.adminRoute(request);
+            } catch (SessionException ex) {
+                Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+                return;
+            } catch (UnauthorizedException ex) {
+                Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+                return;        
+            }
+            
+            
             // Validar parámetros de la solicitud
             Map<String, Integer> integers = null;
             Map<String, Date> dates = null;
@@ -136,46 +162,16 @@ public class SessionController extends HttpServlet {
                 Response.outputMessage(response, 500, "Ha ocurrido un error interno.");
                 return;
             }
-        } else {
-            int sessionId = Integer.parseInt(sessionIdStr);
-            //obtenemos la sesion con id
-            Session session = ModelController.getSession().findSession(sessionId);
-            if (session == null) {
-                Response.outputMessage(response, 404, "No se ha encontrado la sesión solicitada");
-                return;
-            }
-            //comprobamos que el asiento no este ocupado, si lo esta salimos
-            List<Ticket> tickets = session.getTicketList();
-            Short row = Short.valueOf(request.getParameter("row"));
-            Short col = Short.valueOf(request.getParameter("col"));
-            String code = request.getParameter("code");
-
-            for (int i = 0; i < tickets.size(); i++) {
-                if (tickets.get(i).getRow() == row && tickets.get(i).getCol() == col) {
-                    Response.outputMessage(response, 500, "El asiento elegido ya esta ocupado");//no se que tipo de error deberia ser
-                    return;
-                }
-            }
-            //creamos el ticket
-            Ticket ticket = new Ticket();
-            ticket.setRow(row);
-            ticket.setCol(col);
-            ticket.setCode(code);
-            Calendar calendar = Calendar.getInstance();
-            Date fechaActual = calendar.getTime();
-            ticket.setCreatedAt(fechaActual);
-            tickets.add(ticket);
-            session.setTicketList(tickets);
-            try {
-                ModelController.getSession().edit(session);
-                Response.outputData(response, 200, session);
-                return;
-            } catch (Exception ex) {
-                CustomLogger.errorThrow(RegisterController.class.getName(), ex);
-                Response.outputMessage(response, 500, "Ha ocurrido un error interno.");
-                return;
-            }
+        } 
+        
+        // Si está llamado a /session/{id}/ticket
+        if (request.getRequestURI().endsWith("/ticket")) {
+            doPostTicket(request, response);
+            return;
         }
+        
+        Response.outputMessage(response, 404, "Ruta no válida");
+        
     }
 
     /*
@@ -183,6 +179,10 @@ public class SessionController extends HttpServlet {
      */
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        //////////////////////
+        // RUTA SOLO PARA ADMINS
+        //////////////////////
         
         try {
             Middleware.adminRoute(request);
@@ -243,6 +243,10 @@ public class SessionController extends HttpServlet {
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
+        //////////////////////
+        // RUTA SOLO PARA ADMINS
+        //////////////////////
+        
         try {
             Middleware.adminRoute(request);
         } catch (SessionException ex) {
@@ -278,6 +282,110 @@ public class SessionController extends HttpServlet {
             CustomLogger.errorThrow(SessionController.class.getName(), ex);
             Response.outputMessage(response, 500, "No se ha podido eliminar la sesión");
         }
+
+    }
+    
+    
+    private void doPostTicket(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        //////////////////////
+        // RUTA PARA CLIENTES
+        //////////////////////
+        
+        try {
+            Middleware.authRoute(request);
+        } catch (SessionException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;
+        }
+        
+        User userSession;
+        try {
+            userSession = Request.getUser(request);
+        } catch (SessionException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;
+        }
+        
+        String sessionIdStr = Request.getURLValue(request);
+        
+        if (sessionIdStr == null) {
+            Response.outputMessage(response, 400, "No se ha seleccionado ninguna sesión.");
+            return;
+        }
+        
+        int sessionId = Integer.parseInt(sessionIdStr);
+        
+        Session session = ModelController.getSession().findSession(sessionId);
+        if (session == null) {
+            Response.outputMessage(response, 404, "No se ha encontrado la sesión solicitada");
+            return;
+        }
+        
+        List<TicketCreateDTO> requestedTickets = new ArrayList<TicketCreateDTO>();
+        // La solicitud consiste en una lista de tickets
+        // Leer las ids de los actores y guardarlas en una lista de enteros
+        boolean continueReading = true;
+        int count = 0;
+        while (continueReading) {
+            String parameterStr = request.getParameter(""+count);
+            if (parameterStr != null) {
+                if (parameterStr.split(":").length != 2) continueReading = false;
+                String depthStr = parameterStr.split(":")[0];
+                String seatStr = parameterStr.split(":")[1];
+                TicketCreateDTO ticket = new TicketCreateDTO(Short.parseShort(depthStr), Short.parseShort(seatStr));
+                requestedTickets.add(ticket);
+                
+                count++;
+            } else {
+                continueReading = false;
+            }
+        }
+        
+        if (requestedTickets.isEmpty()) {
+            Response.outputMessage(response, 400, "No se ha solicitado la compra de ningún ticket.");
+            return;
+        }
+        
+        // Comprobar que los tickets no tienen butacas ya ocupadas
+        boolean occupied = false; // Se contempla desde un inicio que no hay sitios ocupados
+        List<Ticket> sessionTickets =  session.getTicketList();
+        for (Ticket sessionTicket : sessionTickets) {
+            for (TicketCreateDTO requestedTicket : requestedTickets) {
+                if (occupied) break;
+                if (sessionTicket.getDepth() == requestedTicket.getDepth()
+                        && sessionTicket.getSeat() == requestedTicket.getSeat()) {
+                    occupied = true;
+                }
+            }
+        }
+        
+        if (occupied) {
+            Response.outputMessage(response, 400, "Alguna de las butacas seleccionadas se encuentra ocupada por otra persona.");
+            return;
+        }
+
+        // Crear los tickets
+        for (TicketCreateDTO requestedTicket : requestedTickets) {
+            Ticket ticket = new Ticket();
+            ticket.setDepth(requestedTicket.getDepth());
+            ticket.setSeat(requestedTicket.getSeat());
+            ticket.setCode(CypherUtils.randomString(20));
+            ticket.setCreatedAt(new Date());
+            ticket.setSession(session);
+            ticket.setUser(userSession);
+            
+            try {
+                ModelController.getTicket().create(ticket);
+            } catch (Exception ex) {
+                CustomLogger.errorThrow(RegisterController.class.getName(), ex);
+                Response.outputMessage(response, 500, "Ha ocurrido un error interno.");
+                return;
+            }
+        }
+        
+        Response.outputData(response, 200, "Tickets creados correctamente.");
+        return;
 
     }
 

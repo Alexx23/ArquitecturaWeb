@@ -18,18 +18,18 @@ public class RoomCreateDTO {
 
     @NotNull
     @Min(value = 1)
-    private Short files;
+    private Short depth;
     
     @NotNull
     @Min(value = 1)
-    private Short cols;
+    private Short seats;
     
     public RoomCreateDTO() {}
 
-    public RoomCreateDTO(String name, Short files, Short cols) {
+    public RoomCreateDTO(String name, Short depth, Short seats) {
         this.name = name;
-        this.files = files;
-        this.cols = cols;
+        this.depth = depth;
+        this.seats = seats;
     }
 
 

@@ -312,7 +312,7 @@ public class MovieController extends HttpServlet {
         int movieId = Integer.parseInt(movieIdStr);
         
         List<Integer> numbers = new ArrayList<Integer>();
-        
+        // La solicitud consiste en una lista de enteros
         // Leer las ids de los actores y guardarlas en una lista de enteros
         boolean continueReading = true;
         int count = 0;

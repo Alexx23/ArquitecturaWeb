@@ -30,8 +30,8 @@ import java.util.Date;
 @NamedQueries({
     @NamedQuery(name = "Ticket.findAll", query = "SELECT t FROM Ticket t"),
     @NamedQuery(name = "Ticket.findById", query = "SELECT t FROM Ticket t WHERE t.id = :id"),
-    @NamedQuery(name = "Ticket.findByRow", query = "SELECT t FROM Ticket t WHERE t.row = :row"),
-    @NamedQuery(name = "Ticket.findByCol", query = "SELECT t FROM Ticket t WHERE t.col = :col"),
+    @NamedQuery(name = "Ticket.findByDepth", query = "SELECT t FROM Ticket t WHERE t.depth = :depth"),
+    @NamedQuery(name = "Ticket.findBySeat", query = "SELECT t FROM Ticket t WHERE t.seat = :seat"),
     @NamedQuery(name = "Ticket.findByCode", query = "SELECT t FROM Ticket t WHERE t.code = :code"),
     @NamedQuery(name = "Ticket.findByCreatedAt", query = "SELECT t FROM Ticket t WHERE t.createdAt = :createdAt")})
 public class Ticket implements Serializable {
@@ -43,11 +43,11 @@ public class Ticket implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
-    @Column(name = "row")
-    private short row;
+    @Column(name = "depth")
+    private short depth;
     @Basic(optional = false)
-    @Column(name = "col")
-    private short col;
+    @Column(name = "seat")
+    private short seat;
     @Basic(optional = false)
     @Column(name = "code")
     private String code;
@@ -69,10 +69,10 @@ public class Ticket implements Serializable {
         this.id = id;
     }
 
-    public Ticket(Integer id, short row, short col, String code, Date createdAt) {
+    public Ticket(Integer id, short depth, short seat, String code, Date createdAt) {
         this.id = id;
-        this.row = row;
-        this.col = col;
+        this.depth = depth;
+        this.seat = seat;
         this.code = code;
         this.createdAt = createdAt;
     }
@@ -85,20 +85,20 @@ public class Ticket implements Serializable {
         this.id = id;
     }
 
-    public short getRow() {
-        return row;
+    public short getDepth() {
+        return depth;
     }
 
-    public void setRow(short row) {
-        this.row = row;
+    public void setDepth(short depth) {
+        this.depth = depth;
     }
 
-    public short getCol() {
-        return col;
+    public short getSeat() {
+        return seat;
     }
 
-    public void setCol(short col) {
-        this.col = col;
+    public void setSeat(short seat) {
+        this.seat = seat;
     }
 
     public String getCode() {
