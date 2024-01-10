@@ -68,10 +68,10 @@ INSERT INTO `room` (`id`, `name`, `depth`, `seats`) VALUES
 (6, 'F', 8, 10);
 
 INSERT INTO `user` (`id`, `name`, `username`, `email`, `password`, `role_id`, `created_at`) VALUES
-(1, 'admin', 'admin', 'admin@admin.com', 'admin', 2, '2024-01-10 13:36:38'),
-(2, 'Javier', 'javi', 'javier@gmail.com', 'javi', 1, '2024-01-10 13:45:50'),
-(3, 'Alejandro', 'alex', 'alejandro@gmail.com', 'alex', 1, '2024-01-10 13:45:51'),
-(4, 'Carlos', 'carlos', 'carlos@gmail.com', 'carlos', 1, '2024-01-10 13:45:52');
+(1, 'Admin', 'admin', 'admin@admin.com', '$2a$10$AhjGV6Oh3Lh7E54iIUrFS.OoepOxJ7yQ28cJRsh0baHYJ8T0AGTc.', 2, '2024-01-10 16:40:56'),
+(2, 'javier', 'javi', 'javier@gmail.com', '$2a$10$.rvT.Cw3MZ6ejyaamSfy9uCvWS3XyQlVe7CJTGxGvIp3YwxAj.QVS', 1, '2024-01-10 17:28:00'),
+(3, 'Alejandro', 'alex', 'alejandro@gmail.com', '$2a$10$fjGjDVtM7JNOTeV1txP5MOrmMdTFKSfKewYsnrsUC4hWaINaHXZ1G', 1, '2024-01-10 17:30:28'),
+(4, 'Carlos', 'carlos', 'carlos@gmail.com', '$2a$10$oTVjsQO8nw4o0MR/c9k./.OywnEjMc9na.l7KTJdRfSjGrGEHcDrG', 1, '2024-01-10 17:30:53'),
 
 INSERT INTO `card` (`id`, `title`, `card_number`, `expiration`, `cvv`, `user_id`, `created_at`) VALUES
 (1, 'Javier Lombardía Castro', 4322321053405962, '2026-01-16', '123', 2, '2024-01-10 13:52:27'),
@@ -79,11 +79,11 @@ INSERT INTO `card` (`id`, `title`, `card_number`, `expiration`, `cvv`, `user_id`
 (3, 'Carlos González Rubio', 0987654321653085, '2025-11-14', '123', 4, '2024-01-10 13:52:29');
 
 INSERT INTO `movie` (`id`, `name`, `web`, `original_title`, `duration`, `year`, `synopsis`, `genre_id`, `nationality_id`, `distributor_id`, `director_id`, `age_classification_id`) VALUES
-(1, 'Fast and furious 3', 'www.universalpictures.es', 'The Fast and the Furious: Tokyo Drift', 104, 2006, 'Shaun Boswell es un chico rebelde cuya única conexión con el mundo es a través de las carreras ilegales. Cuando la policía le amenaza con encarcelarle, se va a pasar una temporada con su tío, un militar destinado en Japón.', 1, 2, 5, 2, 5),
+(1, 'Fast and furious 3', 'https://www.universalpictures.es', 'The Fast and the Furious: Tokyo Drift', 104, 2006, 'Shaun Boswell es un chico rebelde cuya única conexión con el mundo es a través de las carreras ilegales. Cuando la policía le amenaza con encarcelarle, se va a pasar una temporada con su tío, un militar destinado en Japón.', 1, 2, 5, 2, 5),
 (2, 'Frankenweenie', 'https://www.dreamworks.com/', 'Frankenweenie', 97, 2012, 'El experimento científico que lleva a cabo el pequeño Víctor Frankenstein para hacer resucitar su adorado Sparky le obligará a afrontar terribles situaciones cuyas de imprevisibles consecuencias.', 2, 2, 4, 4, 2),
-(3, 'Django Desencadenado', 'www.sonypictures.es', 'Django Unchained', 165, 2012, 'Un antiguo esclavo une sus fuerzas con un cazador de recompensas alemán que lo libera y ayuda a cazar a los criminales más buscados del Sur, todo ello con la esperanza de encontrar a su esposa perdida hace mucho tiempo.', 1, 2, 3, 1, 4),
-(4, 'Indiana Jones Raiders of the Lost Ark', 'www.paramountpictures.com', 'Raiders of the Lost Ark', 140, 1981, 'En 1936 el arqueólogo estadounidense Indiana Jones viaja a un templo peruano para recuperar una estatuilla, sin embargo es interceptado por René Belloq, un colega con quien tiene una rivalidad. Tras una persecución por integrantes de una tribu salvaje, Belloq se hace con la estatuilla y Jones escapa a bordo de un hidroavión. De vuelta en Estados Unidos, un par de agentes de inteligencia del ejército le informan a Jones que, al interceptar unos telegramas nazis, se percataron de que las fuerzas alemanas se encuentran excavando en algún sitio de Tanis, Egipto. En uno de los telegramas se menciona a Abner Ravenwood, el antiguo mentor de Indiana. Con esta información, el aventurero deduce que los nazis buscan el Arca de la Alianza para volverse «invencibles», así que acepta involucrarse en una misión para impedirlo.', 1, 2, 1, 3, 3),
-(5, 'Sombras Tenebrosas', 'warnerbros.es', 'Dark Shadows', 140, 2012, 'Barnabas, un playboy impenitente, un hombre rico y poderoso comete el error de romperle el corazón a Angelique Bouchard. Ella, que es una bruja, lo condena a un destino peor que la muerte: lo convierte en vampiro y lo entierra vivo.', 6, 9, 4, 4, 5);
+(3, 'Django Desencadenado', 'https://www.sonypictures.es', 'Django Unchained', 165, 2012, 'Un antiguo esclavo une sus fuerzas con un cazador de recompensas alemán que lo libera y ayuda a cazar a los criminales más buscados del Sur, todo ello con la esperanza de encontrar a su esposa perdida hace mucho tiempo.', 1, 2, 3, 1, 4),
+(4, 'Indiana Jones Raiders of the Lost Ark', 'https://www.paramountpictures.com', 'Raiders of the Lost Ark', 140, 1981, 'En 1936 el arqueólogo estadounidense Indiana Jones viaja a un templo peruano para recuperar una estatuilla, sin embargo es interceptado por René Belloq, un colega con quien tiene una rivalidad. Tras una persecución por integrantes de una tribu salvaje, Belloq se hace con la estatuilla y Jones escapa a bordo de un hidroavión. De vuelta en Estados Unidos, un par de agentes de inteligencia del ejército le informan a Jones que, al interceptar unos telegramas nazis, se percataron de que las fuerzas alemanas se encuentran excavando en algún sitio de Tanis, Egipto. En uno de los telegramas se menciona a Abner Ravenwood, el antiguo mentor de Indiana. Con esta información, el aventurero deduce que los nazis buscan el Arca de la Alianza para volverse «invencibles», así que acepta involucrarse en una misión para impedirlo.', 1, 2, 1, 3, 3),
+(5, 'Sombras Tenebrosas', 'https://warnerbros.es', 'Dark Shadows', 140, 2012, 'Barnabas, un playboy impenitente, un hombre rico y poderoso comete el error de romperle el corazón a Angelique Bouchard. Ella, que es una bruja, lo condena a un destino peor que la muerte: lo convierte en vampiro y lo entierra vivo.', 6, 9, 4, 4, 5);
 
 INSERT INTO `movie_actor` (`movie_id`, `actor_id`) VALUES
 (1, 1),
@@ -118,4 +118,6 @@ INSERT INTO `session` (`id`, `datetime`, `movie_id`, `room_id`) VALUES
 INSERT INTO `payment` (`id`, `reference`, `amount`, `card_title`, `card_number`, `user_id`, `created_at`) VALUES 
 (1, 'a1', '5', 'Javier Lombardía Castro', '4322321053405962', '2', current_timestamp());
 
+INSERT INTO `ticket` (`id`, `depth`, `seat`, `code`, `session_id`, `user_id`, `payment_id`, `created_at`) VALUES 
+(1, '1', '2', 'asdfa', '1', '2', '1', current_timestamp());
 
