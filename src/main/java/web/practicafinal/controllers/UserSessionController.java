@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import web.practicafinal.controllers.validations.CardCreateDTO;
@@ -15,9 +16,11 @@ import web.practicafinal.controllers.validations.UserUpdateDTO;
 import web.practicafinal.exceptions.SessionException;
 import web.practicafinal.exceptions.ValidateException;
 import web.practicafinal.models.Card;
+import web.practicafinal.models.Ticket;
 import web.practicafinal.models.User;
 import web.practicafinal.models.controllers.ModelController;
 import web.practicafinal.models.helpers.CardHelper;
+import web.practicafinal.models.helpers.PaginationHelper;
 import web.practicafinal.models.helpers.UserHelper;
 import web.practicafinal.utils.CustomLogger;
 import web.practicafinal.utils.DateUtils;
@@ -49,17 +52,34 @@ public class UserSessionController extends HttpServlet {
             return;
         }
         
-        User userSession;
-        try {
-            userSession = Request.getUser(request);
-        } catch (SessionException ex) {
-            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+        String parameter = Request.getURLValue(request);
+        
+        // Si está llamado a /usersession
+        if (parameter == null) {
+        
+            User userSession;
+            try {
+                userSession = Request.getUser(request);
+            } catch (SessionException ex) {
+                Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+                return;
+            }
+
+            Response.outputData(response, 200, userSession);
+            return;
+        
+        }
+        
+        // Si está llamado a /usersession/ticket
+        if (parameter.equalsIgnoreCase("ticket")) {
+            doGetTicket(request, response);
             return;
         }
-
-        Response.outputData(response, 200, userSession);
         
+        Response.outputMessage(response, 404, "Ruta no válida.");
     }
+    
+    
     
     /*
     /usersession/password -> Crear nueva contraseña para el usuario que tiene la sesión iniciada
@@ -314,6 +334,31 @@ public class UserSessionController extends HttpServlet {
             Response.outputMessage(response, 500, "Ha ocurrido un error interno.");
             return;
         }
+    }
+    
+    
+    private void doGetTicket(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        User userSession;
+        try {
+            userSession = Request.getUser(request);
+        } catch (SessionException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;
+        }
+        
+        Map<String, Integer> integers = null;
+        try {
+            integers = Request.validateInteger(request, "page");
+        } catch (ValidateException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;            
+        }
+        int actualPage = integers.get("page") != null ? integers.get("page") : 1;
+        Map<String, Object> mapParameters = new HashMap<>();
+        mapParameters.put("user", userSession);
+        Response.outputData(response, 200, PaginationHelper.getPaginatedWithFilters(Ticket.class, actualPage, mapParameters), 5);
+    
     }
     
 }

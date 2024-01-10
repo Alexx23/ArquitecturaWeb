@@ -76,6 +76,7 @@ public class MovieController extends HttpServlet {
         
         String movieIdStr = Request.getURLValue(request);
         
+        // Si está llamado a /movie
         if (movieIdStr == null) {
             Map<String, Integer> integers = null;
             try {
@@ -89,16 +90,20 @@ public class MovieController extends HttpServlet {
             return;
         }
         
+        // Si está llamado a /movie/available
         if (movieIdStr.equalsIgnoreCase("available")) {
             doGetMovieAvailable(request, response);
             return;
         }
         
+        // Si está llamado a /movie/all
         if (movieIdStr.equalsIgnoreCase("all")) {
             List<Movie> movies = ModelController.getMovie().findMovieEntities();
             Response.outputData(response, 200, movies);
             return;
         }
+        
+        // Si está llamado a /movie/{id}
         
         int movieId = Integer.parseInt(movieIdStr);
         Movie movie = ModelController.getMovie().findMovie(movieId);
