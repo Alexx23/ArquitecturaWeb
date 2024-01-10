@@ -21,6 +21,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -49,9 +50,10 @@ public class Payment implements Serializable {
     @Basic(optional = false)
     @Column(name = "reference")
     private String reference;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Basic(optional = false)
     @Column(name = "amount")
-    private int amount;
+    private BigDecimal amount;
     @Basic(optional = false)
     @Column(name = "card_title")
     private String cardTitle;
@@ -75,7 +77,7 @@ public class Payment implements Serializable {
         this.id = id;
     }
 
-    public Payment(Integer id, String reference, int amount, String cardTitle, long cardNumber, Date createdAt) {
+    public Payment(Integer id, String reference, BigDecimal amount, String cardTitle, long cardNumber, Date createdAt) {
         this.id = id;
         this.reference = reference;
         this.amount = amount;
@@ -100,11 +102,11 @@ public class Payment implements Serializable {
         this.reference = reference;
     }
 
-    public int getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 

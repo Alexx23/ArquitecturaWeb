@@ -44,9 +44,9 @@ public class PriceController extends HttpServlet {
     private class PriceContainer {
         private int id;
         private String name;
-        private int amount;
+        private float amount;
         
-        public PriceContainer(int id, String name, int amount) {
+        public PriceContainer(int id, String name, float amount) {
             this.id = id;
             this.name = name;
             this.amount = amount;
@@ -60,7 +60,7 @@ public class PriceController extends HttpServlet {
             return name;
         }
 
-        public int getAmount() {
+        public float getAmount() {
             return amount;
         }
 

@@ -1,4 +1,10 @@
 -- -----------------------------------------------------
+-- Schema web_practicafinal
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `web_practicafinal` DEFAULT CHARACTER SET utf8 ;
+USE `web_practicafinal` ;
+
+-- -----------------------------------------------------
 -- Table `web_practicafinal`.`genre`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `web_practicafinal`.`genre` (
@@ -198,7 +204,7 @@ CREATE TABLE IF NOT EXISTS `web_practicafinal`.`user` (
 CREATE TABLE IF NOT EXISTS `web_practicafinal`.`payment` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `reference` VARCHAR(255) NOT NULL,
-  `amount` INT UNSIGNED NOT NULL,
+  `amount` DECIMAL(8,2) UNSIGNED NOT NULL,
   `card_title` VARCHAR(255) NOT NULL,
   `card_number` BIGINT(16) NOT NULL,
   `user_id` INT UNSIGNED NOT NULL,
@@ -206,6 +212,7 @@ CREATE TABLE IF NOT EXISTS `web_practicafinal`.`payment` (
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
   INDEX `fk_payments_user1_idx` (`user_id` ASC),
+  UNIQUE INDEX `reference_UNIQUE` (`reference` ASC),
   CONSTRAINT `fk_payments_user1`
     FOREIGN KEY (`user_id`)
     REFERENCES `web_practicafinal`.`user` (`id`)

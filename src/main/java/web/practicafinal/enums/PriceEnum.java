@@ -1,16 +1,18 @@
 package web.practicafinal.enums;
 
+import java.math.BigDecimal;
+
 /**
  *
  * @author Alex
  */
 public enum PriceEnum {
-    NORMAL(1, 7);
+    NORMAL(1, 6.9f);
     
     private final int id;
-    private final int price;
+    private final float price;
 
-    private PriceEnum(int id, int price) {
+    private PriceEnum(int id, float price) {
         this.id = id;
         this.price = price;
     }
@@ -19,7 +21,7 @@ public enum PriceEnum {
         return id;
     }
     
-    public int getPrice() {
+    public float getPrice() {
         return price;
     }
 }
