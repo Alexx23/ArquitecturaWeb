@@ -13,6 +13,7 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import jakarta.transaction.UserTransaction;
 import java.util.List;
+import web.practicafinal.models.Payment;
 import web.practicafinal.models.Session;
 import web.practicafinal.models.Ticket;
 import web.practicafinal.models.User;
@@ -41,6 +42,11 @@ public class TicketJpaController implements Serializable {
         try {
             utx.begin();
             em = getEntityManager();
+            Payment payment = ticket.getPayment();
+            if (payment != null) {
+                payment = em.getReference(payment.getClass(), payment.getId());
+                ticket.setPayment(payment);
+            }
             Session session = ticket.getSession();
             if (session != null) {
                 session = em.getReference(session.getClass(), session.getId());
@@ -52,6 +58,10 @@ public class TicketJpaController implements Serializable {
                 ticket.setUser(user);
             }
             em.persist(ticket);
+            if (payment != null) {
+                payment.getTicketList().add(ticket);
+                payment = em.merge(payment);
+            }
             if (session != null) {
                 session.getTicketList().add(ticket);
                 session = em.merge(session);
@@ -81,10 +91,16 @@ public class TicketJpaController implements Serializable {
             utx.begin();
             em = getEntityManager();
             Ticket persistentTicket = em.find(Ticket.class, ticket.getId());
+            Payment paymentOld = persistentTicket.getPayment();
+            Payment paymentNew = ticket.getPayment();
             Session sessionOld = persistentTicket.getSession();
             Session sessionNew = ticket.getSession();
             User userOld = persistentTicket.getUser();
             User userNew = ticket.getUser();
+            if (paymentNew != null) {
+                paymentNew = em.getReference(paymentNew.getClass(), paymentNew.getId());
+                ticket.setPayment(paymentNew);
+            }
             if (sessionNew != null) {
                 sessionNew = em.getReference(sessionNew.getClass(), sessionNew.getId());
                 ticket.setSession(sessionNew);
@@ -94,6 +110,14 @@ public class TicketJpaController implements Serializable {
                 ticket.setUser(userNew);
             }
             ticket = em.merge(ticket);
+            if (paymentOld != null && !paymentOld.equals(paymentNew)) {
+                paymentOld.getTicketList().remove(ticket);
+                paymentOld = em.merge(paymentOld);
+            }
+            if (paymentNew != null && !paymentNew.equals(paymentOld)) {
+                paymentNew.getTicketList().add(ticket);
+                paymentNew = em.merge(paymentNew);
+            }
             if (sessionOld != null && !sessionOld.equals(sessionNew)) {
                 sessionOld.getTicketList().remove(ticket);
                 sessionOld = em.merge(sessionOld);
@@ -143,6 +167,11 @@ public class TicketJpaController implements Serializable {
                 ticket.getId();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The ticket with id " + id + " no longer exists.", enfe);
+            }
+            Payment payment = ticket.getPayment();
+            if (payment != null) {
+                payment.getTicketList().remove(ticket);
+                payment = em.merge(payment);
             }
             Session session = ticket.getSession();
             if (session != null) {

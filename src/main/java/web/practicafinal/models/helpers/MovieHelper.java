@@ -22,15 +22,9 @@ public class MovieHelper {
         MovieHelper movieHelper = new MovieHelper();
         EntityManager em = movieHelper.getEntityManager();
         
-        TypedQuery<Movie> query = null;
-        try {
-        query = em.createQuery("SELECT DISTINCT m FROM Movie m JOIN m.sessionList s WHERE s.datetime > :now AND m.name LIKE :name", Movie.class); 
+        TypedQuery<Movie> query = em.createQuery("SELECT DISTINCT m FROM Movie m JOIN m.sessionList s WHERE s.datetime > :now AND m.name LIKE :name", Movie.class); 
         query.setParameter("now", new Date());
         query.setParameter("name", "%"+name+"%");
-        } catch (Exception ex) 
-        {
-        ex.printStackTrace();
-        }
         
         return query;
     }

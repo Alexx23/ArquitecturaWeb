@@ -10,6 +10,7 @@ web\practicafinal\utils\Response.class
 web\practicafinal\controllers\validations\DistributorCreateDTO.class
 web\practicafinal\controllers\validations\DirectorCreateDTO.class
 web\practicafinal\controllers\validations\SessionUpdateDTO.class
+web\practicafinal\models\Payment.class
 web\practicafinal\controllers\validations\annotations\ValidEmail.class
 web\practicafinal\controllers\validations\annotations\UniqueRoomName$RoomValidator.class
 web\practicafinal\models\controllers\RoomJpaController.class
@@ -36,6 +37,7 @@ web\practicafinal\models\controllers\exceptions\PreexistingEntityException.class
 web\practicafinal\controllers\validations\annotations\ValidDirector.class
 web\practicafinal\enums\RoleEnum.class
 web\practicafinal\models\controllers\TicketJpaController.class
+web\practicafinal\controllers\validations\annotations\ValidSession$SessionValidator.class
 web\practicafinal\controllers\SessionController.class
 web\practicafinal\models\controllers\GenreJpaController.class
 web\practicafinal\controllers\validations\annotations\ValidGenre$GenreValidator.class
@@ -47,11 +49,14 @@ web\practicafinal\controllers\validations\annotations\UniqueEmail$UserValidator.
 web\practicafinal\controllers\validations\DirectorUpdateDTO.class
 web\practicafinal\models\controllers\CardJpaController.class
 web\practicafinal\controllers\validations\DistributorUpdateDTO.class
+web\practicafinal\models\controllers\PaymentJpaController.class
 web\practicafinal\models\controllers\MovieJpaController.class
 web\practicafinal\models\controllers\SessionJpaController.class
 web\practicafinal\models\controllers\ModelController.class
 web\practicafinal\controllers\validations\annotations\ValidDistributor$DistributorValidator.class
 web\practicafinal\utils\JsonUtils.class
+web\practicafinal\controllers\validations\TicketItemCreateDTO.class
+web\practicafinal\enums\PriceEnum.class
 web\practicafinal\controllers\validations\annotations\ValidRoom$RoomValidator.class
 web\practicafinal\filters\CORSFilter.class
 web\practicafinal\models\helpers\ActorHelper.class
@@ -68,6 +73,7 @@ web\practicafinal\controllers\validations\PasswordCreateDTO.class
 web\practicafinal\utils\Response$FilterMixin.class
 web\practicafinal\controllers\validations\annotations\ValidMovie.class
 web\practicafinal\controllers\GenreController.class
+web\practicafinal\models\helpers\PaymentHelper.class
 web\practicafinal\controllers\validations\LoginDTO.class
 web\practicafinal\controllers\DistributorController.class
 web\practicafinal\controllers\RoomController.class
@@ -86,14 +92,17 @@ web\practicafinal\controllers\validations\annotations\ValidMovie$MovieValidator.
 web\practicafinal\models\controllers\NationalityJpaController.class
 web\practicafinal\controllers\validations\SessionCreateDTO.class
 web\practicafinal\controllers\validations\annotations\ValidUsername.class
+web\practicafinal\controllers\validations\annotations\ValidWeb$MovieValidator.class
 web\practicafinal\controllers\validations\annotations\ValidNationality$NationalityValidator.class
 web\practicafinal\models\controllers\exceptions\IllegalOrphanException.class
 web\practicafinal\models\seeders\AgeClassificationSeeder.class
 web\practicafinal\models\Actor.class
 web\practicafinal\models\helpers\NationalityHelper.class
+web\practicafinal\controllers\validations\annotations\ValidCard.class
 web\practicafinal\controllers\validations\annotations\UniqueNationalityName$NationalityValidator.class
 web\practicafinal\utils\CustomLogger.class
 web\practicafinal\exceptions\UnauthorizedException.class
+web\practicafinal\controllers\validations\annotations\ValidCard$CardValidator.class
 web\practicafinal\models\controllers\RoleJpaController.class
 web\practicafinal\controllers\validations\annotations\UniqueGenreName.class
 web\practicafinal\controllers\validations\annotations\ValidNationality.class
@@ -109,6 +118,7 @@ web\practicafinal\models\Session.class
 web\practicafinal\utils\JsonUtils$LocalDateTimeSerializer.class
 web\practicafinal\models\controllers\CommentJpaController.class
 web\practicafinal\models\controllers\exceptions\RollbackFailureException.class
+web\practicafinal\controllers\PaymentController.class
 web\practicafinal\utils\Response$DeepFieldFilter.class
 web\practicafinal\controllers\validations\GenreCreateDTO.class
 web\practicafinal\utils\CypherUtils.class
@@ -124,6 +134,7 @@ web\practicafinal\models\controllers\AgeClassificationJpaController.class
 web\practicafinal\utils\JsonUtils$LocalDateTimeDeserializer.class
 web\practicafinal\models\helpers\PaginationHelper$DataListContainer.class
 web\practicafinal\models\Ticket.class
+web\practicafinal\controllers\validations\annotations\ValidWeb.class
 web\practicafinal\controllers\validations\MovieCreateDTO.class
 web\practicafinal\controllers\validations\RoomCreateDTO.class
 web\practicafinal\models\controllers\DistributorJpaController.class
@@ -131,6 +142,7 @@ web\practicafinal\controllers\validations\annotations\ValidDistributor.class
 web\practicafinal\controllers\validations\annotations\UniqueGenreName$GenreValidator.class
 web\practicafinal\controllers\CommentController.class
 web\practicafinal\controllers\RequestPasswordController.class
+web\practicafinal\controllers\validations\annotations\ValidSession.class
 web\practicafinal\models\helpers\CardHelper.class
 web\practicafinal\utils\InstanceConverter.class
 web\practicafinal\models\Distributor.class

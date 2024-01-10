@@ -6,14 +6,26 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
+import web.practicafinal.controllers.validations.TicketCreateDTO;
+import web.practicafinal.controllers.validations.TicketItemCreateDTO;
+import web.practicafinal.enums.PriceEnum;
 import web.practicafinal.exceptions.SessionException;
 import web.practicafinal.exceptions.UnauthorizedException;
 import web.practicafinal.exceptions.ValidateException;
+import web.practicafinal.models.Card;
+import web.practicafinal.models.Payment;
+import web.practicafinal.models.Session;
 import web.practicafinal.models.Ticket;
+import web.practicafinal.models.User;
 import web.practicafinal.models.controllers.ModelController;
 import web.practicafinal.models.helpers.PaginationHelper;
+import web.practicafinal.models.helpers.PaymentHelper;
 import web.practicafinal.utils.CustomLogger;
+import web.practicafinal.utils.CypherUtils;
 import web.practicafinal.utils.Middleware;
 import web.practicafinal.utils.Request;
 import web.practicafinal.utils.Response;
@@ -69,5 +81,6 @@ public class TicketController extends HttpServlet {
         Response.outputData(response, 200, ticket);
         
     }
+   
    
 }

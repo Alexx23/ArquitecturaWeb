@@ -24,6 +24,7 @@ public class ModelController {
     private static GenreJpaController genre = null;
     private static MovieJpaController movie = null;
     private static NationalityJpaController nationality = null;
+    private static PaymentJpaController payment = null;
     private static RoleJpaController role = null;
     private static RoomJpaController room = null;
     private static SessionJpaController session = null;
@@ -43,6 +44,7 @@ public class ModelController {
         genre = new GenreJpaController(utx, emf);
         movie = new MovieJpaController(utx, emf);
         nationality = new NationalityJpaController(utx, emf);
+        payment = new PaymentJpaController(utx, emf);
         role = new RoleJpaController(utx, emf);
         room = new RoomJpaController(utx, emf);
         session = new SessionJpaController(utx, emf);
@@ -92,6 +94,10 @@ public class ModelController {
     
     public static NationalityJpaController getNationality() {
         return nationality;
+    }
+    
+    public static PaymentJpaController getPayment() {
+        return payment;
     }
     
     public static RoleJpaController getRole() {
