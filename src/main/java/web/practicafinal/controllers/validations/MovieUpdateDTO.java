@@ -7,6 +7,7 @@ import web.practicafinal.controllers.validations.annotations.ValidDirector;
 import web.practicafinal.controllers.validations.annotations.ValidDistributor;
 import web.practicafinal.controllers.validations.annotations.ValidGenre;
 import web.practicafinal.controllers.validations.annotations.ValidNationality;
+import web.practicafinal.controllers.validations.annotations.ValidWeb;
 
 /**
  *
@@ -18,6 +19,7 @@ public class MovieUpdateDTO {
     private String name;
     
     @Size(min = 1, max = 255)
+    @ValidWeb
     private String web;
     
     @Size(min = 1, max = 255)
