@@ -26,9 +26,9 @@ public class PaymentHelper {
         PaymentHelper paymentHelper = new PaymentHelper();
         EntityManager em = paymentHelper.getEntityManager();
         
-        TypedQuery<Payment> query = em.createQuery("SELECT p FROM Payment p WHERE p.user = :user AND p.createdAt = :name", Payment.class); 
+        TypedQuery<Payment> query = em.createQuery("SELECT p FROM Payment p WHERE p.user = :user AND p.createdAt = :date", Payment.class); 
         query.setParameter("user", user);
-        query.setParameter("createdAt", date);
+        query.setParameter("date", date);
         List<Payment> results = query.getResultList();
         if (results.size() <= 0) return null;
         return results.get(0);

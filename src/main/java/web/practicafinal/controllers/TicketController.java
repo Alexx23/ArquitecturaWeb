@@ -68,6 +68,7 @@ public class TicketController extends HttpServlet {
                 return;            
             }
             int actualPage = integers.get("page") != null ? integers.get("page") : 1;
+            // En este caso solicito más profundidad en la respuesta para poder mostrar más información al admin
             Response.outputData(response, 200, PaginationHelper.getPaginated(Ticket.class, actualPage, null), 5);
             return;
         }

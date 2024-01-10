@@ -82,7 +82,7 @@ public class SessionController extends HttpServlet {
                     return;
                 }
                 List<Session> sessionList = SessionHelper.getAvailablesByMovie(movie);
-                Response.outputData(response, 200, sessionList, 4);
+                Response.outputData(response, 200, sessionList, 3);
                 return;
             }
             

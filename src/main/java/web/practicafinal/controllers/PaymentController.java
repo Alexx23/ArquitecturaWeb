@@ -90,14 +90,8 @@ public class PaymentController extends HttpServlet {
         // Leer las ids de los actores y guardarlas en una lista de enteros
         boolean continueReading = true;
         int count = 0;
-        
-        String seatsParameter = request.getParameter("seats");
-        if (seatsParameter == null) {
-            Response.outputMessage(response, 400, "No se han solicitado butacas.");
-            return;
-        }
         while (continueReading) {
-            String parameterStr = request.getParameter(""+count);
+            String parameterStr = request.getParameter("seats["+count+"]");
             if (parameterStr != null) {
                 if (parameterStr.split(":").length != 2) continueReading = false;
                 String depthStr = parameterStr.split(":")[0];
@@ -117,7 +111,7 @@ public class PaymentController extends HttpServlet {
         }
         
         Session session = ModelController.getSession().findSession(integers.get("session_id"));
-        
+
         // Comprobar que los tickets no tienen butacas ya ocupadas
         boolean occupied = false; // Se contempla desde un inicio que no hay sitios ocupados
         List<Ticket> sessionTickets =  session.getTicketList();
@@ -134,6 +128,7 @@ public class PaymentController extends HttpServlet {
             Response.outputMessage(response, 400, "Alguna de las butacas seleccionadas se encuentra ocupada por otra persona.");
             return;
         }
+
         
         // CREAR PAGO
         ///////////////
@@ -141,7 +136,7 @@ public class PaymentController extends HttpServlet {
         // Procesar precios
         int unitPrice = PriceEnum.NORMAL.getPrice();
         int totalPrice = requestedTickets.size() * unitPrice;
-        
+
         // Comprobar tarjeta
         Card card = ModelController.getCard().findCard(integers.get("card_id"));
         if (card.getUser().getId() != userSession.getId()) {
@@ -158,7 +153,7 @@ public class PaymentController extends HttpServlet {
         payment.setReference(CypherUtils.randomString(20));
         payment.setUser(userSession);
         payment.setCreatedAt(createdDate);
-        
+
         try {
             ModelController.getPayment().create(payment);
         } catch (Exception ex) {
@@ -166,7 +161,7 @@ public class PaymentController extends HttpServlet {
             Response.outputMessage(response, 500, "Ha ocurrido un error interno.");
             return;
         }
-        
+
         
         // CREAR TICKETS
         ///////////////
@@ -185,9 +180,10 @@ public class PaymentController extends HttpServlet {
             ticket.setSession(session);
             ticket.setUser(userSession);
             ticket.setPayment(payment);
-            
+            System.out.println("STEP8");
             try {
                 ModelController.getTicket().create(ticket);
+                System.out.println("STEP9");
             } catch (Exception ex) {
                 CustomLogger.errorThrow(RegisterController.class.getName(), ex);
                 Response.outputMessage(response, 500, "Ha ocurrido un error interno.");
