@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,6 +25,7 @@ import web.practicafinal.models.User;
 import web.practicafinal.models.controllers.ModelController;
 import web.practicafinal.models.helpers.PaginationHelper;
 import web.practicafinal.models.helpers.PaymentHelper;
+import web.practicafinal.models.helpers.TicketHelper;
 import web.practicafinal.utils.CustomLogger;
 import web.practicafinal.utils.CypherUtils;
 import web.practicafinal.utils.Middleware;
@@ -167,8 +169,8 @@ public class PaymentController extends HttpServlet {
         ///////////////
         
         // Procesar precios
-        int unitPrice = PriceEnum.NORMAL.getPrice();
-        int totalPrice = requestedTickets.size() * unitPrice;
+        float unitPrice = PriceEnum.NORMAL.getPrice();
+        float totalPrice = requestedTickets.size() * unitPrice;
 
         // Comprobar tarjeta
         Card card = ModelController.getCard().findCard(integers.get("card_id"));
@@ -177,13 +179,17 @@ public class PaymentController extends HttpServlet {
             return;
         }
         
+        // Guardar fecha de creación
         Date createdDate = new Date();
         
+        // Obtener referencia única para el pago
+        String uniqueReference = PaymentHelper.generateUniqueReference();
+        
         Payment payment = new Payment();
-        payment.setAmount(totalPrice);
+        payment.setAmount(new BigDecimal(totalPrice));
         payment.setCardTitle(card.getTitle());
         payment.setCardNumber(card.getCardNumber());
-        payment.setReference(CypherUtils.randomString(20));
+        payment.setReference(uniqueReference);
         payment.setUser(userSession);
         payment.setCreatedAt(createdDate);
 
@@ -205,10 +211,14 @@ public class PaymentController extends HttpServlet {
         
         // Crear los tickets
         for (TicketItemCreateDTO requestedTicket : requestedTickets) {
+            
+            // Obtener código único para el ticket
+            String uniqueCode = TicketHelper.generateUniqueCode();
+            
             Ticket ticket = new Ticket();
             ticket.setDepth(requestedTicket.getDepth());
             ticket.setSeat(requestedTicket.getSeat());
-            ticket.setCode(CypherUtils.randomString(20));
+            ticket.setCode(uniqueCode);
             ticket.setCreatedAt(createdDate);
             ticket.setSession(session);
             ticket.setUser(userSession);

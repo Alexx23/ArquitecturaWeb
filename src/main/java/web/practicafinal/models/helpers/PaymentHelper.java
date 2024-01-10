@@ -11,6 +11,7 @@ import java.util.List;
 import web.practicafinal.models.Payment;
 import web.practicafinal.models.User;
 import web.practicafinal.models.controllers.ModelController;
+import web.practicafinal.utils.CypherUtils;
 
 /**
  *
@@ -32,6 +33,28 @@ public class PaymentHelper {
         List<Payment> results = query.getResultList();
         if (results.size() <= 0) return null;
         return results.get(0);
+    }
+    
+    public static Payment getPaymentByReference(String reference) {
+        PaymentHelper paymentHelper = new PaymentHelper();
+        EntityManager em = paymentHelper.getEntityManager();
+        
+        TypedQuery<Payment> query = em.createNamedQuery("Payment.findByReference", Payment.class); 
+        query.setParameter("reference", reference);
+        List<Payment> results = query.getResultList();
+        if (results.size() <= 0) return null;
+        return results.get(0);
+    }
+    
+    public static String generateUniqueReference() {
+        String reference = "";
+        boolean finish = false;
+        while (!finish) {
+            reference = CypherUtils.randomString(20);
+            Payment paymentExists = getPaymentByReference(reference);
+            if (paymentExists == null) finish = true;
+        }
+        return reference;
     }
     
 }
