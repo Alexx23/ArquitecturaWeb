@@ -60,12 +60,12 @@ INSERT INTO `genre` (`id`, `name`) VALUES
 (6, 'Terror');
 
 INSERT INTO `room` (`id`, `name`, `depth`, `seats`) VALUES
-(1, 'A', 15, 13),
-(2, 'B', 17, 20),
-(3, 'C', 12, 18),
-(4, 'D', 14, 20),
-(5, 'E', 16, 22),
-(6, 'F', 8, 10);
+(1, 'Sala A', 15, 13),
+(2, 'Sala B', 17, 20),
+(3, 'Sala C', 12, 18),
+(4, 'Sala D', 14, 20),
+(5, 'Sala E', 16, 22),
+(6, 'Sala F', 8, 10);
 
 INSERT INTO `user` (`id`, `name`, `username`, `email`, `password`, `role_id`, `created_at`) VALUES
 (1, 'Admin', 'admin', 'admin@admin.com', '$2a$10$AhjGV6Oh3Lh7E54iIUrFS.OoepOxJ7yQ28cJRsh0baHYJ8T0AGTc.', 2, '2024-01-10 16:40:56'),
@@ -116,8 +116,8 @@ INSERT INTO `session` (`id`, `datetime`, `movie_id`, `room_id`) VALUES
 (5, '2024-03-21 21:30:00', 5, 6);
 
 INSERT INTO `payment` (`id`, `reference`, `amount`, `card_title`, `card_number`, `user_id`, `created_at`) VALUES 
-(1, 'a1', '5', 'Javier Lombardía Castro', '4322321053405962', '2', current_timestamp());
+(1, 'zgxTUzNyMm5gVTgHDfxe', '5', 'Javier Lombardía Castro', '4322321053405962', '2', current_timestamp());
 
 INSERT INTO `ticket` (`id`, `depth`, `seat`, `code`, `session_id`, `user_id`, `payment_id`, `created_at`) VALUES 
-(1, '1', '2', 'asdfa', '1', '2', '1', current_timestamp());
+(1, '1', '2', 'BQnLdZRSiQVkBuU5J22X', '1', '2', '1', current_timestamp());
 
