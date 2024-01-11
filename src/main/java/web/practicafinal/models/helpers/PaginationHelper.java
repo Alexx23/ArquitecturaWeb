@@ -154,7 +154,7 @@ public class PaginationHelper {
         return new DataListContainer(data, actualPage, pageSize, totalSize);
     }
     
-    private static class DataListContainer {
+    public static class DataListContainer {
         private Object data;
         private int actualPage;
         private int pageSize;

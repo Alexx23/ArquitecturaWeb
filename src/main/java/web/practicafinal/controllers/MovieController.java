@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -30,6 +31,7 @@ import web.practicafinal.models.Distributor;
 import web.practicafinal.models.Genre;
 import web.practicafinal.models.Movie;
 import web.practicafinal.models.Nationality;
+import web.practicafinal.models.Room;
 import web.practicafinal.models.controllers.AgeClassificationJpaController;
 import web.practicafinal.models.controllers.DirectorJpaController;
 import web.practicafinal.models.controllers.DistributorJpaController;
@@ -41,6 +43,7 @@ import web.practicafinal.models.controllers.exceptions.RollbackFailureException;
 import web.practicafinal.models.helpers.ActorHelper;
 import web.practicafinal.models.helpers.MovieHelper;
 import web.practicafinal.models.helpers.PaginationHelper;
+import web.practicafinal.models.helpers.PaginationHelper.DataListContainer;
 import web.practicafinal.utils.CustomLogger;
 import web.practicafinal.utils.InstanceConverter;
 import web.practicafinal.utils.Middleware;
@@ -78,6 +81,20 @@ public class MovieController extends HttpServlet {
         
         // Si está llamado a /movie
         if (movieIdStr == null) {
+            
+            // Si está solicitando listar peliculas por algún valor
+            if (request.getParameter("genre") != null || request.getParameter("nationality") != null
+                    || request.getParameter("distributor") != null || request.getParameter("director") != null
+                    || request.getParameter("ageClassification") != null || request.getParameter("room") != null
+                    || request.getParameter("actorList") != null) {
+                
+                doGetFilteredMovies(request, response);
+                return;
+                
+            }
+            
+            // Si solo se pide listar películas
+            
             Map<String, Integer> integers = null;
             try {
                 integers = Request.validateInteger(request, "page");
@@ -86,7 +103,8 @@ public class MovieController extends HttpServlet {
                 return;            
             }
             int actualPage = integers.get("page") != null ? integers.get("page") : 1;
-            Response.outputData(response, 200, PaginationHelper.getPaginated(Movie.class, actualPage, request.getParameter("name")), 4);
+            // Se necesita profundidad de 5 para dar las ids de los actores
+            Response.outputData(response, 200, PaginationHelper.getPaginated(Movie.class, actualPage, request.getParameter("name")), 5);
             return;
         }
         
@@ -404,4 +422,111 @@ public class MovieController extends HttpServlet {
     
     }
     
+    
+    private void doGetFilteredMovies(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        Map<String, Integer> integers = null;
+        try {
+            integers = Request.validateInteger(request, "page", "value");
+        } catch (ValidateException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;            
+        }
+        int actualPage = integers.get("page") != null ? integers.get("page") : 1;
+        
+        
+        Map<String, List<Object>> mapParameters = new HashMap<>();
+        for (Entry<String,String[]> entry : request.getParameterMap().entrySet()){
+            List<Object> keyValues = new ArrayList<>();
+            String valueRaw = request.getParameter(entry.getKey());
+            String[] valuePartsStr = valueRaw.split(",");
+            for (String valueStr : valuePartsStr) {
+                // Si la key está presente pero no hay ningún valor, se omite
+                if (valueStr.equalsIgnoreCase("")) continue;
+                
+                // Si hay valor, se obtiene el número entero
+                int value = Integer.parseInt(valueStr);
+                switch (entry.getKey()) {
+                    case "genre":
+                        Genre genre = ModelController.getGenre().findGenre(value);
+                        if (genre == null) {
+                            Response.outputMessage(response, 400, "Algún género indicado no existe");
+                            return;
+                        }
+                        keyValues.add(genre);
+                        break;
+                    case "nationality":
+                        Nationality nationality = ModelController.getNationality().findNationality(value);
+                        if (nationality == null) {
+                            Response.outputMessage(response, 400, "Algún género indicado no existe");
+                            return;
+                        }
+                        keyValues.add(nationality);
+                        break;
+                    case "distributor":
+                        Distributor distributor = ModelController.getDistributor().findDistributor(value);
+                        if (distributor == null) {
+                            Response.outputMessage(response, 400, "Algún distribuidor indicado no existe");
+                            return;
+                        }
+                        keyValues.add(distributor);
+                        break;
+                    case "director":
+                        Director director = ModelController.getDirector().findDirector(value);
+                        if (director == null) {
+                            Response.outputMessage(response, 400, "Algún director indicado no existe");
+                            return;
+                        }
+                        keyValues.add(director);
+                        break;
+                    case "ageClassification":
+                        AgeClassification ageClassification = ModelController.getAgeClassification().findAgeClassification(value);
+                        if (ageClassification == null) {
+                            Response.outputMessage(response, 400, "Alguna clasificación de edad indicada no existe");
+                            return;
+                        }
+                        keyValues.add(ageClassification);
+                        break;
+                    case "room":
+                        Room room = ModelController.getRoom().findRoom(value);
+                        if (room == null) {
+                            Response.outputMessage(response, 400, "Alguna sala indicado no existe");
+                            return;
+                        }
+                        keyValues.add(room);
+                        break;
+                    case "actorList":
+                        Actor actor = ModelController.getActor().findActor(value);
+                        if (actor == null) {
+                            Response.outputMessage(response, 400, "Algún actor indicado no existe");
+                            return;
+                        }
+                        keyValues.add(actor);
+                        break;
+                }
+                
+            }
+            
+            if (!keyValues.isEmpty()) {
+                mapParameters.put(entry.getKey(), keyValues);
+            }
+
+        }
+        
+        // Si no hay filtros
+        if (mapParameters.isEmpty()) {
+            // Devolver primera página normal
+            Response.outputData(response, 200, PaginationHelper.getPaginated(Movie.class, 1, null), 5);
+            return;
+        }
+        
+        DataListContainer dlc = new DataListContainer(
+                MovieHelper.getFilteredMoviesTQ(actualPage, mapParameters), 
+                actualPage, 
+                20, 
+                MovieHelper.getFilteredMoviesTC(actualPage, mapParameters));
+
+        Response.outputData(response, 200, dlc, 5);
+        
+    }
 }
