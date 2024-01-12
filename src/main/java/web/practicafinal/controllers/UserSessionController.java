@@ -39,12 +39,14 @@ public class UserSessionController extends HttpServlet {
 
     /*
     /usersession -> Ver usuario que tiene la sesión iniciada
+    /usersession/ticket -> Obtiene lista paginada de tickets del usuario con la sesión iniciada
+    /usersession/payment -> Obtiene lista paginada de pagos del usuario con la sesión iniciada
     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
         //////////////////////
-        // RUTA SOLO CLIENTES
+        // RUTA PARA CLIENTES
         //////////////////////
         try {
             Middleware.authRoute(request);
@@ -96,7 +98,7 @@ public class UserSessionController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
         //////////////////////
-        // RUTA SOLO CLIENTES
+        // RUTA PARA CLIENTES
         //////////////////////
         try {
             Middleware.authRoute(request);
@@ -127,7 +129,7 @@ public class UserSessionController extends HttpServlet {
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
         //////////////////////
-        // RUTA SOLO CLIENTES
+        // RUTA PARA CLIENTES
         //////////////////////
         try {
             Middleware.authRoute(request);

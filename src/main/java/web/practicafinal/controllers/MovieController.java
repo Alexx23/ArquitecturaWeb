@@ -195,6 +195,7 @@ public class MovieController extends HttpServlet {
     
     /*
     /movie -> Crear pelicula
+    /movie/{id}/actors -> Insertar actores en una película
     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -436,17 +437,7 @@ public class MovieController extends HttpServlet {
     
     
     private void doGetComment(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
-        //////////////////////
-        // RUTA PARA CLIENTES
-        //////////////////////
-        try {
-            Middleware.authRoute(request);
-        } catch (SessionException ex) {
-            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
-            return;
-        }
-        
+
         
         String movieIdStr = Request.getURLValue(request);
         if (movieIdStr == null) {
