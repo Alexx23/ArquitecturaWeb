@@ -30,6 +30,7 @@ D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\models\controllers\CardJpaController.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\controllers\validations\annotations\ValidEmail.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\filters\CORSFilter.java
+D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\controllers\FavoriteController.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\controllers\validations\annotations\UniqueEmail.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\controllers\CommentController.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\models\controllers\NationalityJpaController.java
@@ -51,6 +52,7 @@ D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\controllers\PriceController.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\models\helpers\DistributorHelper.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\controllers\validations\RequestPasswordDTO.java
+D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\models\Favorite.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\enums\RoleEnum.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\controllers\validations\NationalityUpdateDTO.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\models\helpers\MovieHelper.java
@@ -79,6 +81,7 @@ D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\controllers\DirectorController.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\controllers\validations\annotations\ValidUsername.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\exceptions\SessionException.java
+D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\models\helpers\FavoriteHelper.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\utils\DateUtils.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\controllers\RoomController.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\controllers\validations\annotations\ValidRoom.java
@@ -96,10 +99,12 @@ D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\utils\CypherUtils.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\controllers\validations\SessionCreateDTO.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\controllers\validations\DistributorUpdateDTO.java
+D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\models\controllers\FavoriteJpaController.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\models\controllers\ActorJpaController.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\controllers\validations\annotations\ValidGenre.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\utils\Response.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\listeners\CustomServletContextListener.java
+D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\controllers\validations\FavoriteDTO.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\controllers\validations\annotations\ValidDistributor.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\models\seeders\RoleSeeder.java
 D:\Usuarios\Alex\Documentos\NetBeansProjects\WEB-PracticaFinal\src\main\java\web\practicafinal\controllers\RegisterController.java

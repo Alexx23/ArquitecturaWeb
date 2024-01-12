@@ -54,7 +54,7 @@ INSERT INTO `distributor` (`id`, `name`) VALUES
 INSERT INTO `genre` (`id`, `name`) VALUES
 (1, 'Acción'),
 (2, 'Animación'),
-(3, 'Ciencia Ficción.'),
+(3, 'Ciencia Ficción'),
 (4, 'Drama'),
 (5, 'Fantasía'),
 (6, 'Terror');
@@ -71,7 +71,7 @@ INSERT INTO `user` (`id`, `name`, `username`, `email`, `password`, `role_id`, `c
 (1, 'Admin', 'admin', 'admin@admin.com', '$2a$10$AhjGV6Oh3Lh7E54iIUrFS.OoepOxJ7yQ28cJRsh0baHYJ8T0AGTc.', 2, '2024-01-10 16:40:56'),
 (2, 'javier', 'javi', 'javier@gmail.com', '$2a$10$.rvT.Cw3MZ6ejyaamSfy9uCvWS3XyQlVe7CJTGxGvIp3YwxAj.QVS', 1, '2024-01-10 17:28:00'),
 (3, 'Alejandro', 'alex', 'alejandro@gmail.com', '$2a$10$fjGjDVtM7JNOTeV1txP5MOrmMdTFKSfKewYsnrsUC4hWaINaHXZ1G', 1, '2024-01-10 17:30:28'),
-(4, 'Carlos', 'carlos', 'carlos@gmail.com', '$2a$10$oTVjsQO8nw4o0MR/c9k./.OywnEjMc9na.l7KTJdRfSjGrGEHcDrG', 1, '2024-01-10 17:30:53'),
+(4, 'Carlos', 'carlos', 'carlos@gmail.com', '$2a$10$oTVjsQO8nw4o0MR/c9k./.OywnEjMc9na.l7KTJdRfSjGrGEHcDrG', 1, '2024-01-10 17:30:53');
 
 INSERT INTO `card` (`id`, `title`, `card_number`, `expiration`, `cvv`, `user_id`, `created_at`) VALUES
 (1, 'Javier Lombardía Castro', 4322321053405962, '2026-01-16', 'uyh9tMHN9uceJ71Q0g1hNv3VXJ6EBVxdTtEa/tW3XZQ=', 2, '2024-01-10 13:52:27'),
@@ -109,14 +109,49 @@ INSERT INTO `movie_actor` (`movie_id`, `actor_id`) VALUES
 (5, 21);
 
 INSERT INTO `session` (`id`, `datetime`, `movie_id`, `room_id`) VALUES
-(1, '2024-03-13 17:30:00', 1, 1),
-(2, '2024-03-15 18:00:00', 2, 2),
-(3, '2024-03-11 19:30:00', 3, 3),
-(4, '2024-03-18 20:00:00', 4, 4),
-(5, '2024-03-21 21:30:00', 5, 6);
+(1, '2024-02-01 14:30:00', 1, 1),
+(2, '2024-02-01 16:30:00', 1, 2),
+(3, '2024-02-01 18:30:00', 1, 3),
+(4, '2024-02-01 20:30:00', 1, 4),
+(5, '2024-02-01 22:30:00', 1, 5),
+(6, '2024-02-02 15:00:00', 1, 1),
+(7, '2024-02-02 17:00:00', 1, 2),
+(8, '2024-02-02 19:00:00', 1, 3),
+(9, '2024-02-02 21:00:00', 1, 4),
+(10, '2024-02-02 23:00:00', 1, 5),
+(11, '2024-02-01 14:30:00', 2, 1),
+(12, '2024-02-01 16:30:00', 2, 2),
+(13, '2024-02-01 18:30:00', 2, 3),
+(14, '2024-02-01 20:30:00', 2, 4),
+(15, '2024-02-01 22:30:00', 2, 5),
+(16, '2024-02-02 15:00:00', 2, 1),
+(17, '2024-02-02 17:00:00', 2, 2),
+(18, '2024-02-02 19:00:00', 2, 3),
+(19, '2024-02-02 21:00:00', 2, 4),
+(20, '2024-02-02 23:00:00', 2, 5),
+(21, '2024-02-01 14:30:00', 3, 1),
+(22, '2024-02-01 16:30:00', 3, 2),
+(23, '2024-02-01 18:30:00', 3, 3),
+(24, '2024-02-01 20:30:00', 3, 4),
+(25, '2024-02-01 22:30:00', 3, 5),
+(26, '2024-02-02 15:00:00', 3, 1),
+(27, '2024-02-02 17:00:00', 3, 2),
+(28, '2024-02-02 19:00:00', 3, 3),
+(29, '2024-02-02 21:00:00', 3, 4),
+(30, '2024-02-02 23:00:00', 3, 5),
+(31, '2024-02-01 14:30:00', 5, 1),
+(32, '2024-02-01 16:30:00', 5, 2),
+(33, '2024-02-01 18:30:00', 5, 3),
+(34, '2024-02-01 20:30:00', 5, 4),
+(35, '2024-02-01 22:30:00', 5, 5),
+(36, '2024-02-02 15:00:00', 5, 1),
+(37, '2024-02-02 17:00:00', 5, 2),
+(38, '2024-02-02 19:00:00', 5, 3),
+(39, '2024-02-02 21:00:00', 5, 4),
+(40, '2024-02-02 23:00:00', 5, 5);
 
 INSERT INTO `payment` (`id`, `reference`, `amount`, `card_title`, `card_number`, `user_id`, `created_at`) VALUES 
-(1, 'zgxTUzNyMm5gVTgHDfxe', '5', 'Javier Lombardía Castro', '4322321053405962', '2', current_timestamp());
+(1, 'zgxTUzNyMm5gVTgHDfxe', '5', 'Javier Lombardía Castro', '4322321053405962', 2, current_timestamp());
 
 INSERT INTO `ticket` (`id`, `depth`, `seat`, `code`, `session_id`, `user_id`, `payment_id`, `created_at`) VALUES 
 (1, '1', '2', 'BQnLdZRSiQVkBuU5J22X', '1', '2', '1', current_timestamp());

@@ -1,8 +1,3 @@
--- -----------------------------------------------------
--- Schema web_practicafinal
--- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `web_practicafinal` DEFAULT CHARACTER SET utf8 ;
-USE `web_practicafinal` ;
 
 -- -----------------------------------------------------
 -- Table `web_practicafinal`.`genre`
@@ -325,3 +320,29 @@ CREATE TABLE IF NOT EXISTS `web_practicafinal`.`card` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ;
+
+
+-- -----------------------------------------------------
+-- Table `web_practicafinal`.`favorite`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `web_practicafinal`.`favorite` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_id` INT UNSIGNED NOT NULL,
+  `movie_id` INT UNSIGNED NOT NULL,
+  `created_at` DATETIME NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC),
+  INDEX `fk_favorite_user1_idx` (`user_id` ASC),
+  INDEX `fk_favorite_movie1_idx` (`movie_id` ASC),
+  CONSTRAINT `fk_favorite_user1`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `web_practicafinal`.`user` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_favorite_movie1`
+    FOREIGN KEY (`movie_id`)
+    REFERENCES `web_practicafinal`.`movie` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+;
+

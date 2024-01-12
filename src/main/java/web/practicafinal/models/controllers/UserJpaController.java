@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import web.practicafinal.models.Comment;
 import web.practicafinal.models.Payment;
+import web.practicafinal.models.Favorite;
 import web.practicafinal.models.Card;
 import web.practicafinal.models.User;
 import web.practicafinal.models.controllers.exceptions.IllegalOrphanException;
@@ -51,6 +52,9 @@ public class UserJpaController implements Serializable {
         if (user.getPaymentList() == null) {
             user.setPaymentList(new ArrayList<Payment>());
         }
+        if (user.getFavoriteList() == null) {
+            user.setFavoriteList(new ArrayList<Favorite>());
+        }
         if (user.getCardList() == null) {
             user.setCardList(new ArrayList<Card>());
         }
@@ -81,6 +85,12 @@ public class UserJpaController implements Serializable {
                 attachedPaymentList.add(paymentListPaymentToAttach);
             }
             user.setPaymentList(attachedPaymentList);
+            List<Favorite> attachedFavoriteList = new ArrayList<Favorite>();
+            for (Favorite favoriteListFavoriteToAttach : user.getFavoriteList()) {
+                favoriteListFavoriteToAttach = em.getReference(favoriteListFavoriteToAttach.getClass(), favoriteListFavoriteToAttach.getId());
+                attachedFavoriteList.add(favoriteListFavoriteToAttach);
+            }
+            user.setFavoriteList(attachedFavoriteList);
             List<Card> attachedCardList = new ArrayList<Card>();
             for (Card cardListCardToAttach : user.getCardList()) {
                 cardListCardToAttach = em.getReference(cardListCardToAttach.getClass(), cardListCardToAttach.getId());
@@ -117,6 +127,15 @@ public class UserJpaController implements Serializable {
                 if (oldUserOfPaymentListPayment != null) {
                     oldUserOfPaymentListPayment.getPaymentList().remove(paymentListPayment);
                     oldUserOfPaymentListPayment = em.merge(oldUserOfPaymentListPayment);
+                }
+            }
+            for (Favorite favoriteListFavorite : user.getFavoriteList()) {
+                User oldUserOfFavoriteListFavorite = favoriteListFavorite.getUser();
+                favoriteListFavorite.setUser(user);
+                favoriteListFavorite = em.merge(favoriteListFavorite);
+                if (oldUserOfFavoriteListFavorite != null) {
+                    oldUserOfFavoriteListFavorite.getFavoriteList().remove(favoriteListFavorite);
+                    oldUserOfFavoriteListFavorite = em.merge(oldUserOfFavoriteListFavorite);
                 }
             }
             for (Card cardListCard : user.getCardList()) {
@@ -157,6 +176,8 @@ public class UserJpaController implements Serializable {
             List<Comment> commentListNew = user.getCommentList();
             List<Payment> paymentListOld = persistentUser.getPaymentList();
             List<Payment> paymentListNew = user.getPaymentList();
+            List<Favorite> favoriteListOld = persistentUser.getFavoriteList();
+            List<Favorite> favoriteListNew = user.getFavoriteList();
             List<Card> cardListOld = persistentUser.getCardList();
             List<Card> cardListNew = user.getCardList();
             List<String> illegalOrphanMessages = null;
@@ -182,6 +203,14 @@ public class UserJpaController implements Serializable {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
                     illegalOrphanMessages.add("You must retain Payment " + paymentListOldPayment + " since its user field is not nullable.");
+                }
+            }
+            for (Favorite favoriteListOldFavorite : favoriteListOld) {
+                if (!favoriteListNew.contains(favoriteListOldFavorite)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain Favorite " + favoriteListOldFavorite + " since its user field is not nullable.");
                 }
             }
             for (Card cardListOldCard : cardListOld) {
@@ -220,6 +249,13 @@ public class UserJpaController implements Serializable {
             }
             paymentListNew = attachedPaymentListNew;
             user.setPaymentList(paymentListNew);
+            List<Favorite> attachedFavoriteListNew = new ArrayList<Favorite>();
+            for (Favorite favoriteListNewFavoriteToAttach : favoriteListNew) {
+                favoriteListNewFavoriteToAttach = em.getReference(favoriteListNewFavoriteToAttach.getClass(), favoriteListNewFavoriteToAttach.getId());
+                attachedFavoriteListNew.add(favoriteListNewFavoriteToAttach);
+            }
+            favoriteListNew = attachedFavoriteListNew;
+            user.setFavoriteList(favoriteListNew);
             List<Card> attachedCardListNew = new ArrayList<Card>();
             for (Card cardListNewCardToAttach : cardListNew) {
                 cardListNewCardToAttach = em.getReference(cardListNewCardToAttach.getClass(), cardListNewCardToAttach.getId());
@@ -266,6 +302,17 @@ public class UserJpaController implements Serializable {
                     if (oldUserOfPaymentListNewPayment != null && !oldUserOfPaymentListNewPayment.equals(user)) {
                         oldUserOfPaymentListNewPayment.getPaymentList().remove(paymentListNewPayment);
                         oldUserOfPaymentListNewPayment = em.merge(oldUserOfPaymentListNewPayment);
+                    }
+                }
+            }
+            for (Favorite favoriteListNewFavorite : favoriteListNew) {
+                if (!favoriteListOld.contains(favoriteListNewFavorite)) {
+                    User oldUserOfFavoriteListNewFavorite = favoriteListNewFavorite.getUser();
+                    favoriteListNewFavorite.setUser(user);
+                    favoriteListNewFavorite = em.merge(favoriteListNewFavorite);
+                    if (oldUserOfFavoriteListNewFavorite != null && !oldUserOfFavoriteListNewFavorite.equals(user)) {
+                        oldUserOfFavoriteListNewFavorite.getFavoriteList().remove(favoriteListNewFavorite);
+                        oldUserOfFavoriteListNewFavorite = em.merge(oldUserOfFavoriteListNewFavorite);
                     }
                 }
             }
@@ -335,6 +382,13 @@ public class UserJpaController implements Serializable {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
                 illegalOrphanMessages.add("This User (" + user + ") cannot be destroyed since the Payment " + paymentListOrphanCheckPayment + " in its paymentList field has a non-nullable user field.");
+            }
+            List<Favorite> favoriteListOrphanCheck = user.getFavoriteList();
+            for (Favorite favoriteListOrphanCheckFavorite : favoriteListOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This User (" + user + ") cannot be destroyed since the Favorite " + favoriteListOrphanCheckFavorite + " in its favoriteList field has a non-nullable user field.");
             }
             List<Card> cardListOrphanCheck = user.getCardList();
             for (Card cardListOrphanCheckCard : cardListOrphanCheck) {

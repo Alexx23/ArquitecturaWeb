@@ -23,7 +23,7 @@ public class PaymentHelper {
         return ModelController.getEMF().createEntityManager();
     }
     
-    public static Payment getPayment(User user, Date date) {
+    /*public static Payment getPayment(User user, Date date) {
         PaymentHelper paymentHelper = new PaymentHelper();
         EntityManager em = paymentHelper.getEntityManager();
         
@@ -33,7 +33,7 @@ public class PaymentHelper {
         List<Payment> results = query.getResultList();
         if (results.size() <= 0) return null;
         return results.get(0);
-    }
+    }*/
     
     public static Payment getPaymentByReference(String reference) {
         PaymentHelper paymentHelper = new PaymentHelper();

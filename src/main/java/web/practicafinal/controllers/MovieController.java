@@ -28,10 +28,12 @@ import web.practicafinal.models.AgeClassification;
 import web.practicafinal.models.Comment;
 import web.practicafinal.models.Director;
 import web.practicafinal.models.Distributor;
+import web.practicafinal.models.Favorite;
 import web.practicafinal.models.Genre;
 import web.practicafinal.models.Movie;
 import web.practicafinal.models.Nationality;
 import web.practicafinal.models.Room;
+import web.practicafinal.models.User;
 import web.practicafinal.models.controllers.AgeClassificationJpaController;
 import web.practicafinal.models.controllers.DirectorJpaController;
 import web.practicafinal.models.controllers.DistributorJpaController;
@@ -41,6 +43,7 @@ import web.practicafinal.models.controllers.MovieJpaController;
 import web.practicafinal.models.controllers.NationalityJpaController;
 import web.practicafinal.models.controllers.exceptions.RollbackFailureException;
 import web.practicafinal.models.helpers.ActorHelper;
+import web.practicafinal.models.helpers.FavoriteHelper;
 import web.practicafinal.models.helpers.MovieHelper;
 import web.practicafinal.models.helpers.PaginationHelper;
 import web.practicafinal.models.helpers.PaginationHelper.DataListContainer;
@@ -61,6 +64,7 @@ public class MovieController extends HttpServlet {
     /movie -> Ver lista paginada con todas las peliculas
     /movie/{id} -> Ver información de la película con id = {id}
     /movie/{id}/comment -> Ver comentarios paginados de película con id = {id}
+    /movie/{id}/favorite -> Ver comentarios paginados de película con id = {id}
     /movie/available -> Ver lista paginada con todas las peliculas disponibles para ver
     */
     @Override
@@ -73,7 +77,35 @@ public class MovieController extends HttpServlet {
         
         // Si está llamado a /movie/{id}/comment
         if (request.getRequestURI().endsWith("/comment")) {
+            
+            //////////////////////
+            // RUTA PARA CLIENTES
+            //////////////////////
+            try {
+                Middleware.authRoute(request);
+            } catch (SessionException ex) {
+                Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+                return;
+            }
+            
             doGetComment(request, response);
+            return;
+        }
+        
+        // Si está llamado a /movie/{id}/favorite
+        if (request.getRequestURI().endsWith("/favorite")) {
+            
+            //////////////////////
+            // RUTA PARA CLIENTES
+            //////////////////////
+            try {
+                Middleware.authRoute(request);
+            } catch (SessionException ex) {
+                Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+                return;
+            }
+            
+            doGetFavorite(request, response);
             return;
         }
         
@@ -87,6 +119,20 @@ public class MovieController extends HttpServlet {
                     || request.getParameter("distributor") != null || request.getParameter("director") != null
                     || request.getParameter("ageClassification") != null || request.getParameter("room") != null
                     || request.getParameter("actorList") != null) {
+                
+                
+                //////////////////////
+                // RUTA SOLO PARA ADMINS
+                //////////////////////
+                try {
+                    Middleware.adminRoute(request);
+                } catch (SessionException ex) {
+                    Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+                    return;
+                } catch (UnauthorizedException ex) {
+                    Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+                    return;
+                }
                 
                 doGetFilteredMovies(request, response);
                 return;
@@ -116,6 +162,20 @@ public class MovieController extends HttpServlet {
         
         // Si está llamado a /movie/all
         if (movieIdStr.equalsIgnoreCase("all")) {
+            
+            //////////////////////
+            // RUTA SOLO PARA ADMINS
+            //////////////////////
+            try {
+                Middleware.adminRoute(request);
+            } catch (SessionException ex) {
+                Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+                return;
+            } catch (UnauthorizedException ex) {
+                Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+                return;
+            }
+            
             List<Movie> movies = ModelController.getMovie().findMovieEntities();
             Response.outputData(response, 200, movies);
             return;
@@ -377,6 +437,17 @@ public class MovieController extends HttpServlet {
     
     private void doGetComment(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
+        //////////////////////
+        // RUTA PARA CLIENTES
+        //////////////////////
+        try {
+            Middleware.authRoute(request);
+        } catch (SessionException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;
+        }
+        
+        
         String movieIdStr = Request.getURLValue(request);
         if (movieIdStr == null) {
             Response.outputMessage(response, 400, "No se ha seleccionado ninguna película.");
@@ -427,7 +498,7 @@ public class MovieController extends HttpServlet {
         
         Map<String, Integer> integers = null;
         try {
-            integers = Request.validateInteger(request, "page", "value");
+            integers = Request.validateInteger(request, "page");
         } catch (ValidateException ex) {
             Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
             return;            
@@ -527,6 +598,41 @@ public class MovieController extends HttpServlet {
                 MovieHelper.getFilteredMoviesTC(actualPage, mapParameters));
 
         Response.outputData(response, 200, dlc, 5);
+        
+    }
+    
+    
+    private void doGetFavorite(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+
+        // Validar parámetros de la solicitud
+        String movieIdStr = Request.getURLValue(request);
+        if (movieIdStr == null) {
+            Response.outputMessage(response, 400, "No se ha seleccionado ninguna película.");
+            return;
+        }
+        int movieId = Integer.parseInt(movieIdStr);
+        Movie movie = ModelController.getMovie().findMovie(movieId);
+        if (movie == null) {
+            Response.outputMessage(response, 404, "No se ha encontrado la película solicitada");
+            return;
+        }
+        
+        User userSession;
+        try {
+            userSession = Request.getUser(request);
+        } catch (SessionException ex) {
+            Response.outputMessage(response, ex.getHttpErrorCode(), ex.getMessage());
+            return;
+        }
+        
+        Favorite existingFavorite = FavoriteHelper.getFavorite(userSession, movie);
+        if (existingFavorite != null) {
+            Response.outputData(response, 200, true);
+            return;
+        }
+            
+        Response.outputData(response, 200, false);
         
     }
 }

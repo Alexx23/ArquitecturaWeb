@@ -68,6 +68,8 @@ public class User implements Serializable {
     private List<Comment> commentList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
     private List<Payment> paymentList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Favorite> favoriteList;
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Role role;
@@ -160,6 +162,14 @@ public class User implements Serializable {
 
     public void setPaymentList(List<Payment> paymentList) {
         this.paymentList = paymentList;
+    }
+
+    public List<Favorite> getFavoriteList() {
+        return favoriteList;
+    }
+
+    public void setFavoriteList(List<Favorite> favoriteList) {
+        this.favoriteList = favoriteList;
     }
 
     public Role getRole() {

@@ -207,7 +207,7 @@ public class PaymentController extends HttpServlet {
     
         // Obtener el pago creado de la base de datos
         // porque tendrá ID
-        payment = PaymentHelper.getPayment(userSession, createdDate);
+        payment = PaymentHelper.getPaymentByReference(uniqueReference);
         
         // Crear los tickets
         for (TicketItemCreateDTO requestedTicket : requestedTickets) {

@@ -85,6 +85,8 @@ public class Movie implements Serializable {
     private List<Session> sessionList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "movie", fetch = FetchType.LAZY)
     private List<Comment> commentList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "movie", fetch = FetchType.LAZY)
+    private List<Favorite> favoriteList;
 
     public Movie() {
     }
@@ -221,6 +223,14 @@ public class Movie implements Serializable {
 
     public void setCommentList(List<Comment> commentList) {
         this.commentList = commentList;
+    }
+
+    public List<Favorite> getFavoriteList() {
+        return favoriteList;
+    }
+
+    public void setFavoriteList(List<Favorite> favoriteList) {
+        this.favoriteList = favoriteList;
     }
 
     @Override

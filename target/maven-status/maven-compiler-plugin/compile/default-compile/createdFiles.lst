@@ -55,10 +55,12 @@ web\practicafinal\models\controllers\MovieJpaController.class
 web\practicafinal\models\controllers\SessionJpaController.class
 web\practicafinal\models\controllers\ModelController.class
 web\practicafinal\controllers\validations\annotations\ValidDistributor$DistributorValidator.class
+web\practicafinal\controllers\FavoriteController.class
 web\practicafinal\utils\JsonUtils.class
 web\practicafinal\controllers\validations\TicketItemCreateDTO.class
 web\practicafinal\enums\PriceEnum.class
 web\practicafinal\controllers\validations\annotations\ValidRoom$RoomValidator.class
+web\practicafinal\models\Favorite.class
 web\practicafinal\filters\CORSFilter.class
 web\practicafinal\models\helpers\ActorHelper.class
 web\practicafinal\controllers\validations\UserUpdateDTO.class
@@ -79,6 +81,7 @@ web\practicafinal\controllers\validations\LoginDTO.class
 web\practicafinal\controllers\DistributorController.class
 web\practicafinal\controllers\PriceController$PriceContainer.class
 web\practicafinal\controllers\RoomController.class
+web\practicafinal\models\helpers\FavoriteHelper.class
 web\practicafinal\models\helpers\UserHelper.class
 web\practicafinal\controllers\validations\ActorUpdateDTO.class
 web\practicafinal\controllers\validations\MovieUpdateDTO.class
@@ -95,8 +98,10 @@ web\practicafinal\controllers\validations\annotations\ValidMovie$MovieValidator.
 web\practicafinal\models\controllers\NationalityJpaController.class
 web\practicafinal\controllers\validations\SessionCreateDTO.class
 web\practicafinal\controllers\validations\annotations\ValidUsername.class
+web\practicafinal\controllers\validations\FavoriteDTO.class
 web\practicafinal\controllers\validations\annotations\ValidWeb$MovieValidator.class
 web\practicafinal\controllers\validations\annotations\ValidNationality$NationalityValidator.class
+web\practicafinal\models\controllers\FavoriteJpaController.class
 web\practicafinal\models\controllers\exceptions\IllegalOrphanException.class
 web\practicafinal\models\seeders\AgeClassificationSeeder.class
 web\practicafinal\models\Actor.class

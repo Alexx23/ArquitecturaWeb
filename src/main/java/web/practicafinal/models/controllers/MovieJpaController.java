@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import web.practicafinal.models.Session;
 import web.practicafinal.models.Comment;
+import web.practicafinal.models.Favorite;
 import web.practicafinal.models.Movie;
 import web.practicafinal.models.controllers.exceptions.IllegalOrphanException;
 import web.practicafinal.models.controllers.exceptions.NonexistentEntityException;
@@ -53,6 +54,9 @@ public class MovieJpaController implements Serializable {
         }
         if (movie.getCommentList() == null) {
             movie.setCommentList(new ArrayList<Comment>());
+        }
+        if (movie.getFavoriteList() == null) {
+            movie.setFavoriteList(new ArrayList<Favorite>());
         }
         EntityManager em = null;
         try {
@@ -101,6 +105,12 @@ public class MovieJpaController implements Serializable {
                 attachedCommentList.add(commentListCommentToAttach);
             }
             movie.setCommentList(attachedCommentList);
+            List<Favorite> attachedFavoriteList = new ArrayList<Favorite>();
+            for (Favorite favoriteListFavoriteToAttach : movie.getFavoriteList()) {
+                favoriteListFavoriteToAttach = em.getReference(favoriteListFavoriteToAttach.getClass(), favoriteListFavoriteToAttach.getId());
+                attachedFavoriteList.add(favoriteListFavoriteToAttach);
+            }
+            movie.setFavoriteList(attachedFavoriteList);
             em.persist(movie);
             if (ageClassification != null) {
                 ageClassification.getMovieList().add(movie);
@@ -144,6 +154,15 @@ public class MovieJpaController implements Serializable {
                     oldMovieOfCommentListComment = em.merge(oldMovieOfCommentListComment);
                 }
             }
+            for (Favorite favoriteListFavorite : movie.getFavoriteList()) {
+                Movie oldMovieOfFavoriteListFavorite = favoriteListFavorite.getMovie();
+                favoriteListFavorite.setMovie(movie);
+                favoriteListFavorite = em.merge(favoriteListFavorite);
+                if (oldMovieOfFavoriteListFavorite != null) {
+                    oldMovieOfFavoriteListFavorite.getFavoriteList().remove(favoriteListFavorite);
+                    oldMovieOfFavoriteListFavorite = em.merge(oldMovieOfFavoriteListFavorite);
+                }
+            }
             utx.commit();
         } catch (Exception ex) {
             try {
@@ -181,6 +200,8 @@ public class MovieJpaController implements Serializable {
             List<Session> sessionListNew = movie.getSessionList();
             List<Comment> commentListOld = persistentMovie.getCommentList();
             List<Comment> commentListNew = movie.getCommentList();
+            List<Favorite> favoriteListOld = persistentMovie.getFavoriteList();
+            List<Favorite> favoriteListNew = movie.getFavoriteList();
             List<String> illegalOrphanMessages = null;
             for (Session sessionListOldSession : sessionListOld) {
                 if (!sessionListNew.contains(sessionListOldSession)) {
@@ -196,6 +217,14 @@ public class MovieJpaController implements Serializable {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
                     illegalOrphanMessages.add("You must retain Comment " + commentListOldComment + " since its movie field is not nullable.");
+                }
+            }
+            for (Favorite favoriteListOldFavorite : favoriteListOld) {
+                if (!favoriteListNew.contains(favoriteListOldFavorite)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain Favorite " + favoriteListOldFavorite + " since its movie field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -242,6 +271,13 @@ public class MovieJpaController implements Serializable {
             }
             commentListNew = attachedCommentListNew;
             movie.setCommentList(commentListNew);
+            List<Favorite> attachedFavoriteListNew = new ArrayList<Favorite>();
+            for (Favorite favoriteListNewFavoriteToAttach : favoriteListNew) {
+                favoriteListNewFavoriteToAttach = em.getReference(favoriteListNewFavoriteToAttach.getClass(), favoriteListNewFavoriteToAttach.getId());
+                attachedFavoriteListNew.add(favoriteListNewFavoriteToAttach);
+            }
+            favoriteListNew = attachedFavoriteListNew;
+            movie.setFavoriteList(favoriteListNew);
             movie = em.merge(movie);
             if (ageClassificationOld != null && !ageClassificationOld.equals(ageClassificationNew)) {
                 ageClassificationOld.getMovieList().remove(movie);
@@ -317,6 +353,17 @@ public class MovieJpaController implements Serializable {
                     }
                 }
             }
+            for (Favorite favoriteListNewFavorite : favoriteListNew) {
+                if (!favoriteListOld.contains(favoriteListNewFavorite)) {
+                    Movie oldMovieOfFavoriteListNewFavorite = favoriteListNewFavorite.getMovie();
+                    favoriteListNewFavorite.setMovie(movie);
+                    favoriteListNewFavorite = em.merge(favoriteListNewFavorite);
+                    if (oldMovieOfFavoriteListNewFavorite != null && !oldMovieOfFavoriteListNewFavorite.equals(movie)) {
+                        oldMovieOfFavoriteListNewFavorite.getFavoriteList().remove(favoriteListNewFavorite);
+                        oldMovieOfFavoriteListNewFavorite = em.merge(oldMovieOfFavoriteListNewFavorite);
+                    }
+                }
+            }
             utx.commit();
         } catch (Exception ex) {
             try {
@@ -365,6 +412,13 @@ public class MovieJpaController implements Serializable {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
                 illegalOrphanMessages.add("This Movie (" + movie + ") cannot be destroyed since the Comment " + commentListOrphanCheckComment + " in its commentList field has a non-nullable movie field.");
+            }
+            List<Favorite> favoriteListOrphanCheck = movie.getFavoriteList();
+            for (Favorite favoriteListOrphanCheckFavorite : favoriteListOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Movie (" + movie + ") cannot be destroyed since the Favorite " + favoriteListOrphanCheckFavorite + " in its favoriteList field has a non-nullable movie field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
